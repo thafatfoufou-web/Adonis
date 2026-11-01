@@ -7,9 +7,10 @@ from farm import Farm
 from shop import Shop, sell_selected
 from ui import HUD
 from npc import load_npcs
+from controls import INTERACT_KEYS
 
 pygame.init()
-screen = pygame.display.set_mode((960, 540))
+screen = pygame.display.set_mode((960, 544), pygame.SCALED | pygame.FULLSCREEN)
 pygame.display.set_caption("Farm Mystery")
 clock = pygame.time.Clock()
 font = pygame.font.Font(None, 32)        # your font lines here
@@ -36,6 +37,32 @@ inventory.add_item("turnip_seeds", 5)
 night = pygame.Surface(screen.get_size())
 night.fill((0, 0, 40))
 
+
+def interact():
+    """Do the action on the tile in front of the player.
+
+    An NPC there is greeted, the shop counter opens the shop, the box sells
+    the held item, and anything else goes to the farm (till, water, plant, harvest).
+    """
+    tx, ty = player.get_target_tile()
+    tile = world.get_tile(tx, ty)
+
+    # is there an NPC on the tile in front of us?
+    npc_found = None
+    for npc in npcs:
+        if npc.tile == (tx, ty):
+            npc_found = npc
+
+    if npc_found is not None:
+        hud.show_notice("You meet " + npc_found.name)
+    elif tile == "3":
+        shop.open()
+    elif tile == "4":
+        hud.show_notice(sell_selected(inventory))
+    else:
+        farm.use(tx, ty, inventory, world)
+
+
 running = True
 while running:
     dt = clock.tick(60) / 1000
@@ -47,27 +74,18 @@ while running:
             if shop.is_open:
                 shop.handle_key(event.key, inventory)
             else:
-                if event.key == pygame.K_e:
-                    tx, ty = player.get_target_tile()
-                    tile = world.get_tile(tx, ty)
-
-                    # is there an NPC on the tile in front of us?
-                    npc_found = None
-                    for npc in npcs:
-                        if npc.tile == (tx, ty):
-                            npc_found = npc
-
-                    if npc_found is not None:
-                        hud.show_notice("You meet " + npc_found.name)
-                    elif tile == "3":
-                        shop.open()
-                    elif tile == "4":
-                        hud.show_notice(sell_selected(inventory))
-                    else:
-                        farm.use(tx, ty, inventory, world)
+                if event.key in INTERACT_KEYS:
+                    interact()
                 for i, code in enumerate(SLOT_KEYS):
                     if event.scancode == code:
                         inventory.select(i)
+        elif event.type == pygame.MOUSEBUTTONDOWN:
+            # button 1 is the left click
+            if event.button == 1:
+                if shop.is_open:
+                    shop.handle_click(event.pos, screen, inventory)
+                else:
+                    interact()
         elif event.type == pygame.MOUSEWHEEL:
             if not shop.is_open:
                 inventory.scroll(-event.y)
@@ -75,13 +93,18 @@ while running:
     # the game is paused while the shop is open
     if not shop.is_open:
         player.update(dt, world)
-        if game_time.update(dt):
+
+        new_day = game_time.update(dt)
+        if new_day:
             farm.new_day()
+            for npc in npcs:
+                npc.go_home()
+
         for npc in npcs:
-            npc.update(game_time.minutes)
+            npc.update(dt, game_time.minutes, world)
     hud.update(dt)
 
-    screen.fill((0, 0, 0))
+    screen.fill((180, 229, 145))
     world.draw(screen)
     farm.draw(screen)
     for npc in npcs:
@@ -98,7 +121,6 @@ while running:
     screen.blit(night, (0, 0))
 
     hud.draw(screen, game_time, inventory)
-    inventory.draw(screen, small_font)
 
     if shop.is_open:
         shop.draw(screen, font, small_font, inventory)
