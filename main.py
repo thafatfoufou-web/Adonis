@@ -22,7 +22,7 @@ SLOT_KEYS = [pygame.KSCAN_1, pygame.KSCAN_2, pygame.KSCAN_3, pygame.KSCAN_4,
              pygame.KSCAN_5, pygame.KSCAN_6, pygame.KSCAN_7, pygame.KSCAN_8,
              pygame.KSCAN_9, pygame.KSCAN_0]
 
-world = TileMap("maps/farm.txt")
+world = TileMap("maps/farm.txt", "data/tiles.json")
 player = Player(64, 256)
 game_time = GameTime()
 farm = Farm()
@@ -49,7 +49,7 @@ def interact():
     (till, water, plant, harvest).
     """
     tx, ty = player.get_target_tile()
-    tile = world.get_tile(tx, ty)
+    action = world.get_action(tx, ty)
 
     # is there an NPC on the tile in front of us?
     npc_found = None
@@ -60,9 +60,9 @@ def interact():
     if npc_found is not None:
         lines = get_lines(dialogues, npc_found.id, game_time.day)
         dialogue_box.open(npc_found.name, lines)
-    elif tile == "3":
+    elif action == "shop":
         shop.open()
-    elif tile == "4":
+    elif action == "sell":
         hud.show_notice(sell_selected(inventory))
     else:
         farm.use(tx, ty, inventory, world)

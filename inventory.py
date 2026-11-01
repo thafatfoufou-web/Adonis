@@ -1,17 +1,21 @@
 import pygame
+import json
 
 SLOT_COUNT = 10
 SLOT_SIZE = 48
 SLOT_GAP = 4
 
-ITEMS = {
-    "hoe": {"name": "Hoe", "color": (150, 100, 50), "stackable": False},
-    "watering_can": {"name": "Watering can", "color": (70, 130, 220), "stackable": False},
-    "turnip_seeds": {"name": "Turnip seeds", "color": (200, 230, 120), "stackable": True,
-                     "buy_price": 20},
-    "turnip": {"name": "Turnip", "color": (230, 230, 240), "stackable": True,
-               "sell_price": 50},
-}
+def load_items(path):
+    """Read the item file and return a dictionary: item id -> item data."""
+    with open(path) as f:
+        items = json.load(f)
+
+    for item in items.values():
+        item["color"] = tuple(item["color"])
+    return items
+
+
+ITEMS = load_items("data/items.json")
 
 
 class Inventory:

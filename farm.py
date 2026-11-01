@@ -8,6 +8,16 @@ CROPS = {
         "harvest": "turnip",
         "ripe_color": (230, 230, 240),
     },
+        "carrot_seeds": {
+        "growth_days": 3,
+        "harvest": "carrot",
+        "ripe_color": (240, 140, 40),
+    },
+    "pumpkin_seeds": {
+        "growth_days": 6,
+        "harvest": "pumpkin",
+        "ripe_color": (230, 120, 30),
+    },
 }
 
 DRY_SOIL = (110, 75, 40)
@@ -43,7 +53,7 @@ class Farm:
 
         # 2. hoe: grass becomes tilled soil
         if item == "hoe":
-            if tile is None and world.get_tile(tx, ty) == "1":
+            if tile is None and world.is_tillable(tx, ty):
                 self.soil[(tx, ty)] = {"watered": False, "crop": None}
 
         # 3. watering can: water tilled soil

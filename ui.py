@@ -1,4 +1,5 @@
 import pygame
+from assets import load_image
 from inventory import ITEMS, SLOT_COUNT
 
 # colors taken from the mockup
@@ -104,9 +105,10 @@ class HUD:
         slot = inventory.slots[index]
         if slot is not None:
             data = ITEMS[slot["id"]]
-            item_rect = pygame.Rect(0, 0, 24, 24)
-            item_rect.center = (slot_rect.centerx + 6, slot_rect.centery + 6)
-            pygame.draw.rect(screen, data["color"], item_rect)
+            icon = load_image(data["icon"], (28, 28), data["color"])
+            icon_rect = icon.get_rect()
+            icon_rect.center = (slot_rect.centerx + 6, slot_rect.centery + 6)
+            screen.blit(icon, icon_rect)
 
             if slot["count"] > 1:
                 count = self.small_font.render(str(slot["count"]), True, TEXT_COLOR)

@@ -1,0 +1,34 @@
+{
+  "1": {
+    "name": "Grass", "image": "assets/tiles/grass.png",
+    "color": [60, 120, 60], "solid": false, "tillable": true
+  },
+  "2": {
+    "name": "Wall", "image": "assets/tiles/wall.png",
+    "color": [90, 90, 90], "solid": true
+  },
+  "3": {
+    "name": "Shop counter", "image": "assets/tiles/shop_counter.png",
+    "color": [210, 150, 60], "solid": true, "action": "shop"
+  },
+  "4": {
+    "name": "Shipping box", "image": "assets/tiles/shipping_box.png",
+    "color": [170, 60, 60], "solid": true, "action": "sell"
+  },
+  "5": {
+    "name": "Path", "image": "assets/tiles/path.png",
+    "color": [190, 160, 110], "solid": false
+  },
+  "6": {
+    "name": "Water", "image": "assets/tiles/water.png",
+    "color": [70, 130, 200], "solid": true
+  },
+  "7": {
+    "name": "Tree", "image": "assets/tiles/tree.png",
+    "color": [30, 90, 40], "solid": true
+  },
+  "8": {
+    "name": "Fence", "image": "assets/tiles/fence.png",
+    "color": [140, 100, 60], "solid": true
+  }
+}

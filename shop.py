@@ -2,7 +2,7 @@ import pygame
 from inventory import ITEMS
 from controls import INTERACT_KEYS
 
-SHOP_STOCK = ["turnip_seeds"]  # add item ids here to sell more things
+SHOP_STOCK = ["turnip_seeds", "carrot_seeds", "pumpkin_seeds"]
 
 PANEL_WIDTH = 480
 PANEL_HEIGHT = 260
@@ -91,8 +91,8 @@ class Shop:
             if i == self.cursor:
                 pygame.draw.rect(screen, (70, 70, 90), row)
 
-            icon = pygame.Rect(row.x + 6, row.y + 6, 22, 22)
-            pygame.draw.rect(screen, data["color"], icon)
+            icon = load_image(data["icon"], (22, 22), data["color"])
+            screen.blit(icon, (row.x + 6, row.y + 6))
 
             name = font.render(data["name"], True, (255, 255, 255))
             screen.blit(name, (row.x + 40, row.y + 6))
