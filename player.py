@@ -5,7 +5,7 @@ class Player:
     def __init__(self, x, y):
         self.pos = pygame.Vector2(x, y)
         self.speed = 200
-        self.size = 24  # smaller than a tile, so he fits through gaps
+        self.size = 24  
 
     def get_rect(self):
         return pygame.Rect(self.pos.x, self.pos.y, self.size, self.size)
@@ -27,12 +27,10 @@ class Player:
             direction = direction.normalize()
         move = direction * self.speed * dt
 
-        # move on X, undo if we hit a wall
         self.pos.x += move.x
         if world.collides(self.get_rect()):
             self.pos.x -= move.x
 
-        # move on Y, undo if we hit a wall
         self.pos.y += move.y
         if world.collides(self.get_rect()):
             self.pos.y -= move.y
