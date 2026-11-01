@@ -1,0 +1,24 @@
+{
+  "npcs": [
+    {
+      "id": "mira",
+      "name": "Mira",
+      "color": [220, 120, 180],
+      "schedule": [
+        {"hour": 6,  "tile": [6, 5]},
+        {"hour": 12, "tile": [8, 8]},
+        {"hour": 18, "tile": [13, 11]}
+      ]
+    },
+    {
+      "id": "tom",
+      "name": "Old Tom",
+      "color": [120, 160, 230],
+      "schedule": [
+        {"hour": 6,  "tile": [13, 2]},
+        {"hour": 14, "tile": [8, 6]},
+        {"hour": 20, "tile": [6, 13]}
+      ]
+    }
+  ]
+}

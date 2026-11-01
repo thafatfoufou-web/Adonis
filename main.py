@@ -6,13 +6,14 @@ from inventory import Inventory
 from farm import Farm
 from shop import Shop, sell_selected
 from ui import HUD
+from npc import load_npcs
 
 pygame.init()
 screen = pygame.display.set_mode((960, 540))
 pygame.display.set_caption("Farm Mystery")
 clock = pygame.time.Clock()
-font = pygame.font.Font(None, 32)
-small_font = pygame.font.Font(None, 22)
+font = pygame.font.Font(None, 32)        # your font lines here
+small_font = pygame.font.Font(None, 22)  # your font lines here
 
 # physical keys 1 to 9 then 0, whatever the keyboard layout
 SLOT_KEYS = [pygame.KSCAN_1, pygame.KSCAN_2, pygame.KSCAN_3, pygame.KSCAN_4,
@@ -25,6 +26,7 @@ game_time = GameTime()
 farm = Farm()
 shop = Shop()
 hud = HUD(font, small_font)
+npcs = load_npcs("data/npcs.json")
 
 inventory = Inventory()
 inventory.add_item("hoe")
@@ -48,7 +50,16 @@ while running:
                 if event.key == pygame.K_e:
                     tx, ty = player.get_target_tile()
                     tile = world.get_tile(tx, ty)
-                    if tile == "3":
+
+                    # is there an NPC on the tile in front of us?
+                    npc_found = None
+                    for npc in npcs:
+                        if npc.tile == (tx, ty):
+                            npc_found = npc
+
+                    if npc_found is not None:
+                        hud.show_notice("You meet " + npc_found.name)
+                    elif tile == "3":
                         shop.open()
                     elif tile == "4":
                         hud.show_notice(sell_selected(inventory))
@@ -66,11 +77,15 @@ while running:
         player.update(dt, world)
         if game_time.update(dt):
             farm.new_day()
+        for npc in npcs:
+            npc.update(game_time.minutes)
     hud.update(dt)
 
     screen.fill((0, 0, 0))
     world.draw(screen)
     farm.draw(screen)
+    for npc in npcs:
+        npc.draw(screen, small_font)
     player.draw(screen)
 
     # yellow outline on the tile in front of the player
