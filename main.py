@@ -8,6 +8,7 @@ from shop import Shop, sell_selected
 from ui import HUD
 from npc import load_npcs
 from controls import INTERACT_KEYS
+from dialogue import DialogueBox, load_dialogues, get_lines
 
 pygame.init()
 screen = pygame.display.set_mode((960, 544), pygame.SCALED | pygame.FULLSCREEN)
@@ -28,6 +29,8 @@ farm = Farm()
 shop = Shop()
 hud = HUD(font, small_font)
 npcs = load_npcs("data/npcs.json")
+dialogues = load_dialogues("data/dialogues.json")
+dialogue_box = DialogueBox()
 
 inventory = Inventory()
 inventory.add_item("hoe")
@@ -41,8 +44,9 @@ night.fill((0, 0, 40))
 def interact():
     """Do the action on the tile in front of the player.
 
-    An NPC there is greeted, the shop counter opens the shop, the box sells
-    the held item, and anything else goes to the farm (till, water, plant, harvest).
+    An NPC there starts a dialogue, the shop counter opens the shop, the box
+    sells the held item, and anything else goes to the farm
+    (till, water, plant, harvest).
     """
     tx, ty = player.get_target_tile()
     tile = world.get_tile(tx, ty)
@@ -54,7 +58,8 @@ def interact():
             npc_found = npc
 
     if npc_found is not None:
-        hud.show_notice("You meet " + npc_found.name)
+        lines = get_lines(dialogues, npc_found.id, game_time.day)
+        dialogue_box.open(npc_found.name, lines)
     elif tile == "3":
         shop.open()
     elif tile == "4":
@@ -71,7 +76,9 @@ while running:
         if event.type == pygame.QUIT:
             running = False
         elif event.type == pygame.KEYDOWN:
-            if shop.is_open:
+            if dialogue_box.is_open:
+                dialogue_box.handle_key(event.key)
+            elif shop.is_open:
                 shop.handle_key(event.key, inventory)
             else:
                 if event.key in INTERACT_KEYS:
@@ -82,16 +89,19 @@ while running:
         elif event.type == pygame.MOUSEBUTTONDOWN:
             # button 1 is the left click
             if event.button == 1:
-                if shop.is_open:
+                if dialogue_box.is_open:
+                    dialogue_box.handle_click()
+                elif shop.is_open:
                     shop.handle_click(event.pos, screen, inventory)
                 else:
                     interact()
         elif event.type == pygame.MOUSEWHEEL:
-            if not shop.is_open:
+            if not shop.is_open and not dialogue_box.is_open:
                 inventory.scroll(-event.y)
 
-    # the game is paused while the shop is open
-    if not shop.is_open:
+    # the game is paused while the shop or a dialogue is open
+    paused = shop.is_open or dialogue_box.is_open
+    if not paused:
         player.update(dt, world)
 
         new_day = game_time.update(dt)
@@ -124,6 +134,8 @@ while running:
 
     if shop.is_open:
         shop.draw(screen, font, small_font, inventory)
+
+    dialogue_box.draw(screen, font, small_font)
 
     pygame.display.flip()
 

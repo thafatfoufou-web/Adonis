@@ -1,0 +1,32 @@
+{
+  "mira": [
+    {
+      "day_min": 1,
+      "lines": [
+        "Oh, hello! You must be the new farmer.",
+        "I run the flower stall near the shop. Come by anytime."
+      ]
+    },
+    {
+      "day_min": 3,
+      "lines": [
+        "Have you heard the news? Everyone in the village is whispering.",
+        "I would lock my door tonight, if I were you."
+      ]
+    }
+  ],
+  "tom": [
+    {
+      "day_min": 1,
+      "lines": [
+        "Hmph. Another farmer. The last one did not stay long."
+      ]
+    },
+    {
+      "day_min": 3,
+      "lines": [
+        "I did not see anything. Do you hear me? Nothing at all."
+      ]
+    }
+  ]
+}
