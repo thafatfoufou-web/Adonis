@@ -11,9 +11,12 @@ class GameTime:
         self.minutes = START_OF_DAY
 
     def update(self, dt):
+        # returns True if a new day just started
         self.minutes += MINUTES_PER_SECOND * dt
         if self.minutes >= END_OF_DAY:
             self.new_day()
+            return True
+        return False
 
     def new_day(self):
         self.day += 1

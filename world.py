@@ -3,8 +3,9 @@ import pygame
 TILE_SIZE = 32
 
 COLORS = {
-    "1": (60, 120, 60),  
-    "2": (90, 90, 90),   }
+    "1": (60, 120, 60),   # grass
+    "2": (90, 90, 90),    # wall
+}
 
 
 class TileMap:
@@ -12,7 +13,7 @@ class TileMap:
         self.rows = []
         with open(path) as f:
             for line in f:
-                if line.strip(): 
+                if line.strip():  # skip empty lines
                     self.rows.append(line.split())
 
     def draw(self, screen):
@@ -21,14 +22,19 @@ class TileMap:
                 rect = pygame.Rect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE)
                 pygame.draw.rect(screen, COLORS[char], rect)
 
-    def is_solid(self, tx, ty):
+    def get_tile(self, tx, ty):
+        # outside the map counts as a wall
         if ty < 0 or ty >= len(self.rows):
-            return True
+            return "2"
         if tx < 0 or tx >= len(self.rows[ty]):
-            return True
-        return self.rows[ty][tx] == "2"
+            return "2"
+        return self.rows[ty][tx]
+
+    def is_solid(self, tx, ty):
+        return self.get_tile(tx, ty) == "2"
 
     def collides(self, rect):
+        # first and last tile covered by the rectangle
         left = rect.left // TILE_SIZE
         right = (rect.right - 1) // TILE_SIZE
         top = rect.top // TILE_SIZE

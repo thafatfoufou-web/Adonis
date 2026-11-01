@@ -40,6 +40,15 @@ class Inventory:
             return "Empty hand"
         return ITEMS[slot["id"]]["name"]
 
+    def remove_one_selected(self):
+        # uses one item of the selected slot, empties the slot at 0
+        slot = self.slots[self.selected]
+        if slot is None:
+            return
+        slot["count"] -= 1
+        if slot["count"] <= 0:
+            self.slots[self.selected] = None
+
     def select(self, index):
         if 0 <= index < SLOT_COUNT:
             self.selected = index

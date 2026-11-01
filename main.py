@@ -1,8 +1,9 @@
 import pygame
 from player import Player
-from world import TileMap
+from world import TileMap, TILE_SIZE
 from gametime import GameTime
 from inventory import Inventory
+from farm import Farm
 
 pygame.init()
 screen = pygame.display.set_mode((960, 540))
@@ -19,6 +20,7 @@ SLOT_KEYS = [pygame.KSCAN_1, pygame.KSCAN_2, pygame.KSCAN_3, pygame.KSCAN_4,
 world = TileMap("maps/farm.txt")
 player = Player(64, 256)
 game_time = GameTime()
+farm = Farm()
 
 inventory = Inventory()
 inventory.add_item("hoe")
@@ -36,6 +38,9 @@ while running:
         if event.type == pygame.QUIT:
             running = False
         elif event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_e:
+                tx, ty = player.get_target_tile()
+                farm.use(tx, ty, inventory, world)
             for i, code in enumerate(SLOT_KEYS):
                 if event.scancode == code:
                     inventory.select(i)
@@ -43,11 +48,18 @@ while running:
             inventory.scroll(-event.y)
 
     player.update(dt, world)
-    game_time.update(dt)
+    if game_time.update(dt):
+        farm.new_day()
 
     screen.fill((0, 0, 0))
     world.draw(screen)
+    farm.draw(screen)
     player.draw(screen)
+
+    # yellow outline on the tile in front of the player
+    tx, ty = player.get_target_tile()
+    target = pygame.Rect(tx * TILE_SIZE, ty * TILE_SIZE, TILE_SIZE, TILE_SIZE)
+    pygame.draw.rect(screen, (255, 220, 60), target, 2)
 
     night.set_alpha(game_time.get_darkness())
     screen.blit(night, (0, 0))
