@@ -3,9 +3,13 @@ import pygame
 TILE_SIZE = 32
 
 COLORS = {
-    "1": (60, 120, 60),   # grass
-    "2": (90, 90, 90),    # wall
+    "1": (60, 120, 60),    # grass
+    "2": (90, 90, 90),     # wall
+    "3": (210, 150, 60),   # shop counter
+    "4": (170, 60, 60),    # shipping box
 }
+
+SOLID_TILES = ("2", "3", "4")
 
 
 class TileMap:
@@ -31,7 +35,7 @@ class TileMap:
         return self.rows[ty][tx]
 
     def is_solid(self, tx, ty):
-        return self.get_tile(tx, ty) == "2"
+        return self.get_tile(tx, ty) in SOLID_TILES
 
     def collides(self, rect):
         # first and last tile covered by the rectangle

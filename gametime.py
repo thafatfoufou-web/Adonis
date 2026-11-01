@@ -1,7 +1,7 @@
 START_OF_DAY = 6 * 60       # 6:00, in minutes
 END_OF_DAY = 24 * 60        # 24:00
 NIGHT_START = 18 * 60       # darkness begins at 18:00
-MINUTES_PER_SECOND = 20     # game minutes per real second (lower it later)
+MINUTES_PER_SECOND = 100     # game minutes per real second (lower it later)
 MAX_DARKNESS = 150          # max alpha of the night layer (0-255)
 
 

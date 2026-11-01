@@ -7,8 +7,10 @@ SLOT_GAP = 4
 ITEMS = {
     "hoe": {"name": "Hoe", "color": (150, 100, 50), "stackable": False},
     "watering_can": {"name": "Watering can", "color": (70, 130, 220), "stackable": False},
-    "turnip_seeds": {"name": "Turnip seeds", "color": (200, 230, 120), "stackable": True},
-    "turnip": {"name": "Turnip", "color": (230, 230, 240), "stackable": True},
+    "turnip_seeds": {"name": "Turnip seeds", "color": (200, 230, 120), "stackable": True,
+                     "buy_price": 20},
+    "turnip": {"name": "Turnip", "color": (230, 230, 240), "stackable": True,
+               "sell_price": 50},
 }
 
 
@@ -16,6 +18,7 @@ class Inventory:
     def __init__(self):
         self.slots = [None] * SLOT_COUNT
         self.selected = 0
+        self.gold = 100
 
     def add_item(self, item_id, count=1):
         # stackable items join an existing stack if there is one
