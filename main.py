@@ -5,6 +5,7 @@ from gametime import GameTime
 from inventory import Inventory
 from farm import Farm
 from shop import Shop, sell_selected
+from ui import HUD
 
 pygame.init()
 screen = pygame.display.set_mode((960, 540))
@@ -23,6 +24,7 @@ player = Player(64, 256)
 game_time = GameTime()
 farm = Farm()
 shop = Shop()
+hud = HUD(font, small_font)
 
 inventory = Inventory()
 inventory.add_item("hoe")
@@ -31,9 +33,6 @@ inventory.add_item("turnip_seeds", 5)
 
 night = pygame.Surface(screen.get_size())
 night.fill((0, 0, 40))
-
-notice = ""        # short message shown on screen
-notice_timer = 0   # seconds left before it disappears
 
 running = True
 while running:
@@ -52,8 +51,7 @@ while running:
                     if tile == "3":
                         shop.open()
                     elif tile == "4":
-                        notice = sell_selected(inventory)
-                        notice_timer = 2
+                        hud.show_notice(sell_selected(inventory))
                     else:
                         farm.use(tx, ty, inventory, world)
                 for i, code in enumerate(SLOT_KEYS):
@@ -68,9 +66,7 @@ while running:
         player.update(dt, world)
         if game_time.update(dt):
             farm.new_day()
-
-    if notice_timer > 0:
-        notice_timer -= dt
+    hud.update(dt)
 
     screen.fill((0, 0, 0))
     world.draw(screen)
@@ -82,19 +78,11 @@ while running:
     target = pygame.Rect(tx * TILE_SIZE, ty * TILE_SIZE, TILE_SIZE, TILE_SIZE)
     pygame.draw.rect(screen, (255, 220, 60), target, 2)
 
+    # the night covers the whole screen, the interface is drawn on top
     night.set_alpha(game_time.get_darkness())
     screen.blit(night, (0, 0))
 
-    text = font.render(game_time.get_text(), True, (255, 255, 255))
-    screen.blit(text, (540, 20))
-    held = font.render(inventory.get_selected_name(), True, (255, 255, 255))
-    screen.blit(held, (540, 60))
-    gold = font.render(f"Gold: {inventory.gold}", True, (255, 220, 60))
-    screen.blit(gold, (540, 100))
-    if notice_timer > 0:
-        msg = font.render(notice, True, (255, 255, 255))
-        screen.blit(msg, (540, 140))
-
+    hud.draw(screen, game_time, inventory)
     inventory.draw(screen, small_font)
 
     if shop.is_open:
