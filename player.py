@@ -1,5 +1,8 @@
 import pygame
 from world import TILE_SIZE
+from assets import load_image
+
+SPRITE_SIZE = (64, 64)
 
 
 class Player:
@@ -53,4 +56,8 @@ class Player:
             self.pos.y -= move.y
 
     def draw(self, screen):
-        pygame.draw.rect(screen, (230, 200, 80), self.get_rect())
+        sprite = load_image("assets/characters/player.png", SPRITE_SIZE, (230, 200, 80))
+        hitbox = self.get_rect()
+        x = hitbox.centerx - SPRITE_SIZE[0] // 2
+        y = hitbox.bottom - SPRITE_SIZE[1]
+        screen.blit(sprite, (x, y))
