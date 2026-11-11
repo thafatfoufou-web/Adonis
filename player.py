@@ -22,6 +22,25 @@ class Player:
         ty = int((cy + self.facing.y * TILE_SIZE) // TILE_SIZE)
         return tx, ty
 
+    def get_tile(self):
+        # the tile the player is standing on (center of the hitbox)
+        cx, cy = self.get_rect().center
+        return int(cx // TILE_SIZE), int(cy // TILE_SIZE)
+
+    def can_reach(self, tx, ty, reach=1):
+        # True if tile (tx, ty) is within `reach` tiles (our own tile included)
+        px, py = self.get_tile()
+        return max(abs(tx - px), abs(ty - py)) <= reach
+
+    def face_tile(self, tx, ty):
+        # turn toward a tile (horizontal wins in diagonal, like in update)
+        px, py = self.get_tile()
+        dx, dy = tx - px, ty - py
+        if dx != 0:
+            self.facing = pygame.Vector2(1 if dx > 0 else -1, 0)
+        elif dy != 0:
+            self.facing = pygame.Vector2(0, 1 if dy > 0 else -1)
+
     def update(self, dt, world):
         keys = pygame.key.get_pressed()
         direction = pygame.Vector2(0, 0)

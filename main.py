@@ -17,6 +17,8 @@ clock = pygame.time.Clock()
 font = pygame.font.Font(None, 32)        # your font lines here
 small_font = pygame.font.Font(None, 22)  # your font lines here
 
+CLICK_REACH = 1   # how many tiles around the player you can click (1 = your tile + the 8 around)
+
 # physical keys 1 to 9 then 0, whatever the keyboard layout
 SLOT_KEYS = [pygame.KSCAN_1, pygame.KSCAN_2, pygame.KSCAN_3, pygame.KSCAN_4,
              pygame.KSCAN_5, pygame.KSCAN_6, pygame.KSCAN_7, pygame.KSCAN_8,
@@ -41,17 +43,22 @@ night = pygame.Surface(screen.get_size())
 night.fill((0, 0, 40))
 
 
-def interact():
-    """Do the action on the tile in front of the player.
+def interact(target=None):
+    """Do the action on a tile.
 
+    With the keyboard (no target) it is the tile in front of the player.
+    With the mouse, target is the clicked tile.
     An NPC there starts a dialogue, the shop counter opens the shop, the box
     sells the held item, and anything else goes to the farm
     (till, water, plant, harvest).
     """
-    tx, ty = player.get_target_tile()
+    if target is None:
+        tx, ty = player.get_target_tile()   # keyboard: tile in front
+    else:
+        tx, ty = target                     # mouse: the clicked tile
     action = world.get_action(tx, ty)
 
-    # is there an NPC on the tile in front of us?
+    # is there an NPC on the tile?
     npc_found = None
     for npc in npcs:
         if npc.tile == (tx, ty):
@@ -94,7 +101,10 @@ while running:
                 elif shop.is_open:
                     shop.handle_click(event.pos, screen, inventory)
                 else:
-                    interact()
+                    tile = (event.pos[0] // TILE_SIZE, event.pos[1] // TILE_SIZE)
+                    if player.can_reach(tile[0], tile[1], CLICK_REACH):
+                        player.face_tile(tile[0], tile[1])
+                        interact(tile)
         elif event.type == pygame.MOUSEWHEEL:
             if not shop.is_open and not dialogue_box.is_open:
                 inventory.scroll(-event.y)
@@ -121,10 +131,12 @@ while running:
         npc.draw(screen, small_font)
     player.draw(screen)
 
-    # yellow outline on the tile in front of the player
-    tx, ty = player.get_target_tile()
-    target = pygame.Rect(tx * TILE_SIZE, ty * TILE_SIZE, TILE_SIZE, TILE_SIZE)
-    pygame.draw.rect(screen, (255, 220, 60), target, 2)
+    # outline only on the hovered tile, and only if we can reach it
+    mx, my = pygame.mouse.get_pos()
+    hover = (mx // TILE_SIZE, my // TILE_SIZE)
+    if player.can_reach(hover[0], hover[1], CLICK_REACH):
+        target = pygame.Rect(hover[0] * TILE_SIZE, hover[1] * TILE_SIZE, TILE_SIZE, TILE_SIZE)
+        pygame.draw.rect(screen, (255, 220, 60), target, 2)
 
     # the night covers the whole screen, the interface is drawn on top
     night.set_alpha(game_time.get_darkness())
