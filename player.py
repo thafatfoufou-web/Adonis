@@ -9,21 +9,24 @@ class Player:
     def __init__(self, x, y):
         self.pos = pygame.Vector2(x, y)
         self.speed = 200
-        self.size = 24  # smaller than a tile, so he fits through gaps
+        # the hitbox is only her feet (a small rectangle at the bottom of the
+        # sprite), so her head can go over things, like in a real top-down game
+        self.width = 14
+        self.height = 10
         self.facing = pygame.Vector2(0, 1)  # looking down at the start
 
     def get_rect(self):
-        return pygame.Rect(self.pos.x, self.pos.y, self.size, self.size)
+        return pygame.Rect(self.pos.x, self.pos.y, self.width, self.height)
 
     def get_target_tile(self):
-        # the tile just in front of the player's center
+        # the tile just in front of the player's feet
         cx, cy = self.get_rect().center
         tx = int((cx + self.facing.x * TILE_SIZE) // TILE_SIZE)
         ty = int((cy + self.facing.y * TILE_SIZE) // TILE_SIZE)
         return tx, ty
 
     def get_tile(self):
-        # the tile the player is standing on (center of the hitbox)
+        # the tile the player is standing on (center of her feet)
         cx, cy = self.get_rect().center
         return int(cx // TILE_SIZE), int(cy // TILE_SIZE)
 

@@ -1,10 +1,15 @@
 import json
+import os
 import pygame
 from world import TILE_SIZE
 from pathfinding import find_path
+from assets import load_image
 
-NPC_SPEED = 80   # pixels per second
-NPC_SIZE = 24
+NPC_SPEED = 80        # pixels per second
+NPC_SIZE = 24         # size of the colored square used when there is no picture
+SPRITE_SIZE = (64, 64)
+FEET_OFFSET = 12      # how far below the tile center the feet are, in pixels
+SHOW_NAMES = True     # set to False to hide the name above the head
 
 
 def load_npcs(path):
@@ -18,11 +23,21 @@ class NPC:
     """A villager who follows a schedule and walks between its spots."""
 
     def __init__(self, data):
-        """Create an NPC standing on the first spot of its schedule."""
+        """Create an NPC standing on the first spot of its schedule.
+
+        The picture is assets/characters/<id>.png, unless the NPC has a
+        "sprite" entry in npcs.json. Without a picture, a colored square is used.
+        """
         self.id = data["id"]
         self.name = data["name"]
         self.color = tuple(data["color"])
         self.schedule = data["schedule"]  # sorted by hour
+
+        default_path = "assets/characters/" + self.id + ".png"
+        self.sprite_path = data.get("sprite", default_path)
+        self.has_sprite = os.path.exists(self.sprite_path)
+        if not self.has_sprite:
+            print("[npc] no picture for " + self.id + ", expected " + self.sprite_path)
 
         first = self.schedule[0]["tile"]
         self.start_tile = (first[0], first[1])
@@ -89,16 +104,38 @@ class NPC:
         tile_y = int(self.pos.y // TILE_SIZE)
         return (tile_x, tile_y)
 
+    def get_feet_y(self):
+        """Return the screen height of the NPC's feet, used to draw in depth order."""
+        return int(self.pos.y) + FEET_OFFSET
+
     def get_rect(self):
-        """Return the rectangle of the NPC, centered on its pixel position."""
+        """Return the rectangle of the colored square, centered on the NPC's position."""
         rect = pygame.Rect(0, 0, NPC_SIZE, NPC_SIZE)
         rect.center = (int(self.pos.x), int(self.pos.y))
         return rect
 
-    def draw(self, screen, font):
-        """Draw the NPC as a colored square with its name above."""
+    def draw_picture(self, screen):
+        """Draw the NPC's picture with its feet on the ground. Return its rectangle."""
+        picture = load_image(self.sprite_path, SPRITE_SIZE, self.color)
+        picture_rect = picture.get_rect()
+        picture_rect.midbottom = (int(self.pos.x), self.get_feet_y())
+        screen.blit(picture, picture_rect)
+        return picture_rect
+
+    def draw_square(self, screen):
+        """Draw the colored square used when there is no picture. Return its rectangle."""
         rect = self.get_rect()
         pygame.draw.rect(screen, self.color, rect)
-        label = font.render(self.name, True, (255, 255, 255))
-        label_x = rect.centerx - label.get_width() // 2
-        screen.blit(label, (label_x, rect.y - 18))
+        return rect
+
+    def draw(self, screen, font):
+        """Draw the NPC (picture or colored square) and its name above it."""
+        if self.has_sprite:
+            body = self.draw_picture(screen)
+        else:
+            body = self.draw_square(screen)
+
+        if SHOW_NAMES:
+            label = font.render(self.name, True, (255, 255, 255))
+            label_x = body.centerx - label.get_width() // 2
+            screen.blit(label, (label_x, body.y - 18))

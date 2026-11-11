@@ -1,0 +1,17 @@
+{
+  "buildings": [
+    {
+      "name": "Shop",
+      "image": "assets/shop.png",
+      "tile": [10, 0],
+      "hitbox": [16, 144, 160, 88],
+      "doors": [
+        {"tile": [2, 6], "action": "shop"},
+        {"tile": [3, 6], "action": "shop"},
+        {"tile": [2, 7], "action": "shop"},
+        {"tile": [3, 7], "action": "shop"}
+]
+      
+    }
+  ]
+}

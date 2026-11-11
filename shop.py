@@ -1,6 +1,7 @@
 import pygame
+from assets import load_image
 from inventory import ITEMS
-from controls import INTERACT_KEYS
+from controls import INTERACT_KEYS, UP_KEYS, DOWN_KEYS
 
 SHOP_STOCK = ["turnip_seeds", "carrot_seeds", "pumpkin_seeds"]
 
@@ -42,20 +43,34 @@ class Shop:
         row_width = panel.width - 40
         return pygame.Rect(row_x, row_y, row_width, ROW_HEIGHT)
 
+    def get_close_rect(self, panel):
+        """Return the rectangle of the X button, at the top right of the window."""
+        return pygame.Rect(panel.right - 40, panel.y + 10, 28, 28)
+
     def handle_key(self, key, inventory):
-        """React to a key: Esc closes, arrows move, E / Space / Enter buy."""
+        """React to a key: Esc closes, up / down keys move, E / Space / Enter buy."""
         if key == pygame.K_ESCAPE:
             self.close()
-        elif key == pygame.K_UP:
+        elif key in UP_KEYS:
             self.cursor = (self.cursor - 1) % len(SHOP_STOCK)
-        elif key == pygame.K_DOWN:
+        elif key in DOWN_KEYS:
             self.cursor = (self.cursor + 1) % len(SHOP_STOCK)
         elif key in INTERACT_KEYS:
             self.buy(SHOP_STOCK[self.cursor], inventory)
 
-    def handle_click(self, pos, screen, inventory):
-        """React to a left click: clicking an item row buys that item."""
+    def handle_hover(self, pos, screen):
+        """Move the cursor to the item row under the mouse."""
         panel = self.get_panel(screen)
+        for index in range(len(SHOP_STOCK)):
+            if self.get_row_rect(panel, index).collidepoint(pos):
+                self.cursor = index
+
+    def handle_click(self, pos, screen, inventory):
+        """React to a left click: an item row buys it, the X or outside closes."""
+        panel = self.get_panel(screen)
+        if self.get_close_rect(panel).collidepoint(pos) or not panel.collidepoint(pos):
+            self.close()
+            return
         for index in range(len(SHOP_STOCK)):
             row = self.get_row_rect(panel, index)
             if row.collidepoint(pos):
@@ -82,8 +97,15 @@ class Shop:
         title = font.render("Shop", True, (255, 255, 255))
         screen.blit(title, (panel.x + 20, panel.y + 15))
         gold = font.render("Gold: " + str(inventory.gold), True, (255, 220, 60))
-        gold_x = panel.right - gold.get_width() - 20
+        gold_x = panel.right - gold.get_width() - 60
         screen.blit(gold, (gold_x, panel.y + 15))
+
+        # the X button, to close the shop with the mouse
+        close = self.get_close_rect(panel)
+        pygame.draw.rect(screen, (120, 50, 50), close)
+        x_label = font.render("X", True, (255, 255, 255))
+        x_pos = (close.centerx - x_label.get_width() // 2, close.centery - x_label.get_height() // 2)
+        screen.blit(x_label, x_pos)
 
         for i, item_id in enumerate(SHOP_STOCK):
             data = ITEMS[item_id]
@@ -104,7 +126,7 @@ class Shop:
         msg = small_font.render(self.message, True, (255, 150, 150))
         screen.blit(msg, (panel.x + 20, panel.bottom - 60))
 
-        hint_text = "Arrows: choose   E / Enter / click: buy   Esc: close"
+        hint_text = "ZS / WS / arrows: choose   E / click: buy   Esc / X: close"
         hint = small_font.render(hint_text, True, (180, 180, 180))
         screen.blit(hint, (panel.x + 20, panel.bottom - 30))
 

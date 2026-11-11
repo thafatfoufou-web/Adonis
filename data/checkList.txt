@@ -1,0 +1,60 @@
+A. Quick test (2 images)
+
+assets/tiles/grass.png +
+Hero sprite sheet, only the standing pose to start +
+
+B. Ground tiles (8, active now) in assets/tiles/
+
+grass.png +
+path.png  +
+wall.png +
+water.png 
+tree.png +
+fence.png
+shop_counter.png +
+shipping_box.png
+
+C. Characters in assets/characters/
+A character is 64 x 64 
+
+D. Item icons (8, active now) in assets/items/, 32 x 32 each
+
+hoe.png, watering_can.png
+turnip_seeds.png, turnip.png
+carrot_seeds.png, carrot.png
+pumpkin_seeds.png, pumpkin.png
+
+E. Farm in assets/farm/
+These are not read by the game yet. I’ll hook them in the next steps.
+
+soil_dry.png, soil_wet.png
+Each crop in 4 growth stages (sprout, small, big, ripe). The game picks the stage from the number of days, so a 3-day carrot and a 6-day pumpkin both use 4 images:
+turnip_1.png to turnip_4.png
+carrot_1.png to carrot_4.png
+pumpkin_1.png to pumpkin_4.png
+clue_spot.png (replaces the gold diamond)
+
+F. Extra tiles for a richer map in assets/tiles/
+These are not in tiles.json yet. Draw the ones you want, and I’ll add them.
+
+Ground: dirt.png, sand.png, flowers.png, tall_grass.png
+Buildings: house_wall.png, roof.png, door.png, window.png, house_floor.png
+Objects: rock.png, bush.png, well.png (useful for the mystery), sign.png, bed.png, bridge.png
+
+G. Interface (optional, they are drawn in code now) in assets/ui/
+
+slot.png (32 or 48 square), slot_selected.png
+panel.png (a frame that can stretch)
+coin.png
+dialogue_portrait_<name>.png (a face, about 64 x 64, one per villager, shown in the dialogue box)
+
+Counts
+
+Needed to make the game look real: 8 tiles + 8 icons + 2 soil + 12 crops + 6 characters (2 heroes, Mira, Tom, 2 new villagers) = 36 images.
+With extras (F) and the interface (G): around 60 to 70.
+
+
+
+TO FIX
+make it so that u cant put anything in 0 slot 
+shouldnt be tilable under house

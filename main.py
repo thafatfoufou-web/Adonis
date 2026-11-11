@@ -17,6 +17,7 @@ clock = pygame.time.Clock()
 font = pygame.font.Font(None, 32)        # your font lines here
 small_font = pygame.font.Font(None, 22)  # your font lines here
 
+
 CLICK_REACH = 1   # how many tiles around the player you can click (1 = your tile + the 8 around)
 
 # physical keys 1 to 9 then 0, whatever the keyboard layout
@@ -24,7 +25,7 @@ SLOT_KEYS = [pygame.KSCAN_1, pygame.KSCAN_2, pygame.KSCAN_3, pygame.KSCAN_4,
              pygame.KSCAN_5, pygame.KSCAN_6, pygame.KSCAN_7, pygame.KSCAN_8,
              pygame.KSCAN_9, pygame.KSCAN_0]
 
-world = TileMap("maps/farm.txt", "data/tiles.json")
+world = TileMap("maps/farm.txt", "data/tiles.json", "data/buildings.json")
 player = Player(64, 256)
 game_time = GameTime()
 farm = Farm()
@@ -101,10 +102,16 @@ while running:
                 elif shop.is_open:
                     shop.handle_click(event.pos, screen, inventory)
                 else:
-                    tile = (event.pos[0] // TILE_SIZE, event.pos[1] // TILE_SIZE)
+                    # clicking a building uses its door, otherwise the clicked tile
+                    tile = world.get_building_click_tile(event.pos, player.get_tile())
+                    if tile is None:
+                        tile = (event.pos[0] // TILE_SIZE, event.pos[1] // TILE_SIZE)
                     if player.can_reach(tile[0], tile[1], CLICK_REACH):
                         player.face_tile(tile[0], tile[1])
                         interact(tile)
+        elif event.type == pygame.MOUSEMOTION:
+            if shop.is_open:
+                shop.handle_hover(event.pos, screen)
         elif event.type == pygame.MOUSEWHEEL:
             if not shop.is_open and not dialogue_box.is_open:
                 inventory.scroll(-event.y)
@@ -127,13 +134,23 @@ while running:
     screen.fill((180, 229, 145))
     world.draw(screen)
     farm.draw(screen)
+    feet = player.get_rect().bottom
+    world.draw_objects(screen, feet, True)    # objects the player is in front of
+
     for npc in npcs:
-        npc.draw(screen, small_font)
+        if npc.get_feet_y() <= feet:
+            npc.draw(screen, small_font)
     player.draw(screen)
+    for npc in npcs:
+        if npc.get_feet_y() > feet:
+            npc.draw(screen, small_font)
+    world.draw_objects(screen, feet, False)   # objects the player is behind
 
     # outline only on the hovered tile, and only if we can reach it
     mx, my = pygame.mouse.get_pos()
-    hover = (mx // TILE_SIZE, my // TILE_SIZE)
+    hover = world.get_building_click_tile((mx, my), player.get_tile())
+    if hover is None:
+        hover = (mx // TILE_SIZE, my // TILE_SIZE)
     if player.can_reach(hover[0], hover[1], CLICK_REACH):
         target = pygame.Rect(hover[0] * TILE_SIZE, hover[1] * TILE_SIZE, TILE_SIZE, TILE_SIZE)
         pygame.draw.rect(screen, (255, 220, 60), target, 2)
