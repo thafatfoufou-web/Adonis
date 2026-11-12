@@ -83,7 +83,7 @@ class TileMap:
         return False
 
     def is_tillable(self, tx, ty):
-        """Return True if the hoe can turn this tile into soil."""
+        """Return True if the shovel can turn this tile into soil."""
         definition = self.get_definition_at(tx, ty)
         return definition.get("tillable", False)
 

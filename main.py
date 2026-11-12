@@ -36,9 +36,9 @@ dialogues = load_dialogues("data/dialogues.json")
 dialogue_box = DialogueBox()
 
 inventory = Inventory()
-inventory.add_item("hoe")
+inventory.add_item("shovel")
 inventory.add_item("watering_can")
-inventory.add_item("turnip_seeds", 5)
+inventory.add_item("cauliflower_seeds", 5)
 
 night = pygame.Surface(screen.get_size())
 night.fill((0, 0, 40))

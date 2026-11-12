@@ -1,7 +1,7 @@
 {
-  "hoe": {
-    "name": "Hoe", "type": "tool",
-    "icon": "assets/items/hoe.png",
+  "shovel": {
+    "name": "Shovel", "type": "tool",
+    "icon": "assets/items/shovel.png",
     "color": [150, 100, 50], "stackable": false
   },
   "watering_can": {
@@ -9,14 +9,14 @@
     "icon": "assets/items/watering_can.png",
     "color": [70, 130, 220], "stackable": false
   },
-  "turnip_seeds": {
-    "name": "Turnip seeds", "type": "seed",
-    "icon": "assets/items/turnip_seeds.png",
+  "cauliflower_seeds": {
+    "name": "Cauliflower seeds", "type": "seed",
+    "icon": "assets/items/cauliflower_seeds.png",
     "color": [200, 230, 120], "stackable": true, "buy_price": 20
   },
-  "turnip": {
-    "name": "Turnip", "type": "crop",
-    "icon": "assets/items/turnip.png",
+  "cauliflower": {
+    "name": "Cauliflower", "type": "crop",
+    "icon": "assets/items/cauliflower.png",
     "color": [230, 230, 240], "stackable": true, "sell_price": 50
   },
   "carrot_seeds": {

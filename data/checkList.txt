@@ -8,21 +8,21 @@ B. Ground tiles (8, active now) in assets/tiles/
 grass.png +
 path.png  +
 wall.png +
-water.png 
+water.png +
 tree.png +
-fence.png
+fence.png +
 shop_counter.png +
-shipping_box.png
+shipping_box.png -
 
-C. Characters in assets/characters/
-A character is 64 x 64 
+C. Characters in assets/characters/ !! A character is 64 x 64 !!
 
 D. Item icons (8, active now) in assets/items/, 32 x 32 each
 
-hoe.png, watering_can.png
-turnip_seeds.png, turnip.png
-carrot_seeds.png, carrot.png
-pumpkin_seeds.png, pumpkin.png
+hoe.png, watering_can.png found shovel.png instead +
+turnip_seeds.png, turnip.png +
+carrot_seeds.png, carrot.png +
+
+pumpkin_seeds.png, pumpkin.png /cauliflower +
 
 E. Farm in assets/farm/
 These are not read by the game yet. I’ll hook them in the next steps.

@@ -1,14 +1,16 @@
 import pygame
 from assets import load_image
 from inventory import ITEMS
+import theme
 from controls import INTERACT_KEYS, UP_KEYS, DOWN_KEYS
 
-SHOP_STOCK = ["turnip_seeds", "carrot_seeds", "pumpkin_seeds"]
+SHOP_STOCK = ["cauliflower_seeds", "carrot_seeds", "pumpkin_seeds"]
 
 PANEL_WIDTH = 480
-PANEL_HEIGHT = 260
-ROW_HEIGHT = 34
-ROW_SPACING = 40
+PANEL_HEIGHT = 270
+ROW_HEIGHT = 40
+ROW_SPACING = 46
+ICON_SIZE = 32   # icons are drawn at their real size (32x32), so the pixels stay sharp
 
 
 class Shop:
@@ -45,7 +47,7 @@ class Shop:
 
     def get_close_rect(self, panel):
         """Return the rectangle of the X button, at the top right of the window."""
-        return pygame.Rect(panel.right - 40, panel.y + 10, 28, 28)
+        return pygame.Rect(panel.right - 44, panel.y + 16, 28, 28)
 
     def handle_key(self, key, inventory):
         """React to a key: Esc closes, up / down keys move, E / Space / Enter buy."""
@@ -91,44 +93,37 @@ class Shop:
     def draw(self, screen, font, small_font, inventory):
         """Draw the shop window: title, gold, item rows, message and controls hint."""
         panel = self.get_panel(screen)
-        pygame.draw.rect(screen, (30, 30, 40), panel)
-        pygame.draw.rect(screen, (255, 220, 60), panel, 3)
+        theme.draw_frame(screen, panel)
+        theme.draw_inset(screen, panel.inflate(-16, -16))
 
-        title = font.render("Shop", True, (255, 255, 255))
-        screen.blit(title, (panel.x + 20, panel.y + 15))
-        gold = font.render("Gold: " + str(inventory.gold), True, (255, 220, 60))
-        gold_x = panel.right - gold.get_width() - 60
-        screen.blit(gold, (gold_x, panel.y + 15))
+        theme.draw_text(screen, font, "Shop", theme.TEXT, (panel.x + 24, panel.y + 22))
 
         # the X button, to close the shop with the mouse
         close = self.get_close_rect(panel)
-        pygame.draw.rect(screen, (120, 50, 50), close)
-        x_label = font.render("X", True, (255, 255, 255))
-        x_pos = (close.centerx - x_label.get_width() // 2, close.centery - x_label.get_height() // 2)
-        screen.blit(x_label, x_pos)
+        theme.draw_inset(screen, close, theme.DANGER)
+        theme.draw_text(screen, font, "X", theme.TEXT, close.center, "center")
+
+        gold_text = "Gold: " + str(inventory.gold)
+        theme.draw_text(screen, font, gold_text, theme.ACCENT, (close.left - 16, panel.y + 22), "topright")
 
         for i, item_id in enumerate(SHOP_STOCK):
             data = ITEMS[item_id]
             row = self.get_row_rect(panel, i)
             if i == self.cursor:
-                pygame.draw.rect(screen, (70, 70, 90), row)
+                theme.draw_inset(screen, row, theme.INSET_LIGHT)
+                pygame.draw.rect(screen, theme.ACCENT, row, 2)
 
-            icon = load_image(data["icon"], (22, 22), data["color"])
-            screen.blit(icon, (row.x + 6, row.y + 6))
+            icon = load_image(data["icon"], (ICON_SIZE, ICON_SIZE), data["color"])
+            screen.blit(icon, (row.x + 8, row.y + (ROW_HEIGHT - ICON_SIZE) // 2))
 
-            name = font.render(data["name"], True, (255, 255, 255))
-            screen.blit(name, (row.x + 40, row.y + 6))
+            theme.draw_text(screen, font, data["name"], theme.TEXT, (row.x + 52, row.centery), "midleft")
+            price_text = str(data["buy_price"]) + " g"
+            theme.draw_text(screen, font, price_text, theme.ACCENT, (row.right - 14, row.centery), "midright")
 
-            price = font.render(str(data["buy_price"]) + " g", True, (255, 220, 60))
-            price_x = row.right - price.get_width() - 10
-            screen.blit(price, (price_x, row.y + 6))
+        if self.message:
+            color = theme.GOOD if self.message.startswith("Bought") else theme.BAD
+            theme.draw_text(screen, small_font, self.message, color, (panel.x + 24, panel.bottom - 44))
 
-        msg = small_font.render(self.message, True, (255, 150, 150))
-        screen.blit(msg, (panel.x + 20, panel.bottom - 60))
-
-        hint_text = "ZS / WS / arrows: choose   E / click: buy   Esc / X: close"
-        hint = small_font.render(hint_text, True, (180, 180, 180))
-        screen.blit(hint, (panel.x + 20, panel.bottom - 30))
 
 
 def sell_selected(inventory):
