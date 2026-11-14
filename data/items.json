@@ -4,10 +4,20 @@
     "icon": "assets/items/shovel.png",
     "color": [150, 100, 50], "stackable": false
   },
+  "pickaxe": {
+    "name": "Pickaxe", "type": "tool",
+    "icon": "assets/items/pickaxe.png",
+    "color": [140, 140, 150], "stackable": false
+  },
   "watering_can": {
     "name": "Watering can", "type": "tool",
     "icon": "assets/items/watering_can.png",
     "color": [70, 130, 220], "stackable": false
+  },
+    "beehive": {
+    "name": "Beehive", "type": "placeable",
+    "icon": "assets/items/beehive.png",
+    "color": [230, 180, 60], "stackable": true
   },
   "cauliflower_seeds": {
     "name": "Cauliflower seeds", "type": "seed",
@@ -38,5 +48,20 @@
     "name": "Pumpkin", "type": "crop",
     "icon": "assets/items/pumpkin.png",
     "color": [230, 120, 30], "stackable": true, "sell_price": 180
+  },
+    "milk": {
+    "name": "Milk", "type": "crop",
+    "icon": "assets/items/milk.png",
+    "color": [245, 245, 250], "stackable": true, "sell_price": 45
+  },
+  "honey": {
+    "name": "Honey", "type": "crop",
+    "icon": "assets/items/honey.png",
+    "color": [255, 190, 40], "stackable": true, "sell_price": 60
+  },
+  "mad_honey": {
+    "name": "Honey", "type": "crop",
+    "icon": "assets/items/madHoney.png",
+    "color": [150, 70, 40], "stackable": true, "sell_price": 60, "toxic": true
   }
 }

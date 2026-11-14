@@ -1,112 +1,181 @@
+import os
+from pathlib import Path
+os.chdir(Path(__file__).resolve().parent)
 import pygame
-from player import Player
-from world import TileMap, TILE_SIZE
-from gametime import GameTime
-from inventory import Inventory
-from farm import Farm
-from shop import Shop, sell_selected
-from ui import HUD
-from npc import load_npcs
-from controls import INTERACT_KEYS
-from dialogue import DialogueBox, load_dialogues, get_lines
+import config
+from core.camera import Camera
+from core.gametime import GameTime
+from entities.cow import Cow
+from entities.npc import load_npcs
+from entities.player import Player
+from systems.energy import Energy
+from systems.farm import Farm
+from systems.inventory import Inventory
+from ui.dialogue import DialogueBox, load_dialogues, pick_entry
+from ui.hud import HUD
+from ui.shop import Shop, sell_selected
+from world.tilemap import TileMap
+from systems.story import Story
+from systems.apiary import Apiary
 
 pygame.init()
-screen = pygame.display.set_mode((960, 544), pygame.SCALED | pygame.FULLSCREEN)
-pygame.display.set_caption("Farm Mystery")
+window_flags = pygame.SCALED | (pygame.FULLSCREEN if config.FULLSCREEN else 0)
+screen = pygame.display.set_mode(config.SCREEN_SIZE, window_flags)
+pygame.display.set_caption(config.WINDOW_TITLE)
 clock = pygame.time.Clock()
-font = pygame.font.Font(None, 32)        # your font lines here
-small_font = pygame.font.Font(None, 22)  # your font lines here
+font = pygame.font.Font(None, config.FONT_SIZE)
+small_font = pygame.font.Font(None, config.SMALL_FONT_SIZE)
 
-
-CLICK_REACH = 1   # how many tiles around the player you can click (1 = your tile + the 8 around)
-
-# physical keys 1 to 9 then 0, whatever the keyboard layout
-SLOT_KEYS = [pygame.KSCAN_1, pygame.KSCAN_2, pygame.KSCAN_3, pygame.KSCAN_4,
-             pygame.KSCAN_5, pygame.KSCAN_6, pygame.KSCAN_7, pygame.KSCAN_8,
-             pygame.KSCAN_9, pygame.KSCAN_0]
-
-world = TileMap("maps/farm.txt", "data/tiles.json", "data/buildings.json")
-player = Player(64, 256)
+world = TileMap(config.MAP_FILE, config.TILES_FILE, config.BUILDINGS_FILE)
+player = Player(*config.PLAYER_START)
+camera = Camera(screen.get_size(), world.pixel_size, config.CAMERA_PADDING)
 game_time = GameTime()
 farm = Farm()
+apiary = Apiary(world)
 shop = Shop()
 hud = HUD(font, small_font)
-npcs = load_npcs("data/npcs.json")
-dialogues = load_dialogues("data/dialogues.json")
+npcs = load_npcs(config.NPCS_FILE)
+cows = [Cow(tile) for tile in config.COW_START_TILES]
+dialogues = load_dialogues(config.DIALOGUES_FILE)
 dialogue_box = DialogueBox()
-
 inventory = Inventory()
-inventory.add_item("shovel")
-inventory.add_item("watering_can")
-inventory.add_item("cauliflower_seeds", 5)
+energy = Energy()
+story = Story()
+
+for item_id, count in config.STARTING_ITEMS:
+    inventory.add_item(item_id, count)
 
 night = pygame.Surface(screen.get_size())
-night.fill((0, 0, 40))
+night.fill(config.NIGHT_COLOR)
+
+HIVE_MESSAGES = {
+    "placed": ("You placed the beehive.", config.GOOD),
+    "collected": ("You collected some honey.", config.GOOD),
+    "not_ready": ("The bees are still working...", config.GOOD),
+    "bad_spot": ("A hive needs a free patch of grass.", config.BAD),
+    "full": ("Your hotbar is full.", config.BAD),
+    "tired": ("Too tired... go home and sleep.", config.BAD),
+    "picked_up": ("You took the beehive back.", config.GOOD),
+        "placed_no_flowers": ("Placed. But bees need flowers nearby to make honey.", config.BAD),
+    "no_flowers": ("No flowers nearby: the bees cannot make honey here.", config.BAD),
+}
+
+
+COW_MESSAGES = {
+    "milked": ("You milked the cow.", config.GOOD),
+    "not_ready": ("This cow has no milk left today.", config.BAD),
+    "full": ("Your hotbar is full.", config.BAD),
+    "tired": ("Too tired... go home and sleep.", config.BAD),
+}
+
+
+def start_new_day(slept):
+    """Start the next morning: crops grow, villagers go home and energy comes back.
+
+    Sleeping restores SLEEP_ENERGY_FRACTION of the energy, staying up until
+    midnight only PASS_OUT_FRACTION.
+    """
+    farm.new_day()
+    apiary.new_day()
+    for npc in npcs:
+        npc.go_home()
+    for cow in cows:
+        cow.new_day()
+
+    if slept:
+        energy.restore(config.SLEEP_ENERGY_FRACTION)
+        hud.show_notice("You slept well. A new day begins!")
+    else:
+        energy.restore(config.PASS_OUT_FRACTION)
+        hud.show_notice("You fell asleep exhausted...", 3, config.BAD)
 
 
 def interact(target=None):
-    """Do the action on a tile.
+    """Do the action on a tile: the one in front of the player, or the clicked one if target is given.
 
-    With the keyboard (no target) it is the tile in front of the player.
-    With the mouse, target is the clicked tile.
-    An NPC there starts a dialogue, the shop counter opens the shop, the box
-    sells the held item, and anything else goes to the farm
-    (till, water, plant, harvest).
+    An NPC starts a dialogue, the shop counter opens the shop, the box sells
+    the held item, the bed sleeps, and anything else goes to the farm.
     """
     if target is None:
-        tx, ty = player.get_target_tile()   # keyboard: tile in front
+        tx, ty = player.get_target_tile()
     else:
-        tx, ty = target                     # mouse: the clicked tile
+        tx, ty = target
     action = world.get_action(tx, ty)
 
-    # is there an NPC on the tile?
     npc_found = None
     for npc in npcs:
         if npc.tile == (tx, ty):
             npc_found = npc
 
+    cow_found = None
+    for cow in cows:
+        if cow.is_on_tile(tx, ty):
+            cow_found = cow
+
     if npc_found is not None:
-        lines = get_lines(dialogues, npc_found.id, game_time.day)
-        dialogue_box.open(npc_found.name, lines)
+        entry = pick_entry(dialogues, npc_found.id, game_time, story)
+        gifts = entry.get("gives", [])
+        if not all(inventory.can_add(gift["item"]) for gift in gifts):
+            hud.show_notice("Your hotbar is full. Make some room first.", 2, config.BAD)
+        else:
+            dialogue_box.open(npc_found.name, entry["lines"])
+            story.set_many(entry.get("sets", []))
+            for gift in gifts:
+                inventory.add_item(gift["item"], gift.get("count", 1))
+    elif cow_found is not None:
+        text, color = COW_MESSAGES[cow_found.milk(inventory, energy)]
+        hud.show_notice(text, 2, color)
     elif action == "shop":
         shop.open()
     elif action == "sell":
         hud.show_notice(sell_selected(inventory))
+    elif action == "sleep":
+        game_time.new_day()
+        start_new_day(slept=True)
     else:
-        farm.use(tx, ty, inventory, world)
+        taken = set(farm.soil) | {npc.tile for npc in npcs} | {player.get_tile()}
+        hive_result = apiary.use(tx, ty, inventory, energy, story, taken)
+        if hive_result is not None:
+            text, color = HIVE_MESSAGES[hive_result]
+            hud.show_notice(text, 2, color)
+        elif farm.use(tx, ty, inventory, world, energy) == "tired":
+            hud.show_notice("Too tired... go home and sleep.", 2, config.BAD)
 
 
-running = True
-while running:
-    dt = clock.tick(60) / 1000
+def get_mouse_tile():
+    """Return the tile under the mouse, using the building's door when the mouse is on a building."""
+    world_pos = camera.to_world(pygame.mouse.get_pos())
+    tile = world.get_building_click_tile(world_pos, player.get_tile())
+    if tile is None:
+        tile = (world_pos[0] // config.TILE_SIZE, world_pos[1] // config.TILE_SIZE)
+    return tile
 
+
+def handle_events():
+    """Process the window, keyboard and mouse events. Return False when the player quits."""
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
-            running = False
+            return False
         elif event.type == pygame.KEYDOWN:
             if dialogue_box.is_open:
                 dialogue_box.handle_key(event.key)
             elif shop.is_open:
                 shop.handle_key(event.key, inventory)
             else:
-                if event.key in INTERACT_KEYS:
+                if event.key in config.INTERACT_KEYS:
                     interact()
-                for i, code in enumerate(SLOT_KEYS):
+                for i, code in enumerate(config.SLOT_KEYS):
                     if event.scancode == code:
                         inventory.select(i)
         elif event.type == pygame.MOUSEBUTTONDOWN:
-            # button 1 is the left click
             if event.button == 1:
                 if dialogue_box.is_open:
                     dialogue_box.handle_click()
                 elif shop.is_open:
                     shop.handle_click(event.pos, screen, inventory)
                 else:
-                    # clicking a building uses its door, otherwise the clicked tile
-                    tile = world.get_building_click_tile(event.pos, player.get_tile())
-                    if tile is None:
-                        tile = (event.pos[0] // TILE_SIZE, event.pos[1] // TILE_SIZE)
-                    if player.can_reach(tile[0], tile[1], CLICK_REACH):
+                    tile = get_mouse_tile()
+                    if player.can_reach(tile[0], tile[1], config.CLICK_REACH):
                         player.face_tile(tile[0], tile[1])
                         interact(tile)
         elif event.type == pygame.MOUSEMOTION:
@@ -115,57 +184,77 @@ while running:
         elif event.type == pygame.MOUSEWHEEL:
             if not shop.is_open and not dialogue_box.is_open:
                 inventory.scroll(-event.y)
+    return True
 
-    # the game is paused while the shop or a dialogue is open
+
+def update(dt):
+    """Advance the game by dt seconds; everything but the HUD freezes while the shop or a dialogue is open."""
     paused = shop.is_open or dialogue_box.is_open
     if not paused:
         player.update(dt, world)
 
-        new_day = game_time.update(dt)
-        if new_day:
-            farm.new_day()
-            for npc in npcs:
-                npc.go_home()
+        if game_time.update(dt):
+            start_new_day(slept=False)
 
         for npc in npcs:
             npc.update(dt, game_time.minutes, world)
+
+        blocked = set(farm.soil) | {npc.tile for npc in npcs} | {player.get_tile()}
+        for cow in cows:
+            cow.update(dt, world, blocked, player.get_rect(), cows)
+        world.moving_obstacles = [cow.get_hitbox() for cow in cows]
     hud.update(dt)
 
-    screen.fill((180, 229, 145))
-    world.draw(screen)
-    farm.draw(screen)
+    player_x, player_y = player.get_rect().center
+    camera.follow((player_x, player_y - config.CAMERA_OFFSET_Y))
+
+
+def draw():
+    """Draw one frame: world, farm, characters in depth order, hover outline, night and interface."""
+    screen.fill((0, 0, 0))
+    world.draw(screen, camera)
+    farm.draw(screen, camera)
+    apiary.draw(screen, camera)
     feet = player.get_rect().bottom
-    world.draw_objects(screen, feet, True)    # objects the player is in front of
+    world.draw_objects(screen, camera, feet, True)
 
-    for npc in npcs:
-        if npc.get_feet_y() <= feet:
-            npc.draw(screen, small_font)
-    player.draw(screen)
-    for npc in npcs:
-        if npc.get_feet_y() > feet:
-            npc.draw(screen, small_font)
-    world.draw_objects(screen, feet, False)   # objects the player is behind
+    walkers = npcs + cows       # villagers and cows are drawn in depth order with the player
+    for walker in walkers:
+        if walker.get_feet_y() <= feet:
+            walker.draw(screen, small_font, camera)
+    player.draw(screen, camera)
+    for walker in walkers:
+        if walker.get_feet_y() > feet:
+            walker.draw(screen, small_font, camera)
+    world.draw_objects(screen, camera, feet, False)
 
-    # outline only on the hovered tile, and only if we can reach it
-    mx, my = pygame.mouse.get_pos()
-    hover = world.get_building_click_tile((mx, my), player.get_tile())
-    if hover is None:
-        hover = (mx // TILE_SIZE, my // TILE_SIZE)
-    if player.can_reach(hover[0], hover[1], CLICK_REACH):
-        target = pygame.Rect(hover[0] * TILE_SIZE, hover[1] * TILE_SIZE, TILE_SIZE, TILE_SIZE)
-        pygame.draw.rect(screen, (255, 220, 60), target, 2)
+    hover = get_mouse_tile()
+    if player.can_reach(hover[0], hover[1], config.CLICK_REACH):
+        size = config.TILE_SIZE
+        outline = pygame.Rect(hover[0] * size - camera.x, hover[1] * size - camera.y, size, size)
+        pygame.draw.rect(screen, config.HOVER_COLOR, outline, config.HOVER_WIDTH)
 
-    # the night covers the whole screen, the interface is drawn on top
     night.set_alpha(game_time.get_darkness())
     screen.blit(night, (0, 0))
 
-    hud.draw(screen, game_time, inventory)
-
+    hud.draw(screen, game_time, inventory, energy)
     if shop.is_open:
         shop.draw(screen, font, small_font, inventory)
-
     dialogue_box.draw(screen, font, small_font)
 
     pygame.display.flip()
 
-pygame.quit()
+
+def main():
+    """Run the game loop until the window is closed."""
+    running = True
+    while running:
+        dt = clock.tick(config.FPS) / 1000
+        running = handle_events()
+        update(dt)
+        draw()
+    pygame.quit()
+
+
+if __name__ == "__main__":
+    main()

@@ -1,34 +1,500 @@
 {
   "1": {
-    "name": "Grass", "image": "assets/tiles/grass.png",
-    "color": [60, 120, 60], "solid": false, "tillable": true
+    "name": "Grass",
+    "image": "assets/tiles/grass.png",
+    "color": [
+      60,
+      120,
+      60
+    ],
+    "solid": false,
+    "tillable": true
   },
   "2": {
-    "name": "Wall", "image": "assets/tiles/wall.png",
-    "color": [90, 90, 90], "solid": true
+    "name": "Brick wall",
+    "image": "assets/tiles/wall.png",
+    "color": [
+      90,
+      90,
+      90
+    ],
+    "solid": true
   },
   "3": {
-    "name": "Shop counter", "image": "assets/tiles/shop_counter.png",
-    "color": [210, 150, 60], "solid": true, "action": "shop"
+    "name": "Shop counter",
+    "image": "assets/tiles/shop_counter.png",
+    "color": [
+      210,
+      150,
+      60
+    ],
+    "solid": true,
+    "action": "shop"
   },
   "4": {
-    "name": "Shipping box", "image": "assets/tiles/shipping_box.png",
-    "color": [170, 60, 60], "solid": true, "action": "sell"
+    "name": "Shipping box",
+    "image": "assets/tiles/shipping_box.png",
+    "color": [
+      170,
+      60,
+      60
+    ],
+    "solid": true,
+    "action": "sell"
   },
   "5": {
-    "name": "Path", "image": "assets/tiles/path.png",
-    "color": [190, 160, 110], "solid": false
+    "name": "Road (north-south)",
+    "image": "assets/tiles/path/path.png",
+    "color": [
+      190,
+      160,
+      110
+    ],
+    "solid": false,
+    "ground": null
   },
   "6": {
-    "name": "Water", "image": "assets/tiles/water.png",
-    "color": [70, 130, 200], "solid": true
+    "name": "Water",
+    "image": "assets/tiles/water/water.png",
+    "color": [
+      70,
+      130,
+      200
+    ],
+    "solid": true,
+    "ground": null
   },
   "7": {
-    "name": "Tree", "image": "assets/tiles/tree.png",
-    "color": [30, 90, 40], "solid": true, "object": true, "hitbox": [3, 14, 28, 12]
+    "name": "Bush",
+    "image": "assets/tiles/tree.png",
+    "color": [
+      30,
+      90,
+      40
+    ],
+    "solid": true,
+    "object": true,
+    "hitbox": [
+      3,
+      12,
+      28,
+      14
+    ]
+  },
+  "9": {
+    "name": "Bush 2",
+    "image": "assets/tiles/tree2.png",
+    "color": [
+      30,
+      90,
+      40
+    ],
+    "solid": true,
+    "object": true,
+    "hitbox": [
+      3,
+      12,
+      28,
+      14
+    ]
   },
   "8": {
-    "name": "Fence", "image": "assets/tiles/fence.png",
-    "color": [140, 100, 60], "solid": true
+    "name": "Fence (horizontal)",
+    "image": "assets/tiles/fence/fence_h.png",
+    "color": [
+      140,
+      100,
+      60
+    ],
+    "solid": true,
+    "object": true,
+    "hitbox": [
+      0,
+      16,
+      32,
+      12
+    ]
+  },
+  "80": {
+    "name": "Fence (vertical)",
+    "image": "assets/tiles/fence/fence_v.png",
+    "color": [
+      140,
+      100,
+      60
+    ],
+    "solid": true,
+    "object": true,
+    "hitbox": [8, 0, 16, 32]
+  },
+  "81": {
+    "name": "Fence (corner top-left)",
+    "image": "assets/tiles/fence/fence_se.png",
+    "color": [
+      140,
+      100,
+      60
+    ],
+    "solid": true,
+    "object": true,
+    "hitbox": [8, 0, 16, 32]
+  },
+  "82": {
+    "name": "Fence (corner top-right)",
+    "image": "assets/tiles/fence/fence_sw.png",
+    "color": [
+      140,
+      100,
+      60
+    ],
+    "solid": true,
+    "object": true,
+    "hitbox": [8, 0, 16, 32]
+  },
+  "83": {
+    "name": "Fence (corner bottom-left)",
+    "image": "assets/tiles/fence/fence_ne.png",
+    "color": [
+      140,
+      100,
+      60
+    ],
+    "solid": true,
+    "object": true,
+    "hitbox": [8, 0, 16, 32]
+  },
+  "84": {
+    "name": "Fence (corner bottom-right)",
+    "image": "assets/tiles/fence/fence_nw.png",
+    "color": [
+      140,
+      100,
+      60
+    ],
+    "solid": true,
+    "object": true,
+    "hitbox": [8, 0, 16, 32]
+  },
+  "10": {
+    "name": "Road (east-west)",
+    "image": "assets/tiles/path/path_ew.png",
+    "color": [
+      190,
+      160,
+      110
+    ],
+    "solid": false,
+    "ground": null
+  },
+  "11": {
+    "name": "Road (bend south-east)",
+    "image": "assets/tiles/path/topLeftPath.png",
+    "color": [
+      190,
+      160,
+      110
+    ],
+    "solid": false,
+    "ground": null
+  },
+  "12": {
+    "name": "Road (bend south-west)",
+    "image": "assets/tiles/path/topRightPath.png",
+    "color": [
+      190,
+      160,
+      110
+    ],
+    "solid": false,
+    "ground": null
+  },
+  "13": {
+    "name": "Road (bend north-east)",
+    "image": "assets/tiles/path/botLeftPath.png",
+    "color": [
+      190,
+      160,
+      110
+    ],
+    "solid": false,
+    "ground": null
+  },
+  "14": {
+    "name": "Road (bend north-west)",
+    "image": "assets/tiles/path/botRight.png",
+    "color": [
+      190,
+      160,
+      110
+    ],
+    "solid": false,
+    "ground": null
+  },
+  "15": {
+    "name": "Road (T south-east-west)",
+    "image": "assets/tiles/path/path_sew.png",
+    "color": [
+      190,
+      160,
+      110
+    ],
+    "solid": false,
+    "ground": null
+  },
+  "16": {
+    "name": "Road (T north-east-west)",
+    "image": "assets/tiles/path/path_new.png",
+    "color": [
+      190,
+      160,
+      110
+    ],
+    "solid": false,
+    "ground": null
+  },
+  "17": {
+    "name": "Road (T north-south-east)",
+    "image": "assets/tiles/path/path_nse.png",
+    "color": [
+      190,
+      160,
+      110
+    ],
+    "solid": false,
+    "ground": null
+  },
+  "18": {
+    "name": "Road (T north-south-west)",
+    "image": "assets/tiles/path/path_nsw.png",
+    "color": [
+      190,
+      160,
+      110
+    ],
+    "solid": false,
+    "ground": null
+  },
+  "19": {
+    "name": "Road (crossing)",
+    "image": "assets/tiles/path/path_nsew.png",
+    "color": [
+      190,
+      160,
+      110
+    ],
+    "solid": false,
+    "ground": null
+  },
+  "20": {
+    "name": "Pond (top-left)",
+    "image": "assets/tiles/water/topLeftWater.png",
+    "color": [
+      70,
+      130,
+      200
+    ],
+    "solid": true,
+    "ground": null
+  },
+  "21": {
+    "name": "Pond (top)",
+    "image": "assets/tiles/water/Topdown_RPG_32x32_-_WaterTileset_01.png",
+    "color": [
+      70,
+      130,
+      200
+    ],
+    "solid": true,
+    "ground": null
+  },
+  "22": {
+    "name": "Pond (top-right)",
+    "image": "assets/tiles/water/topRightWater.png",
+    "color": [
+      70,
+      130,
+      200
+    ],
+    "solid": true,
+    "ground": null
+  },
+  "23": {
+    "name": "Pond (left)",
+    "image": "assets/tiles/water/Topdown_RPG_32x32_-_WaterTileset_19.png",
+    "color": [
+      70,
+      130,
+      200
+    ],
+    "solid": true,
+    "ground": null
+  },
+  "24": {
+    "name": "Pond (right)",
+    "image": "assets/tiles/water/Topdown_RPG_32x32_-_WaterTileset_08.png",
+    "color": [
+      70,
+      130,
+      200
+    ],
+    "solid": true,
+    "ground": null
+  },
+  "25": {
+    "name": "Pond (bottom-left)",
+    "image": "assets/tiles/water/botLeftWater.png",
+    "color": [
+      70,
+      130,
+      200
+    ],
+    "solid": true,
+    "ground": null
+  },
+  "26": {
+    "name": "Pond (bottom)",
+    "image": "assets/tiles/water/Topdown_RPG_32x32_-_WaterTileset_14.png",
+    "color": [
+      70,
+      130,
+      200
+    ],
+    "solid": true,
+    "ground": null
+  },
+  "27": {
+    "name": "Pond (bottom-right)",
+    "image": "assets/tiles/water/botRightWater.png",
+    "color": [
+      70,
+      130,
+      200
+    ],
+    "solid": true,
+    "ground": null
+  },
+  "30": {
+    "name": "Border wall (top-left)",
+    "image": "assets/tiles/wall/topleftWall.png",
+    "color": [
+      90,
+      90,
+      90
+    ],
+    "solid": true
+  },
+  "31": {
+    "name": "Border wall (top)",
+    "image": "assets/tiles/wall/middletopwall.png",
+    "color": [
+      90,
+      90,
+      90
+    ],
+    "solid": true
+  },
+  "32": {
+    "name": "Border wall (top-right)",
+    "image": "assets/tiles/wall/topRightWall.png",
+    "color": [
+      90,
+      90,
+      90
+    ],
+    "solid": true
+  },
+  "33": {
+    "name": "Border wall (left)",
+    "image": "assets/tiles/wall/leftWall.png",
+    "color": [
+      90,
+      90,
+      90
+    ],
+    "solid": true
+  },
+  "34": {
+    "name": "Border wall (right)",
+    "image": "assets/tiles/wall/rightWall.png",
+    "color": [
+      90,
+      90,
+      90
+    ],
+    "solid": true
+  },
+  "35": {
+    "name": "Border wall (bottom-left)",
+    "image": "assets/tiles/wall/botoomLeftWall.png",
+    "color": [
+      90,
+      90,
+      90
+    ],
+    "solid": true
+  },
+  "36": {
+    "name": "Border wall (bottom)",
+    "image": "assets/tiles/wall/bottomWall.png",
+    "color": [
+      90,
+      90,
+      90
+    ],
+    "solid": true
+  },
+  "37": {
+    "name": "Border wall (bottom-right)",
+    "image": "assets/tiles/wall/bottomRightWall.png",
+    "color": [
+      90,
+      90,
+      90
+    ],
+    "solid": true
+  },
+  "40": {
+    "name": "Hedge",
+    "image": "assets/tiles/tree.png",
+    "color": [
+      30,
+      90,
+      40
+    ],
+    "solid": true
+  },
+  "41": {
+    "name": "Hedge 2",
+    "image": "assets/tiles/tree2.png",
+    "color": [
+      30,
+      90,
+      40
+    ],
+    "solid": true
+  },
+  "50": {
+    "name": "Lily",
+    "image": "assets/tiles/lily.png",
+    "color": [240, 240, 220],
+    "solid": false,
+    "flower": true
+  },
+  "51": {
+    "name": "Yellow azalea",
+    "image": "assets/tiles/yellow azalea.png",
+    "color": [240,200,40],
+    "solid": false,
+    "flower": true
+  },
+  "52": {
+    "name": "Stepping stones",
+    "image": "assets/tiles/stonepath.png",
+    "color": [
+      150,
+      150,
+      150
+    ],
+    "solid": false
   }
 }

@@ -2,9 +2,16 @@
   "mira": [
     {
       "day_min": 1,
+      "sets": ["met_mira"],
       "lines": [
         "Oh, hello! You must be the new farmer.",
         "I run the flower stall near the shop. Come by anytime."
+      ]
+    },
+    {
+      "requires": ["met_mira"],
+      "lines": [
+        "Back again? The lilies are doing well this year."
       ]
     },
     {
@@ -12,6 +19,14 @@
       "lines": [
         "Have you heard the news? Everyone in the village is whispering.",
         "I would lock my door tonight, if I were you."
+      ]
+    },
+    {
+      "day_min": 3,
+      "time": "night",
+      "lines": [
+        "Shh! Keep your voice down. Did you hear that?",
+        "I keep my shutters closed after dark now."
       ]
     }
   ],
@@ -26,6 +41,80 @@
       "day_min": 3,
       "lines": [
         "I did not see anything. Do you hear me? Nothing at all."
+      ]
+    },
+    {
+      "day_min": 2,
+      "time": "night",
+      "lines": [
+        "What are you doing out at this hour? Go home."
+      ]
+    }
+  ],
+    "foreigner": [
+    {
+      "day_min": 1,
+      "forbids": ["hive_offered"],
+      "sets": ["met_foreigner", "hive_offered"],
+      "gives": [{"item": "beehive", "count": 1}],
+      "lines": [
+        "Ah, you must be the other newcomer. I arrived just a few days ago myself.",
+        "Have you tried the sweets they sell here? All imported, all sugar. Disgusting.",
+        "Back home we kept our own bees. Here, take this hive. I built it from spare boards.",
+        "Put it somewhere sunny, near the flowers, and the bees will do the rest. Trust me, I know what I am doing."
+      ]
+    },
+    {
+      "requires": ["hive_offered"],
+      "lines": [
+        "Found a spot for the hive yet? Somewhere with plenty of flowers nearby.",
+        "You will thank me later. Real honey is nothing like the town sweets."
+      ]
+    },
+        {
+      "requires": ["hive_built"],
+      "lines": [
+        "Good spot! Now give the bees a few days.",
+        "They know their business better than we do."
+      ]
+    },
+    {
+      "requires": ["hive_no_flowers"],
+      "lines": [
+        "Hm. I do not see many flowers around your hive.",
+        "Bees need blossoms to make honey. Maybe you should plant it near some flowers instead.",
+        "Take it back with your pickaxe and move it next to the lilies and azaleas. They will be much happier."
+      ]
+    },
+    {
+      "requires": ["first_honey"],
+      "sets": ["honey_remarked"],
+      "lines": [
+        "Is that the honey? Let me see... Hm. Much darker than what we make back home.",
+        "And the taste is sharper, heavier. Unusual.",
+        "But it is good! Good in its own way. Keep some for yourself."
+      ]
+    },
+    {
+      "requires": ["honey_remarked"],
+      "lines": [
+        "Honey every few days. I should have brought bees to this valley sooner."
+      ]
+    }
+
+  ],
+    "ariane": [
+    {
+      "day_min": 1,
+      "lines": [
+        "Oh, a new face. Welcome to the village.",
+        "I do not talk much, but I do know a lot about the valley. If you need help, just ask."
+      ]
+    },
+    {
+      "day_min": 3,
+      "lines": [
+        "Be careful who you trust around here."
       ]
     }
   ]

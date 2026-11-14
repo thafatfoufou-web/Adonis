@@ -3,21 +3,106 @@
     {
       "id": "mira",
       "name": "Mira",
-      "color": [220, 120, 180],
+      "color": [
+        220,
+        120,
+        180
+      ],
       "schedule": [
-        {"hour": 6,  "tile": [6, 5]},
-        {"hour": 12, "tile": [8, 8]},
-        {"hour": 18, "tile": [13, 11]}
+        {
+          "hour": 6,
+          "tile": [
+            20,
+            9
+          ]
+        },
+        {
+          "hour": 12,
+          "tile": [
+            23,
+            12
+          ]
+        },
+        {
+          "hour": 18,
+          "tile": [
+            29,
+            26
+          ]
+        }
+      ]
+    },
+        {
+      "id": "foreigner",
+      "name": "Jonas",
+      "color": [200, 170, 90],
+      "schedule": [
+        {"hour": 6, "tile": [12, 11]},
+        {"hour": 12, "tile": [21, 13]},
+        {"hour": 18, "tile": [27, 14]}
       ]
     },
     {
       "id": "tom",
       "name": "Old Tom",
-      "color": [120, 160, 230],
+      "color": [
+        120,
+        160,
+        230
+      ],
       "schedule": [
-        {"hour": 6,  "tile": [13, 2]},
-        {"hour": 14, "tile": [8, 6]},
-        {"hour": 20, "tile": [6, 13]}
+        {
+          "hour": 6,
+          "tile": [
+            9,
+            10
+          ]
+        },
+        {
+          "hour": 14,
+          "tile": [
+            43,
+            20
+          ]
+        },
+        {
+          "hour": 20,
+          "tile": [
+            14,
+            9
+          ]
+        }
+      ]
+    },
+        {
+      "id": "maya",
+      "name": "Maya",
+      "color": [150, 150, 150],
+      "schedule": [
+        {"hour": 6, "tile": [20, 12]},
+        {"hour": 12, "tile": [24, 14]},
+        {"hour": 18, "tile": [20, 12]}
+      ]
+    },
+        {
+      "id": "littleGirl",
+      "name": "Little Girl",
+      "color": [150, 150, 150],
+      "schedule": [
+        {"hour": 6, "tile": [18, 12]},
+        {"hour": 12, "tile": [22, 14]},
+        {"hour": 18, "tile": [18, 12]}
+      ]
+    },
+    {
+      "id": "ariane",
+      "name": "Ariane",
+      "color": [200, 160, 90],
+      "schedule": [
+        {"hour": 6,  "tile": [10, 9]},
+        {"hour": 10, "tile": [14, 12]},
+        {"hour": 15, "tile": [20, 10]},
+        {"hour": 19, "tile": [6, 13]}
       ]
     }
   ]
