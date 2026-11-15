@@ -4,14 +4,14 @@
       "day_min": 1,
       "sets": ["met_mira"],
       "lines": [
-        "Oh, hello! You must be the new farmer.",
+        "Oh, hello, {player}! You must be the new farmer.",
         "I run the flower stall near the shop. Come by anytime."
       ]
     },
     {
       "requires": ["met_mira"],
       "lines": [
-        "Back again? The lilies are doing well this year."
+        "Back again, {player}? The lilies are doing well this year."
       ]
     },
     {
@@ -25,7 +25,7 @@
       "day_min": 3,
       "time": "night",
       "lines": [
-        "Shh! Keep your voice down. Did you hear that?",
+        "Shh, {player}! Keep your voice down. Did you hear that?",
         "I keep my shutters closed after dark now."
       ]
     }
@@ -47,18 +47,18 @@
       "day_min": 2,
       "time": "night",
       "lines": [
-        "What are you doing out at this hour? Go home."
+        "What are you doing out at this hour, {player}? Go home."
       ]
     }
   ],
-    "foreigner": [
+  "foreigner": [
     {
       "day_min": 1,
       "forbids": ["hive_offered"],
       "sets": ["met_foreigner", "hive_offered"],
       "gives": [{"item": "beehive", "count": 1}],
       "lines": [
-        "Ah, you must be the other newcomer. I arrived just a few days ago myself.",
+        "Ah, you must be {player}, the other newcomer. I arrived just a few days ago myself.",
         "Have you tried the sweets they sell here? All imported, all sugar. Disgusting.",
         "Back home we kept our own bees. Here, take this hive. I built it from spare boards.",
         "Put it somewhere sunny, near the flowers, and the bees will do the rest. Trust me, I know what I am doing."
@@ -67,11 +67,11 @@
     {
       "requires": ["hive_offered"],
       "lines": [
-        "Found a spot for the hive yet? Somewhere with plenty of flowers nearby.",
+        "Found a spot for the hive yet, {player}? Somewhere with plenty of flowers nearby.",
         "You will thank me later. Real honey is nothing like the town sweets."
       ]
     },
-        {
+    {
       "requires": ["hive_built"],
       "lines": [
         "Good spot! Now give the bees a few days.",
@@ -101,20 +101,19 @@
         "Honey every few days. I should have brought bees to this valley sooner."
       ]
     }
-
   ],
-    "ariane": [
+  "ariane": [
     {
       "day_min": 1,
       "lines": [
-        "Oh, a new face. Welcome to the village.",
+        "Oh, a new face. Welcome to the village, {player}.",
         "I do not talk much, but I do know a lot about the valley. If you need help, just ask."
       ]
     },
     {
       "day_min": 3,
       "lines": [
-        "Be careful who you trust around here."
+        "Be careful who you trust around here, {player}."
       ]
     }
   ]

@@ -55,6 +55,9 @@ def pick_entry(dialogues, npc_id, game_time, story):
         return {"lines": ["..."]}
     return chosen
 
+def personalize(lines, player_name):
+    """Return the lines with {player} replaced by the player's name."""
+    return [line.replace("{player}", player_name) for line in lines]
 
 def wrap_text(text, font, max_width):
     """Cut a long text into lines that each fit in max_width pixels."""
@@ -130,9 +133,10 @@ class DialogueBox:
                           screen.get_width() - 2 * margin, config.DIALOGUE_BOX_HEIGHT)
         inner = theme.draw_panel(screen, box)
 
-        plate = pygame.Rect(box.x + 24, box.y - 16, font.size(self.speaker)[0] + 32, 32)
+        plate_height = font.get_height() + 12
+        plate = pygame.Rect(box.x + 24, box.y - plate_height // 2, font.size(self.speaker)[0] + 36, plate_height)
         theme.draw_frame(screen, plate)
-        theme.draw_text(screen, font, self.speaker, config.ACCENT, plate.center, anchor="center")
+        theme.draw_text(screen, font, self.speaker, config.ACCENT, (plate.centerx, plate.centery - 1), anchor="center")
 
         padding = config.DIALOGUE_TEXT_PADDING
         text_x = inner.x + padding
@@ -146,6 +150,4 @@ class DialogueBox:
         x = inner.right - 26
         y = inner.bottom - 22 + bob
         points = [(x - 7, y - 4), (x + 7, y - 4), (x, y + 5)]
-        shadow = [(px + 1, py + 1) for px, py in points]
-        pygame.draw.polygon(screen, config.OUTLINE, shadow)
         pygame.draw.polygon(screen, config.ACCENT, points)

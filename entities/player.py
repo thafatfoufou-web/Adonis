@@ -8,8 +8,10 @@ from core.assets import load_image
 class Player:
     """The controlled character. Its hitbox is only the feet, so the head can go over things."""
 
-    def __init__(self, x, y):
-        """Create the player at pixel position (x, y), looking down."""
+
+    def __init__(self, x, y, sprite_path=config.PLAYER_SPRITES["female"]):
+        """Create the player at pixel position (x, y), looking down, drawn with the picture at sprite_path."""
+        self.sprite_path = sprite_path
         self.pos = pygame.Vector2(x, y)
         self.speed = config.PLAYER_SPEED
         self.width, self.height = config.PLAYER_HITBOX
@@ -79,7 +81,7 @@ class Player:
     def draw(self, screen, camera):
         """Draw the sprite with its bottom on the feet hitbox."""
         width, height = config.PLAYER_SPRITE_SIZE
-        sprite = load_image(config.PLAYER_SPRITE, config.PLAYER_SPRITE_SIZE, config.PLAYER_FALLBACK_COLOR)
+        sprite = load_image(self.sprite_path, config.PLAYER_SPRITE_SIZE, config.PLAYER_FALLBACK_COLOR)
         hitbox = self.get_rect()
         x = hitbox.centerx - width // 2 - camera.x
         y = hitbox.bottom - height - camera.y

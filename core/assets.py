@@ -34,3 +34,24 @@ def load_image(path, size, fallback_color):
 
     _cache[key] = image
     return image
+
+
+def load_font(path, size):
+    """Load a .ttf font at size. A missing or broken file gives pygame's default font and prints a warning once."""
+    key = ("font", path, size)
+    if key in _cache:
+        return _cache[key]
+    font = None
+    if path is not None and os.path.exists(path):
+        try:
+            font = pygame.font.Font(path, size)
+        except Exception as error:
+            print("[assets] could not load font " + path + ": " + str(error))
+    elif path is not None and path not in _warned:
+        print("[assets] missing font: " + path + " (default font used)")
+        _warned.add(path)
+    if font is None:
+        font = pygame.font.Font(None, size + 4)
+    _cache[key] = font
+    return font
+

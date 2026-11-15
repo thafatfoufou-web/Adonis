@@ -1,5 +1,6 @@
 """Global configuration: every tunable value of the game lives in this file."""
 
+import os
 import pygame
 
 MAP_FILE = "maps/farm_big.txt"
@@ -9,7 +10,10 @@ NPCS_FILE = "data/npcs.json"
 DIALOGUES_FILE = "data/dialogues.json"
 ITEMS_FILE = "data/items.json"
 
-PLAYER_SPRITE = "assets/characters/player.png"
+PLAYER_SPRITES = {                
+    "female": "assets/characters/fmc.png",
+    "male": "assets/characters/mmc.png",
+}
 CHARACTERS_DIR = "assets/characters/"
 ITEMS_DIR = "assets/items/"
 CROPS_DIR = "assets/crops/"
@@ -18,12 +22,20 @@ SOIL_IMAGES = {False: "assets/tiles/soil.png", True: "assets/tiles/soil_wet.png"
 # ============================================================
 # WINDOW
 # ============================================================
-WINDOW_TITLE = "Farm Mystery"
+WINDOW_TITLE = "Adonis"
 SCREEN_SIZE = (960, 544)
 FULLSCREEN = True
 FPS = 60
-FONT_SIZE = 32
-SMALL_FONT_SIZE = 22
+FONT_SIZE = 28
+SMALL_FONT_SIZE = 20
+# Pixelify Sans (pixel font) is used when its files are in assets/fonts, otherwise Adventurer
+FONT_FILE = "assets/fonts/PixelifySans-Regular.ttf"
+FONT_BOLD_FILE = "assets/fonts/PixelifySans-Bold.ttf"
+if not os.path.exists(FONT_FILE):
+    FONT_FILE = "assets/fonts/Adventurer.ttf"
+if not os.path.exists(FONT_BOLD_FILE):
+    FONT_BOLD_FILE = FONT_FILE
+UI_PIXEL_SCALE = 2                # interface pictures are drawn 2x so their pixels match the world's
 
 # ============================================================
 # WORLD AND CAMERA
@@ -50,6 +62,17 @@ MINUTES_PER_SECOND = (END_OF_DAY - START_OF_DAY) / DAY_LENGTH_SECONDS
 NIGHT_START = 18 * 60             # darkness begins at 18:00
 MAX_DARKNESS = 150                # opacity of the night layer at midnight (0-255)
 NIGHT_COLOR = (0, 0, 40)
+
+# ============================================================
+# MOOD (the tinted layer over the world; off for now)
+# ============================================================
+MOOD_ENABLED = False              # False = the plain bright world
+MOOD_STRENGTH = 0.6               # 0 = nothing, 1 = full
+MOOD_TOP = (92, 108, 168)         # the tint at the top of the screen (a cool blue)
+MOOD_BOTTOM = (140, 165, 182)     # the tint at the bottom (lighter, teal)
+MOOD_MIST = (150, 185, 190)       # color of the mist at the bottom
+MOOD_MIST_ALPHA = 76              # how strong the mist is at full strength (0-255)
+MOOD_MIST_HEIGHT = 220            # height of the mist band in pixels
 
 # ============================================================
 # ENERGY
@@ -164,22 +187,24 @@ SLOT_KEYS = [pygame.KSCAN_1, pygame.KSCAN_2, pygame.KSCAN_3, pygame.KSCAN_4,
 # ============================================================
 # COLORS
 # ============================================================
-OUTLINE = (34, 23, 18)
-WOOD = (118, 82, 54)
-WOOD_LIGHT = (156, 114, 78)
-WOOD_DARK = (84, 56, 38)
-INSET = (58, 40, 31)
-INSET_LIGHT = (86, 61, 46)
-TEXT = (248, 236, 210)
-TEXT_DIM = (196, 176, 146)
-ACCENT = (244, 200, 92)
-ACCENT_DARK = (176, 126, 40)
+# Cream and brown pixel interface
+TEXT = (74, 44, 30)               # dark brown text on cream panels
+TEXT_DIM = (140, 100, 72)         # softer brown: hints, labels, empty text
+TEXT_LIGHT = (255, 240, 205)      # cream text drawn on the world or on a picture
+ACCENT = (159, 67, 42)            # red-brown: selection, prices, gold amount
+ACCENT_DARK = (131, 66, 39)
+SHADOW = (40, 24, 16)             # shadow under light text
+LABEL_BG = (40, 24, 16)           # dark plate behind villager names
+GRAVE_TEXT = (230, 190, 180)      # label color on the flesh buttons
+COIN_FILL = (240, 200, 90)
+COIN_DARK = (200, 150, 50)
+COIN_OUTLINE = (110, 70, 30)
 COIN_SHINE = (255, 238, 170)
-GOOD = (150, 210, 120)
-BAD = (232, 128, 112)
-DANGER = (150, 64, 52)
-ENERGY_GREEN = (110, 190, 90)
-ENERGY_LIGHT = (165, 228, 135)
+GOOD = (60, 120, 60)              # good message (readable on cream)
+BAD = (170, 50, 40)               # bad message
+DANGER = (140, 60, 60)
+ENERGY_FILL = (204, 134, 105)
+ENERGY_LIGHT = (246, 207, 106)
 
 # placeholder art used when a soil or plant picture does not exist
 DRY_SOIL = (126, 88, 52)
@@ -195,18 +220,18 @@ LEAF_COLOR = (96, 184, 84)
 # ============================================================
 ICON_SIZE = 32                    # icons are drawn at their real size so pixels stay sharp
 SCREEN_MARGIN = 16
-PANEL_BORDER = 8
+PANEL_BORDER = 12
 
 HOTBAR_SLOT_SIZE = 44
 HOTBAR_SLOT_GAP = 3
-HOTBAR_BORDER = 6
+HOTBAR_BORDER = 10
 HOTBAR_MARGIN = 2                 # gap between the hotbar and the bottom of the screen
 
 ENERGY_BAR_WIDTH = 280
-ENERGY_BAR_HEIGHT = 36
+ENERGY_BAR_HEIGHT = 44
 CLOCK_SIZE = (210, 64)
-COIN_BOX_SIZE = (48, 40)
-GOLD_BOX_SIZE = (100, 40)
+COIN_BOX_SIZE = (52, 44)
+GOLD_BOX_SIZE = (110, 44)
 HUD_GAP = 8
 
 SHOP_PANEL_SIZE = (480, 270)
@@ -218,3 +243,36 @@ DIALOGUE_BOX_MARGIN = 20
 DIALOGUE_BOX_Y = 412
 DIALOGUE_TEXT_PADDING = 20
 DIALOGUE_LINE_SPACING = 28
+
+
+# ============================================================
+# START MENUS
+# ============================================================
+MENU_BACKGROUND = "assets/ui/menu_background.png"   # optional picture behind the menus (a gradient is used without it)
+MENU_BG_TOP = (15, 24, 48)
+MENU_BG_BOTTOM = (90, 106, 130)
+TITLE_FONT_SIZE = 96
+MENU_SUBTITLE = "Some truths grow slowly."
+TITLE_PANEL_SIZE = (640, 170)
+TITLE_PANEL_Y = 150               # height of the middle of the title panel
+MENU_BUTTON_SIZE = (260, 56)
+MENU_BUTTONS_Y = 310              # height of the middle of the first button
+MENU_BUTTON_GAP = 18
+
+CREATION_PANEL = (140, 24, 680, 496)   # the wooden window of the character creation: x, y, width, height
+MAX_NAME_LENGTH = 12
+NAME_BOX_SIZE = (320, 44)
+GENDER_LABELS = {"female": "Female", "male": "Male"}
+CARD_SIZE = (190, 210)
+CARD_GAP = 30
+CREATION_SPRITE_SIZE = (128, 128) # the hero picture on the cards (twice its real size)
+START_BUTTON_SIZE = (260, 52)
+
+# ============================================================
+# SAVING
+# ============================================================
+SAVE_FILE = "saves/save1.json"    # the one save slot (the folder is created when needed)
+SAVE_VERSION = 1                  # raise it if the save format ever changes
+PAUSE_PANEL_SIZE = (340, 320)
+MENU_BUTTON_RECT = (16, 16, 56, 56)  
+

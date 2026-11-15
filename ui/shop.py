@@ -88,35 +88,34 @@ class Shop:
         """Draw the window: title, gold, item rows, X button and the last message."""
         panel = self.get_panel(screen)
         theme.draw_frame(screen, panel)
-        theme.draw_inset(screen, panel.inflate(-16, -16))
 
-        theme.draw_text(screen, font, "Shop", config.TEXT, (panel.x + 24, panel.y + 22))
+        theme.draw_text(screen, font, "Shop", config.TEXT, (panel.x + 26, panel.y + 20))
 
         close = self.get_close_rect(panel)
-        theme.draw_inset(screen, close, config.DANGER)
-        theme.draw_text(screen, font, "X", config.TEXT, close.center, "center")
+        theme.draw_button(screen, small_font, close, "X", False)
 
         gold_text = "Gold: " + str(inventory.gold)
-        theme.draw_text(screen, font, gold_text, config.ACCENT, (close.left - 16, panel.y + 22), "topright")
+        theme.draw_text(screen, font, gold_text, config.ACCENT, (close.left - 16, panel.y + 20), "topright")
 
         for i, item_id in enumerate(config.SHOP_STOCK):
             data = ITEMS[item_id]
             row = self.get_row_rect(panel, i)
-            if i == self.cursor:
-                theme.draw_inset(screen, row, config.INSET_LIGHT)
-                pygame.draw.rect(screen, config.ACCENT, row, 2)
+            selected = i == self.cursor
+            theme.draw_button_base(screen, row, selected)
 
             icon_size = (config.ICON_SIZE, config.ICON_SIZE)
             icon = load_image(data["icon"], icon_size, data["color"])
-            screen.blit(icon, (row.x + 8, row.y + (config.SHOP_ROW_HEIGHT - config.ICON_SIZE) // 2))
+            screen.blit(icon, (row.x + 8, row.y + (config.SHOP_ROW_HEIGHT - config.ICON_SIZE) // 2 - 1))
 
-            theme.draw_text(screen, font, data["name"], config.TEXT, (row.x + 52, row.centery), "midleft")
+            name_color, shadow = theme.get_label_color(selected)
+            theme.draw_text(screen, font, data["name"], name_color, (row.x + 52, row.centery - 1), "midleft", shadow)
             price_text = str(get_buy_price(item_id)) + " g"
-            theme.draw_text(screen, font, price_text, config.ACCENT, (row.right - 14, row.centery), "midright")
+            price_color = name_color if theme.get_skin() == "grave" else config.ACCENT
+            theme.draw_text(screen, font, price_text, price_color, (row.right - 14, row.centery - 1), "midright", shadow)
 
         if self.message:
             color = config.GOOD if self.message.startswith("Bought") else config.BAD
-            theme.draw_text(screen, small_font, self.message, color, (panel.x + 24, panel.bottom - 44))
+            theme.draw_text(screen, small_font, self.message, color, (panel.x + 26, panel.bottom - 40))
 
 
 def sell_selected(inventory):

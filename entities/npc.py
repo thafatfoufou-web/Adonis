@@ -4,6 +4,7 @@ import json
 import os
 import pygame
 import config
+from ui import theme
 from core.assets import load_image
 from world.pathfinding import find_path
 
@@ -129,6 +130,4 @@ class NPC:
             body = self.draw_square(screen, camera)
 
         if config.SHOW_NPC_NAMES:
-            label = font.render(self.name, True, config.NPC_NAME_COLOR)
-            label_x = body.centerx - label.get_width() // 2
-            screen.blit(label, (label_x, body.y - config.NPC_NAME_OFFSET))
+            theme.draw_name_label(screen, font, self.name, (body.centerx, body.y - config.NPC_NAME_OFFSET + 14))

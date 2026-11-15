@@ -1,0 +1,77 @@
+{
+ "version": 1,
+ "profile": {
+  "name": "a",
+  "gender": "male"
+ },
+ "time": {
+  "day": 4,
+  "minutes": 360
+ },
+ "player": {
+  "x": 636.5245450603167,
+  "y": 425.37110370561425,
+  "facing": [
+   -1.0,
+   0.0
+  ],
+  "energy": 80
+ },
+ "inventory": {
+  "slots": [
+   {
+    "id": "shovel",
+    "count": 1
+   },
+   {
+    "id": "pickaxe",
+    "count": 1
+   },
+   {
+    "id": "watering_can",
+    "count": 1
+   },
+   {
+    "id": "cauliflower_seeds",
+    "count": 5
+   },
+   {
+    "id": "milk",
+    "count": 3
+   },
+   null,
+   null,
+   null,
+   null,
+   null
+  ],
+  "selected": 4,
+  "gold": 100
+ },
+ "farm": [
+  {
+   "x": 21,
+   "y": 14,
+   "watered": false,
+   "idle": 2,
+   "crop": null
+  }
+ ],
+ "hives": [
+  {
+   "x": 21,
+   "y": 5,
+   "days": 2
+  }
+ ],
+ "cows": [
+  true,
+  true,
+  true
+ ],
+ "story": [
+  "hive_built",
+  "hive_offered",
+  "met_foreigner"
+ ]
+}
