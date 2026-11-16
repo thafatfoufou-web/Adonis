@@ -32,19 +32,41 @@
         }
       ]
     },
-        {
+    {
       "id": "foreigner",
       "name": "Jonas",
-      "color": [200, 170, 90],
+      "color": [
+        200,
+        170,
+        90
+      ],
       "schedule": [
-        {"hour": 6, "tile": [12, 11]},
-        {"hour": 12, "tile": [21, 13]},
-        {"hour": 18, "tile": [27, 14]}
+        {
+          "hour": 6,
+          "tile": [
+            12,
+            11
+          ]
+        },
+        {
+          "hour": 12,
+          "tile": [
+            21,
+            13
+          ]
+        },
+        {
+          "hour": 18,
+          "tile": [
+            27,
+            14
+          ]
+        }
       ]
     },
     {
       "id": "tom",
-      "name": "Old Tom",
+      "name": "Tom",
       "color": [
         120,
         160,
@@ -74,35 +96,206 @@
         }
       ]
     },
-        {
+    {
       "id": "maya",
       "name": "Maya",
-      "color": [150, 150, 150],
+      "color": [
+        150,
+        150,
+        150
+      ],
       "schedule": [
-        {"hour": 6, "tile": [20, 12]},
-        {"hour": 12, "tile": [24, 14]},
-        {"hour": 18, "tile": [20, 12]}
+        {
+          "hour": 6,
+          "tile": [
+            20,
+            12
+          ]
+        },
+        {
+          "hour": 12,
+          "tile": [
+            24,
+            14
+          ]
+        },
+        {
+          "hour": 18,
+          "tile": [
+            20,
+            12
+          ]
+        }
       ]
     },
-        {
+    {
       "id": "littleGirl",
-      "name": "Little Girl",
-      "color": [150, 150, 150],
+      "name": "Clover",
+      "color": [
+        150,
+        150,
+        150
+      ],
       "schedule": [
-        {"hour": 6, "tile": [18, 12]},
-        {"hour": 12, "tile": [22, 14]},
-        {"hour": 18, "tile": [18, 12]}
+        {
+          "hour": 6,
+          "tile": [
+            18,
+            12
+          ]
+        },
+        {
+          "hour": 12,
+          "tile": [
+            22,
+            14
+          ]
+        },
+        {
+          "hour": 18,
+          "tile": [
+            18,
+            12
+          ]
+        }
       ]
     },
     {
       "id": "ariane",
       "name": "Ariane",
-      "color": [200, 160, 90],
+      "color": [
+        200,
+        160,
+        90
+      ],
       "schedule": [
-        {"hour": 6,  "tile": [10, 9]},
-        {"hour": 10, "tile": [14, 12]},
-        {"hour": 15, "tile": [20, 10]},
-        {"hour": 19, "tile": [6, 13]}
+        {
+          "hour": 6,
+          "tile": [
+            10,
+            9
+          ]
+        },
+        {
+          "hour": 10,
+          "tile": [
+            14,
+            12
+          ]
+        },
+        {
+          "hour": 15,
+          "tile": [
+            20,
+            10
+          ]
+        },
+        {
+          "hour": 19,
+          "tile": [
+            6,
+            13
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cyrus",
+      "name": "Cyrus",
+      "color": [
+        200,
+        200,
+        215
+      ],
+      "sprite": "assets/characters/caretaker.png",
+      "schedule": [
+        {
+          "hour": 6,
+          "tile": [
+            16,
+            13
+          ]
+        },
+        {
+          "hour": 13,
+          "tile": [
+            26,
+            12
+          ]
+        },
+        {
+          "hour": 19,
+          "tile": [
+            23,
+            9
+          ]
+        }
+      ]
+    },
+    {
+      "id": "walter",
+      "name": "Walter",
+      "color": [
+        210,
+        210,
+        210
+      ],
+      "sprite": "assets/characters/oldMan.png",
+      "schedule": [
+        {
+          "hour": 6,
+          "tile": [
+            12,
+            10
+          ]
+        },
+        {
+          "hour": 16,
+          "tile": [
+            18,
+            10
+          ]
+        },
+        {
+          "hour": 20,
+          "tile": [
+            12,
+            10
+          ]
+        }
+      ]
+    },
+    {
+      "id": "martha",
+      "name": "Martha",
+      "color": [
+        230,
+        200,
+        200
+      ],
+      "sprite": "assets/characters/oldWoman.png",
+      "schedule": [
+        {
+          "hour": 6,
+          "tile": [
+            23,
+            9
+          ]
+        },
+        {
+          "hour": 15,
+          "tile": [
+            19,
+            14
+          ]
+        },
+        {
+          "hour": 19,
+          "tile": [
+            23,
+            9
+          ]
+        }
       ]
     }
   ]

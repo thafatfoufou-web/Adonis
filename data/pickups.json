@@ -1,0 +1,94 @@
+{
+ "pickups": [
+  {
+   "id": "wood1",
+   "quest": "q04",
+   "item": "wood",
+   "tile": [
+    6,
+    15
+   ]
+  },
+  {
+   "id": "wood2",
+   "quest": "q04",
+   "item": "wood",
+   "tile": [
+    9,
+    18
+   ]
+  },
+  {
+   "id": "wood3",
+   "quest": "q04",
+   "item": "wood",
+   "tile": [
+    11,
+    14
+   ]
+  },
+  {
+   "id": "wood4",
+   "quest": "q04",
+   "item": "wood",
+   "tile": [
+    5,
+    19
+   ]
+  },
+  {
+   "id": "wood5",
+   "quest": "q04",
+   "item": "wood",
+   "tile": [
+    12,
+    20
+   ]
+  },
+  {
+   "id": "flower1",
+   "quest": "q05",
+   "item": "field_flower",
+   "tile": [
+    15,
+    12
+   ]
+  },
+  {
+   "id": "flower2",
+   "quest": "q05",
+   "item": "field_flower",
+   "tile": [
+    22,
+    13
+   ]
+  },
+  {
+   "id": "flower3",
+   "quest": "q05",
+   "item": "field_flower",
+   "tile": [
+    19,
+    16
+   ]
+  },
+  {
+   "id": "flower4",
+   "quest": "q05",
+   "item": "field_flower",
+   "tile": [
+    17,
+    9
+   ]
+  },
+  {
+   "id": "flower5",
+   "quest": "q05",
+   "item": "field_flower",
+   "tile": [
+    25,
+    15
+   ]
+  }
+ ]
+}

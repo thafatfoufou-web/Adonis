@@ -123,10 +123,35 @@ class HUD:
             slot_rect = pygame.Rect(slot_x, panel.y + border, slot_size, slot_size)
             self.draw_slot(screen, slot_rect, index, inventory)
 
-    def draw(self, screen, game_time, inventory, energy):
+    def draw_quests(self, screen, quests):
+        """Draw the active quests and their goals in a small panel under the menu button."""
+        tracker = quests.get_tracker()
+        if len(tracker) == 0:
+            return
+        line_height = self.small_font.get_height() + 2
+        rows = sum(1 + len(lines) for _, lines in tracker)
+        width = 340
+        height = rows * line_height + 24 + (len(tracker) - 1) * 8
+        top = config.SCREEN_MARGIN + config.MENU_BUTTON_RECT[3] + config.HUD_GAP
+        panel = pygame.Rect(config.SCREEN_MARGIN, top, width, height)
+        inner = theme.draw_panel(screen, panel, 8)
+
+        y = inner.y + 4
+        for title, lines in tracker:
+            theme.draw_text(screen, self.small_font, title, config.ACCENT, (inner.x + 6, y))
+            y += line_height
+            for text in lines:
+                color = config.TEXT_DIM if text.endswith("(done)") else config.TEXT
+                theme.draw_text(screen, self.small_font, "- " + text, color, (inner.x + 6, y))
+                y += line_height
+            y += 8
+
+    def draw(self, screen, game_time, inventory, energy, quests=None):
         """Draw the whole interface; called once per frame after the world."""
         self.draw_notice(screen)
         self.draw_energy(screen, energy)
         clock_rect = self.draw_clock(screen, game_time)
         self.draw_gold(screen, inventory, clock_rect)
         self.draw_hotbar(screen, inventory)
+        if quests is not None:
+            self.draw_quests(screen, quests)

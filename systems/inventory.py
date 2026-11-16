@@ -53,6 +53,23 @@ class Inventory:
                     return True
         return None in self.slots
     
+    def count_item(self, item_id):
+        """Return how many items of this kind the player carries."""
+        return sum(slot["count"] for slot in self.slots if slot is not None and slot["id"] == item_id)
+
+    def remove_item(self, item_id, count=1):
+        """Take count items of this kind out of the slots."""
+        for i in range(config.SLOT_COUNT):
+            slot = self.slots[i]
+            if slot is not None and slot["id"] == item_id:
+                taken = min(slot["count"], count)
+                slot["count"] -= taken
+                count -= taken
+                if slot["count"] <= 0:
+                    self.slots[i] = None
+                if count == 0:
+                    return
+
     def select(self, index):
         """Select the slot at index if it exists."""
         if 0 <= index < config.SLOT_COUNT:

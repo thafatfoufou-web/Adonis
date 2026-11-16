@@ -2,18 +2,18 @@
  "version": 1,
  "profile": {
   "name": "a",
-  "gender": "male"
+  "gender": "female"
  },
  "time": {
-  "day": 4,
+  "day": 9,
   "minutes": 360
  },
  "player": {
-  "x": 636.5245450603167,
-  "y": 425.37110370561425,
+  "x": 301.0928932188132,
+  "y": 1239.2199277023258,
   "facing": [
-   -1.0,
-   0.0
+   0.0,
+   -1.0
   ],
   "energy": 80
  },
@@ -33,12 +33,9 @@
    },
    {
     "id": "cauliflower_seeds",
-    "count": 5
+    "count": 1
    },
-   {
-    "id": "milk",
-    "count": 3
-   },
+   null,
    null,
    null,
    null,
@@ -46,32 +43,60 @@
    null
   ],
   "selected": 4,
-  "gold": 100
+  "gold": 300
  },
- "farm": [
-  {
-   "x": 21,
-   "y": 14,
-   "watered": false,
-   "idle": 2,
-   "crop": null
-  }
- ],
- "hives": [
-  {
-   "x": 21,
-   "y": 5,
-   "days": 2
-  }
- ],
- "cows": [
-  true,
-  true,
-  true
- ],
+ "farm": [],
+ "hives": [],
+ "cows": [],
  "story": [
-  "hive_built",
-  "hive_offered",
-  "met_foreigner"
- ]
+  "met_ariane",
+  "met_clover",
+  "met_cyrus",
+  "met_foreigner",
+  "met_jonas",
+  "met_martha",
+  "met_maya",
+  "met_mira",
+  "met_tom",
+  "met_walter",
+  "q01_done",
+  "q01_started",
+  "q02_done",
+  "q02_started",
+  "q03_done",
+  "q03_started",
+  "q04_started",
+  "shop_carrots",
+  "shop_tier_2"
+ ],
+ "quests": {
+  "state": {
+   "q01": {
+    "status": "done",
+    "progress": {
+     "till": 4,
+     "plant": 4,
+     "water": 1
+    },
+    "marks": {}
+   },
+   "q02": {
+    "status": "done",
+    "progress": {},
+    "marks": {}
+   },
+   "q03": {
+    "status": "done",
+    "progress": {
+     "earn": 100
+    },
+    "marks": {}
+   },
+   "q04": {
+    "status": "active",
+    "progress": {},
+    "marks": {}
+   }
+  }
+ }
 }

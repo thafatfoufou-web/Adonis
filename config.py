@@ -8,6 +8,8 @@ TILES_FILE = "data/tiles.json"
 BUILDINGS_FILE = "data/buildings.json"
 NPCS_FILE = "data/npcs.json"
 DIALOGUES_FILE = "data/dialogues.json"
+QUESTS_FILE = "data/quests.json"
+PICKUPS_FILE = "data/pickups.json"
 ITEMS_FILE = "data/items.json"
 
 PLAYER_SPRITES = {                
@@ -59,6 +61,8 @@ START_OF_DAY = 6 * 60             # minutes since midnight: the day starts at 6:
 END_OF_DAY = 24 * 60              # the day ends at midnight
 DAY_LENGTH_SECONDS = 27           # real seconds from START_OF_DAY to END_OF_DAY
 MINUTES_PER_SECOND = (END_OF_DAY - START_OF_DAY) / DAY_LENGTH_SECONDS
+SEASON_LENGTH = 28                # days in one season (every quest date in the Quest Bible is counted from this)
+SEASON_NAMES = ("Spring", "Summer", "Autumn", "Winter")
 NIGHT_START = 18 * 60             # darkness begins at 18:00
 MAX_DARKNESS = 150                # opacity of the night layer at midnight (0-255)
 NIGHT_COLOR = (0, 0, 40)
@@ -96,7 +100,7 @@ ENERGY_COSTS = {
 # ECONOMY AND ITEMS
 # ============================================================
 START_GOLD = 100
-STARTING_ITEMS = [("shovel", 1), ("pickaxe", 1), ("watering_can", 1), ("cauliflower_seeds", 5)]
+STARTING_ITEMS = [("shovel", 1), ("pickaxe", 1), ("watering_can", 1)]   # the first seeds come from Mira in Quest 1
 SHOP_STOCK = ["cauliflower_seeds", "carrot_seeds", "pumpkin_seeds"]
 SLOT_COUNT = 10                   # hotbar slots (keys 1 to 9, then 0)
 
@@ -229,7 +233,7 @@ HOTBAR_MARGIN = 2                 # gap between the hotbar and the bottom of the
 
 ENERGY_BAR_WIDTH = 280
 ENERGY_BAR_HEIGHT = 44
-CLOCK_SIZE = (210, 64)
+CLOCK_SIZE = (260, 64)
 COIN_BOX_SIZE = (52, 44)
 GOLD_BOX_SIZE = (110, 44)
 HUD_GAP = 8

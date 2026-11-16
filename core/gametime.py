@@ -28,7 +28,16 @@ class GameTime:
         """Return the text shown on the clock, like 'Day 2  14:30'."""
         hours = int(self.minutes // 60)
         mins = int(self.minutes % 60)
-        return f"Day {self.day}  {hours:02d}:{mins:02d}"
+        return f"{self.get_season_name()} {self.get_season_day()}  {hours:02d}:{mins:02d}"
+
+    def get_season_name(self):
+        """Return the name of the current season, like 'Spring' (the year repeats after Winter)."""
+        index = ((self.day - 1) // config.SEASON_LENGTH) % len(config.SEASON_NAMES)
+        return config.SEASON_NAMES[index]
+
+    def get_season_day(self):
+        """Return the day of the current season, from 1 to config.SEASON_LENGTH."""
+        return (self.day - 1) % config.SEASON_LENGTH + 1
     
     def is_night(self):
         """Return True once the night has started (the screen starts to get dark)."""

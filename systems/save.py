@@ -2,7 +2,7 @@
 
 What is saved: the hero's name and gender, the day and time, the player's position and
 energy, the hotbar and gold, the tilled soil with its crops, the beehives, whether each cow
-has milk, and the story flags. The map, the villagers' positions (they walk home every
+has milk, the story flags and the quest progress. The map, the villagers' positions (they walk home every
 morning) and the interface are not saved.
 """
 
@@ -65,7 +65,7 @@ def write_save(data):
         return False
 
 
-def build_save(profile, game_time, player, energy, inventory, farm, apiary, cows, story):
+def build_save(profile, game_time, player, energy, inventory, farm, apiary, cows, story, quests=None):
     """Collect everything worth keeping into a dictionary that can be written as JSON."""
     soil = []
     for (tx, ty), tile in farm.soil.items():
@@ -102,6 +102,7 @@ def build_save(profile, game_time, player, energy, inventory, farm, apiary, cows
         "hives": hives,
         "cows": [bool(cow.milk_ready) for cow in cows],
         "story": sorted(story.flags),
+        "quests": quests.to_dict() if quests is not None else {},
     }
 
 

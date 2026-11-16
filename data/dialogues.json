@@ -2,84 +2,139 @@
   "mira": [
     {
       "day_min": 1,
-      "sets": ["met_mira"],
+      "sets": [
+        "met_mira"
+      ],
+      "gives": [
+        {
+          "item": "cauliflower_seeds",
+          "count": 5
+        }
+      ],
       "lines": [
-        "Oh, hello, {player}! You must be the new farmer.",
-        "I run the flower stall near the shop. Come by anytime."
+        "Oh, hello, {player}! You must be the new farmer. I'm Mira, I run the flower stall.",
+        "Let me show you around! The shop is over there, the shipping box is where you sell what you grow, and your bed is in the farmhouse.",
+        "Here, take these seeds. Use the shovel to till a patch of soil, plant a seed, and water it with the can. Go on, try it!"
       ]
     },
     {
-      "requires": ["met_mira"],
+      "requires": [
+        "met_mira"
+      ],
+      "forbids": [
+        "q01_done"
+      ],
+      "lines": [
+        "Shovel first, then a seed, then the watering can, {player}. One tile is enough to start!"
+      ]
+    },
+    {
+      "requires": [
+        "q01_done"
+      ],
       "lines": [
         "Back again, {player}? The lilies are doing well this year."
       ]
     },
     {
-      "day_min": 3,
+      "requires": [
+        "q02_started"
+      ],
+      "forbids": [
+        "q02_done"
+      ],
       "lines": [
-        "Have you heard the news? Everyone in the village is whispering.",
-        "I would lock my door tonight, if I were you."
-      ]
-    },
-    {
-      "day_min": 3,
-      "time": "night",
-      "lines": [
-        "Shh, {player}! Keep your voice down. Did you hear that?",
-        "I keep my shutters closed after dark now."
+        "Before your first harvest you should say hello to everyone, {player}. It's a small village, you'll meet them all in no time!",
+        "Maya, Ariane, Tom, Jonas at the shop... and the old folks, and Cyrus too, if you can find him. Go on!"
       ]
     }
   ],
   "tom": [
     {
       "day_min": 1,
+      "sets": [
+        "met_tom"
+      ],
       "lines": [
-        "Hmph. Another farmer. The last one did not stay long."
+        "Oh! H-hello. I'm Tom. I do carpentry, well, I'm learning it. From my grandpa.",
+        "Sorry, I'm not good at this. Welcome to the village!"
       ]
     },
     {
-      "day_min": 3,
+      "requires": [
+        "met_tom"
+      ],
       "lines": [
-        "I did not see anything. Do you hear me? Nothing at all."
-      ]
-    },
-    {
-      "day_min": 2,
-      "time": "night",
-      "lines": [
-        "What are you doing out at this hour, {player}? Go home."
+        "Hi again. Um. If you ever need something built, I could... I mean, I'd like to try."
       ]
     }
   ],
   "foreigner": [
     {
       "day_min": 1,
-      "forbids": ["hive_offered"],
-      "sets": ["met_foreigner", "hive_offered"],
-      "gives": [{"item": "beehive", "count": 1}],
+      "sets": [
+        "met_foreigner",
+        "met_jonas"
+      ],
       "lines": [
-        "Ah, you must be {player}, the other newcomer. I arrived just a few days ago myself.",
-        "Have you tried the sweets they sell here? All imported, all sugar. Disgusting.",
-        "Back home we kept our own bees. Here, take this hive. I built it from spare boards.",
-        "Put it somewhere sunny, near the flowers, and the bees will do the rest. Trust me, I know what I am doing."
+        "Welcome to my shop, {player}! I arrived only a few days before you, so we are both new here.",
+        "Take your time. Everything on the shelf is imported, and priced accordingly."
       ]
     },
     {
-      "requires": ["hive_offered"],
+      "requires": [
+        "met_jonas"
+      ],
+      "lines": [
+        "Tea? I always have a cup. Honey Lemon Tea, the way they make it back home.",
+        "Take your time, {player}."
+      ]
+    },
+    {
+      "requires": [
+        "q06_started"
+      ],
+      "forbids": [
+        "hive_offered"
+      ],
+      "sets": [
+        "hive_offered"
+      ],
+      "gives": [
+        {
+          "item": "beehive",
+          "count": 1
+        }
+      ],
+      "lines": [
+        "Ah, {player}, there you are! I wanted to talk to you about tea.",
+        "Honey Lemon Tea is my favourite, but the honey they import here has no flavour at all. Artificial, I think.",
+        "But I have seen the flowers growing all over this valley. Real honey could be made here! Take this hive, I made it from spare boards.",
+        "Put it on grass, with plenty of flowers within five tiles. The bees will do the rest. It takes about three days."
+      ]
+    },
+    {
+      "requires": [
+        "hive_offered"
+      ],
       "lines": [
         "Found a spot for the hive yet, {player}? Somewhere with plenty of flowers nearby.",
         "You will thank me later. Real honey is nothing like the town sweets."
       ]
     },
     {
-      "requires": ["hive_built"],
+      "requires": [
+        "hive_built"
+      ],
       "lines": [
         "Good spot! Now give the bees a few days.",
         "They know their business better than we do."
       ]
     },
     {
-      "requires": ["hive_no_flowers"],
+      "requires": [
+        "hive_no_flowers"
+      ],
       "lines": [
         "Hm. I do not see many flowers around your hive.",
         "Bees need blossoms to make honey. Maybe you should plant it near some flowers instead.",
@@ -87,8 +142,12 @@
       ]
     },
     {
-      "requires": ["first_honey"],
-      "sets": ["honey_remarked"],
+      "requires": [
+        "first_honey"
+      ],
+      "sets": [
+        "honey_remarked"
+      ],
       "lines": [
         "Is that the honey? Let me see... Hm. Much darker than what we make back home.",
         "And the taste is sharper, heavier. Unusual.",
@@ -96,24 +155,165 @@
       ]
     },
     {
-      "requires": ["honey_remarked"],
+      "requires": [
+        "honey_remarked"
+      ],
       "lines": [
         "Honey every few days. I should have brought bees to this valley sooner."
+      ]
+    },
+    {
+      "requires": [
+        "q02_done"
+      ],
+      "forbids": [
+        "jonas_gift"
+      ],
+      "sets": [
+        "jonas_gift"
+      ],
+      "gives": [
+        {
+          "item": "carrot_seeds",
+          "count": 3
+        }
+      ],
+      "lines": [
+        "So you have greeted the whole village, {player}! Everyone here talks about you already.",
+        "Here, a little welcome gift from the shop. Carrot seeds. They grow fast, you will like them."
       ]
     }
   ],
   "ariane": [
     {
       "day_min": 1,
+      "sets": [
+        "met_ariane"
+      ],
       "lines": [
         "Oh, a new face. Welcome to the village, {player}.",
-        "I do not talk much, but I do know a lot about the valley. If you need help, just ask."
+        "I don't talk much. If you want to know about plants, ask."
       ]
     },
     {
-      "day_min": 3,
+      "requires": [
+        "met_ariane"
+      ],
       "lines": [
-        "Be careful who you trust around here, {player}."
+        "Hm. Back again."
+      ]
+    }
+  ],
+  "maya": [
+    {
+      "day_min": 1,
+      "sets": [
+        "met_maya"
+      ],
+      "lines": [
+        "Hey! New farmer! I'm Maya, I'm the blacksmith. The forge is that way. Wait, did I leave it on?",
+        "Anyway! Welcome!"
+      ]
+    },
+    {
+      "requires": [
+        "met_maya"
+      ],
+      "lines": [
+        "Come for dinner some time! I'm working on a new recipe. An experimental one."
+      ]
+    }
+  ],
+  "littleGirl": [
+    {
+      "day_min": 1,
+      "sets": [
+        "met_clover"
+      ],
+      "lines": [
+        "Hi! Who are you? Why are you here? What's that you're carrying?",
+        "I'm Clover! I draw everything. I'll draw you next!"
+      ]
+    },
+    {
+      "requires": [
+        "met_clover"
+      ],
+      "lines": [
+        "Why do plants need water? What's under the ground? Can I see?"
+      ]
+    }
+  ],
+  "cyrus": [
+    {
+      "day_min": 1,
+      "sets": [
+        "met_cyrus"
+      ],
+      "lines": [
+        "Oh... hello. You must be the new farmer. I'm Cyrus. I write novels, mostly. Or I try to.",
+        "It's fine. Everything's fine. Please don't mind me."
+      ]
+    },
+    {
+      "requires": [
+        "met_cyrus"
+      ],
+      "lines": [
+        "Oh, hello again. It's fine, I was just thinking. It's fine."
+      ]
+    },
+    {
+      "requires": [
+        "q03_started"
+      ],
+      "forbids": [
+        "q03_done"
+      ],
+      "lines": [
+        "You're the new one, we spoke the other day. I can help you with something.",
+        "Harvest a crop and put it in the shipping box by your farm. It pays you for whatever you put in. Sell enough and you'll have some gold to grow on.",
+        "I'm not really good at making money myself, being a novelist and all. But I can still help a neighbour."
+      ]
+    }
+  ],
+  "walter": [
+    {
+      "day_min": 1,
+      "sets": [
+        "met_walter"
+      ],
+      "lines": [
+        "Hmph. A new farmer.",
+        "Don't go up the ridge. Ever."
+      ]
+    },
+    {
+      "requires": [
+        "met_walter"
+      ],
+      "lines": [
+        "Hmph."
+      ]
+    }
+  ],
+  "martha": [
+    {
+      "day_min": 1,
+      "sets": [
+        "met_martha"
+      ],
+      "lines": [
+        "Oh, hello, dear! You must be the new farmer. I'm Martha, Mira's granny.",
+        "Come see us sometimes. You look like you could use a hot meal."
+      ]
+    },
+    {
+      "requires": [
+        "met_martha"
+      ],
+      "lines": [
+        "Have you eaten, dear?"
       ]
     }
   ]

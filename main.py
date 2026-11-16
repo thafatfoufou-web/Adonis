@@ -22,6 +22,8 @@ from ui.shop import Shop, sell_selected
 from ui import theme
 from world.tilemap import TileMap
 from systems.story import Story
+from systems.quests import Quests
+from systems.pickups import Pickups
 from systems.apiary import Apiary
 from core.mood import Mood
 
@@ -43,7 +45,7 @@ next_screen = None          # the pause menu sets it to "menu"
 def start_session(new_profile):
     """Build a fresh game (a new one, or the loaded save inside new_profile)."""
     global profile, world, player, camera, game_time, farm, apiary, shop, hud, npcs, cows
-    global dialogues, dialogue_box, inventory, energy, story, night, mood
+    global dialogues, dialogue_box, inventory, energy, story, night, mood, quests, pending_notices, pickups
     profile = new_profile
     world = TileMap(config.MAP_FILE, config.TILES_FILE, config.BUILDINGS_FILE)
     player = Player(*config.PLAYER_START, profile["sprite"])
@@ -54,16 +56,22 @@ def start_session(new_profile):
     shop = Shop()
     hud = HUD(font, small_font)
     npcs = load_npcs(config.NPCS_FILE)
-    cows = [Cow(tile) for tile in config.COW_START_TILES]
+    # cows only exist once the barn is repaired (Quest 4); a save remembers how many there were
+    saved_cows = [] if profile["save"] is None else profile["save"].get("cows", [])
+    cows = [Cow(tile) for tile in config.COW_START_TILES[:len(saved_cows)]]
     dialogues = load_dialogues(config.DIALOGUES_FILE)
     dialogue_box = DialogueBox()
     inventory = Inventory()
     energy = Energy()
     story = Story()
+    quests = Quests(config.QUESTS_FILE, story)
+    pickups = Pickups(config.PICKUPS_FILE)
+    pending_notices = []
     pause_menu.close()
 
     if profile["save"] is not None:
         apply_save(profile["save"], game_time, player, energy, inventory, farm, apiary, world, cows, story)
+        quests.load(profile["save"].get("quests"))
     else:
         for item_id, count in config.STARTING_ITEMS:
             inventory.add_item(item_id, count)
@@ -96,7 +104,7 @@ COW_MESSAGES = {
 
 def save_game():
     """Write the save file. Return True if it worked."""
-    data = build_save(profile, game_time, player, energy, inventory, farm, apiary, cows, story)
+    data = build_save(profile, game_time, player, energy, inventory, farm, apiary, cows, story, quests)
     return write_save(data)
 
 
@@ -143,6 +151,14 @@ def start_new_day(slept):
     hud.show_notice(message, 3, color)
 
 
+def farm_counts():
+    """Return (tilled tiles, planted tiles, watered tiles); comparing before and after an action tells what happened."""
+    tilled = len(farm.soil)
+    planted = sum(1 for tile in farm.soil.values() if tile["crop"] is not None)
+    watered = sum(1 for tile in farm.soil.values() if tile["watered"])
+    return (tilled, planted, watered)
+
+
 def interact(target=None):
     """Do the action on a tile: the one in front of the player, or the clicked one if target is given.
 
@@ -165,7 +181,12 @@ def interact(target=None):
         if cow.is_on_tile(tx, ty):
             cow_found = cow
 
+    handin_lines = None
     if npc_found is not None:
+        handin_lines = quests.try_handin(npc_found.id, inventory)
+    if handin_lines is not None:
+        dialogue_box.open(npc_found.name, personalize(handin_lines, profile["name"]))
+    elif npc_found is not None:
         entry = pick_entry(dialogues, npc_found.id, game_time, story)
         gifts = entry.get("gives", [])
         if not all(inventory.can_add(gift["item"]) for gift in gifts):
@@ -173,15 +194,24 @@ def interact(target=None):
         else:
             dialogue_box.open(npc_found.name, personalize(entry["lines"], profile["name"]))
             story.set_many(entry.get("sets", []))
+            quests.notify("talk", npc=npc_found.id)
             for gift in gifts:
                 inventory.add_item(gift["item"], gift.get("count", 1))
     elif cow_found is not None:
         text, color = COW_MESSAGES[cow_found.milk(inventory, energy)]
         hud.show_notice(text, 2, color)
+    elif pickups.at(tx, ty, story, quests) is not None:
+        text, good = pickups.pick(tx, ty, inventory, story, quests)
+        hud.show_notice(text, 2, config.GOOD if good else config.BAD)
     elif action == "shop":
         shop.open()
     elif action == "sell":
+        held = inventory.get_selected()
+        item_id = None if held is None else held["id"]
+        gold_before = inventory.gold
         hud.show_notice(sell_selected(inventory))
+        if inventory.gold > gold_before:
+            quests.notify("sell", item=item_id, gold=inventory.gold - gold_before)
     elif action == "sleep":
         game_time.new_day()
         start_new_day(slept=True)
@@ -191,8 +221,17 @@ def interact(target=None):
         if hive_result is not None:
             text, color = HIVE_MESSAGES[hive_result]
             hud.show_notice(text, 2, color)
-        elif farm.use(tx, ty, inventory, world, energy) == "tired":
-            hud.show_notice("Too tired... go home and sleep.", 2, config.BAD)
+        else:
+            before = farm_counts()
+            if farm.use(tx, ty, inventory, world, energy) == "tired":
+                hud.show_notice("Too tired... go home and sleep.", 2, config.BAD)
+            after = farm_counts()
+            if after[0] > before[0]:
+                quests.notify("till")
+            if after[1] > before[1]:
+                quests.notify("plant")
+            if after[2] > before[2]:
+                quests.notify("water")
 
 
 def get_mouse_tile():
@@ -268,6 +307,17 @@ def update(dt):
         world.moving_obstacles = [cow.get_hitbox() for cow in cows]
     hud.update(dt)
 
+    # quests: start, finish and pay; their messages wait until the dialogue box is closed
+    quests.update(game_time.day)
+    inventory.gold += quests.take_gold()
+    if story.has("cows_unlocked") and len(cows) == 0:
+        cows.append(Cow(config.COW_START_TILES[0]))
+    for text, mood_name in quests.pop_messages():
+        pending_notices.append((text, config.GOOD if mood_name == "good" else config.BAD))
+    if pending_notices and hud.notice_timer <= 0 and not dialogue_box.is_open:
+        text, color = pending_notices.pop(0)
+        hud.show_notice(text, 3, color)
+
     player_x, player_y = player.get_rect().center
     camera.follow((player_x, player_y - config.CAMERA_OFFSET_Y))
 
@@ -277,6 +327,7 @@ def draw():
     screen.fill((0, 0, 0))
     world.draw(screen, camera)
     farm.draw(screen, camera)
+    pickups.draw(screen, camera, story, quests)
     apiary.draw(screen, camera)
     feet = player.get_rect().bottom
     world.draw_objects(screen, camera, feet, True)
@@ -302,7 +353,7 @@ def draw():
     night.set_alpha(game_time.get_darkness())
     screen.blit(night, (0, 0))
 
-    hud.draw(screen, game_time, inventory, energy)
+    hud.draw(screen, game_time, inventory, energy, quests)
     theme.draw_menu_button(screen, menu_button_rect, menu_button_rect.collidepoint(pygame.mouse.get_pos()))
     if shop.is_open:
         shop.draw(screen, font, small_font, inventory)

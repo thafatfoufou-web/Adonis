@@ -1,0 +1,263 @@
+{
+ "quests": [
+  {
+   "id": "q01",
+   "title": "Welcome to the Valley",
+   "required": true,
+   "start": {
+    "day": 1
+   },
+   "goals": [
+    {
+     "id": "talk",
+     "type": "flag",
+     "flag": "met_mira",
+     "text": "Talk to Mira"
+    },
+    {
+     "id": "till",
+     "type": "count",
+     "event": "till",
+     "count": 1,
+     "text": "Till a tile with the shovel"
+    },
+    {
+     "id": "plant",
+     "type": "count",
+     "event": "plant",
+     "count": 1,
+     "text": "Plant a seed"
+    },
+    {
+     "id": "water",
+     "type": "count",
+     "event": "water",
+     "count": 1,
+     "text": "Water your seed"
+    }
+   ],
+   "on_complete": {
+    "sets": [
+     "q01_done"
+    ]
+   }
+  },
+  {
+   "id": "q02",
+   "title": "Greet Everyone",
+   "required": true,
+   "start": {
+    "after": [
+     "q01"
+    ]
+   },
+   "goals": [
+    {
+     "id": "greet",
+     "type": "flags",
+     "text": "Say hello to the villagers",
+     "flags": [
+      "met_maya",
+      "met_cyrus",
+      "met_ariane",
+      "met_tom",
+      "met_walter",
+      "met_martha",
+      "met_clover",
+      "met_jonas"
+     ]
+    }
+   ],
+   "on_complete": {
+    "sets": [
+     "shop_carrots"
+    ]
+   }
+  },
+  {
+   "id": "q03",
+   "title": "Making a Living",
+   "required": true,
+   "start": {
+    "day": 3,
+    "after": [
+     "q02"
+    ]
+   },
+   "goals": [
+    {
+     "id": "earn",
+     "type": "count",
+     "event": "sell",
+     "sum": "gold",
+     "count": 100,
+     "items": [
+      "cauliflower",
+      "carrot",
+      "pumpkin"
+     ],
+     "text": "Earn 100 gold selling crops"
+    }
+   ],
+   "on_complete": {
+    "sets": [
+     "shop_tier_2"
+    ]
+   }
+  },
+  {
+   "id": "q04",
+   "title": "The Empty Barn",
+   "required": true,
+   "start": {
+    "day": 8,
+    "after": [
+     "q03"
+    ]
+   },
+   "goals": [
+    {
+     "id": "wood",
+     "type": "count",
+     "event": "pickup",
+     "items": [
+      "wood"
+     ],
+     "count": 5,
+     "text": "Find wood in the old pen"
+    },
+    {
+     "id": "paid",
+     "type": "flag",
+     "flag": "barn_paid",
+     "text": "Pay Walter: 250 gold, 5 wood"
+    },
+    {
+     "id": "build",
+     "type": "wait",
+     "after_flag": "barn_paid",
+     "days": 4,
+     "text": "Wait for the repairs"
+    }
+   ],
+   "handin": {
+    "npc": "walter",
+    "gold": 250,
+    "items": {
+     "wood": 5
+    },
+    "done_flag": "barn_paid",
+    "missing_lines": [
+     "Hmph. The barn needs fixing. Tom can do it, but not for free.",
+     "250 gold and five good pieces of wood. There's plenty of rotten boards lying around the old pen.",
+     "Bring it all to me. Don't waste my time."
+    ],
+    "done_lines": [
+     "Hmph. Wood. Gold. Good.",
+     "Tom! To work. Four days, no more.",
+     "Tom: Y-yes, Grandpa! I'll do my best."
+    ]
+   },
+   "on_complete": {
+    "sets": [
+     "cows_unlocked"
+    ],
+    "message": "The barn is repaired! You got a cow."
+   }
+  },
+  {
+   "id": "q05",
+   "title": "Pressed Flowers",
+   "required": false,
+   "start": {
+    "day": 14,
+    "after": [
+     "q03"
+    ]
+   },
+   "goals": [
+    {
+     "id": "pick",
+     "type": "count",
+     "event": "pickup",
+     "items": [
+      "field_flower"
+     ],
+     "count": 5,
+     "text": "Pick five field flowers"
+    },
+    {
+     "id": "give",
+     "type": "flag",
+     "flag": "flowers_given",
+     "text": "Bring them to Ariane"
+    }
+   ],
+   "handin": {
+    "npc": "ariane",
+    "items": {
+     "field_flower": 5
+    },
+    "done_flag": "flowers_given",
+    "also_sets": [
+     "knows_red_flowers"
+    ],
+    "missing_lines": [
+     "Oh, {player}. Could you do me a small favour? I need five common field flowers for my perfumes.",
+     "They grow loose in the meadows around the village. Bring them to me when you have them."
+    ],
+    "done_lines": [
+     "Thank you, these are perfect.",
+     "You know, in the old days the village wore red mountain flowers in their hair at the spring festivals.",
+     "Nobody does anymore. Because of the old legend. ...Never mind. It's only an old story."
+    ]
+   },
+   "on_complete": {
+    "gold": 40,
+    "message": "Quest complete: Pressed Flowers (+40 gold)"
+   }
+  },
+  {
+   "id": "q06",
+   "title": "Something Different",
+   "required": true,
+   "start": {
+    "day": 21,
+    "after": [
+     "q03"
+    ]
+   },
+   "goals": [
+    {
+     "id": "talk",
+     "type": "flag",
+     "flag": "hive_offered",
+     "text": "Talk to Jonas about honey"
+    },
+    {
+     "id": "hive",
+     "type": "flag",
+     "flag": "hive_built",
+     "text": "Place the hive on grass near flowers"
+    },
+    {
+     "id": "honey",
+     "type": "flag",
+     "flag": "first_honey",
+     "text": "Collect the first honey"
+    },
+    {
+     "id": "show",
+     "type": "flag",
+     "flag": "honey_remarked",
+     "text": "Show the honey to Jonas"
+    }
+   ],
+   "on_complete": {
+    "sets": [
+     "beehives_unlocked"
+    ]
+   }
+  }
+ ]
+}

@@ -14,8 +14,6 @@ fence.png +
 shop_counter.png +
 shipping_box.png -
 
-C. Characters in assets/characters/ !! A character is 64 x 64 !!
-
 D. Item icons (8, active now) in assets/items/, 32 x 32 each
 
 hoe.png, watering_can.png found shovel.png instead +
@@ -109,3 +107,6 @@ Small things anytime
 [ ] Lengthen the day for real playtesting.
 
 
+to change add cooking and food sprite
+add gifts and hearts
+you cant end the day before 19h
