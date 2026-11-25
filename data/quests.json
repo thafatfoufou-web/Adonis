@@ -12,7 +12,7 @@
      "id": "talk",
      "type": "flag",
      "flag": "met_mira",
-     "text": "Talk to Mira"
+     "text": "Talk to Zoe"
     },
     {
      "id": "till",
@@ -40,6 +40,32 @@
     "sets": [
      "q01_done"
     ]
+   },
+   "visit": {
+    "npc": "mira",
+    "notice": "Zoe is waiting outside your house.",
+    "sets": [
+     "met_mira",
+     "mira_c1"
+    ],
+    "gives": [
+     {
+      "item": "cauliflower_seeds",
+      "count": 5
+     }
+    ],
+    "lines": [
+     "Oh, there you are! {player}, right? I've been watching the road since sunrise. I'm Zoe, I run the flower stall by the square.",
+     "Welcome to the valley! Everyone's been wondering who'd take the old farm. Granny said someone with strong hands.",
+     "And look at that, strong hands!",
+     "Right, a proper tour! The shop is that way, Jonas runs it, he's new too, so you'll get along.",
+     "The shipping box by your gate buys whatever you grow.",
+     "And the farmhouse behind you has your bed. Sleep when you're tired.",
+     "The day ends whether you like it or not, and you'll want your energy back.",
+     "These are cauliflower seeds. Five of them. Don't make that face, everyone starts with cauliflower. It's honest food.",
+     "Shovel to dig a patch, then a seed, then the watering can. Just one tile for now. I'll stand here and watch. I won't say anything.",
+     "...I'm going to say something. Go on!"
+    ]
    }
   },
   {
@@ -47,9 +73,7 @@
    "title": "Greet Everyone",
    "required": true,
    "start": {
-    "after": [
-     "q01"
-    ]
+    "day": 1
    },
    "goals": [
     {
@@ -80,8 +104,8 @@
    "required": true,
    "start": {
     "day": 3,
-    "after": [
-     "q02"
+    "requires": [
+     "met_cyrus"
     ]
    },
    "goals": [
@@ -102,6 +126,20 @@
    "on_complete": {
     "sets": [
      "shop_tier_2"
+    ]
+   },
+   "visit": {
+    "npc": "cyrus",
+    "notice": "Cyrus is at your door.",
+    "sets": [],
+    "lines": [
+     "Oh, {player}! Good, I found you. Well, you're easy to find. You're always in the field. That's good!",
+     "Forgive me, I should have said something sooner. You're the new one, we spoke the other day. I've been thinking about your farm.",
+     "I can help you with something. Not much. I'm not good with money myself, being a novelist. Novelists are famously poor.",
+     "It's practically a tradition.",
+     "But I do know how selling works here. Harvest a crop, carry it to the shipping box by your farm, and it pays you for whatever you put in.",
+     "Sell enough and you'll have some gold to grow on. Seeds, tools, maybe more one day. It's a good start. It's fine. It's a good start.",
+     "I'll leave you to it. Please don't feel rushed. Really. It's no trouble at all."
     ]
    }
   },
@@ -163,6 +201,24 @@
      "cows_unlocked"
     ],
     "message": "The barn is repaired! You got a cow."
+   },
+   "visit": {
+    "npc": "walter",
+    "notice": "Walter and Tom are at your door.",
+    "sets": [],
+    "lines": [
+     "Hmph. Farmer.",
+     "The barn's broken. You've seen it. Roof's half gone and the door hangs by a hinge.",
+     "Tom can fix it. I'll teach him as he goes. Hmph. It's time he did something big.",
+     "Tom: H-hello, {player}! Sorry. Grandpa made me come. I mean, I wanted to come. I just didn't know what to say.",
+     "Not for free. Materials cost. 250 gold, and five good pieces of wood.",
+     "There's rotten boards lying around the old pen. Most are useless. Some are still sound. Find five.",
+     "Tom: I could help look, but Grandpa says it's your barn, so... your wood. Sorry!",
+     "Bring it all to me. Not the boy, me. Four days once I have it. Do it right and you'll have a cow. Hmph. Don't get attached."
+    ],
+    "with": [
+     "tom"
+    ]
    }
   },
   {
@@ -171,8 +227,8 @@
    "required": false,
    "start": {
     "day": 14,
-    "after": [
-     "q03"
+    "requires": [
+     "met_ariane"
     ]
    },
    "goals": [
@@ -215,6 +271,18 @@
    "on_complete": {
     "gold": 40,
     "message": "Quest complete: Pressed Flowers (+40 gold)"
+   },
+   "visit": {
+    "npc": "ariane",
+    "notice": "Ariane is at your door.",
+    "sets": [],
+    "lines": [
+     "{player}. Good. I was about to go and wait by your fence.",
+     "I need a favour. A small one. Five common field flowers. Not the garden kind. The loose ones, out in the meadows.",
+     "For perfume. I'm trying something with the pollen. It's slow. Everything is slow.",
+     "Pick them by hand. Don't dig them up. They should be whole.",
+     "Bring them to me when you have them. I'm home most days. ...Thank you. I mean it."
+    ]
    }
   },
   {
@@ -223,8 +291,8 @@
    "required": true,
    "start": {
     "day": 21,
-    "after": [
-     "q03"
+    "requires": [
+     "met_jonas"
     ]
    },
    "goals": [
@@ -256,6 +324,157 @@
    "on_complete": {
     "sets": [
      "beehives_unlocked"
+    ]
+   },
+   "visit": {
+    "npc": "foreigner",
+    "notice": "Jonas is at your door.",
+    "sets": [
+     "hive_offered"
+    ],
+    "gives": [
+     {
+      "item": "beehive",
+      "count": 1
+     }
+    ],
+    "lines": [
+     "{player}! There you are. You look awful. I mean that fondly. Farming suits you. I came all this way to talk about something important.",
+     "Tea. Honey Lemon Tea is my favourite, I told you. But the imported artificial honey they sell here has no flavour at all.",
+     "Sweet and flat, like a polite compliance form. But I have seen the native flowers growing all over this valley.",
+     "Real honey could be made here! You have a farm. I have memories to chase. Take this hive, I made it from spare boards.",
+     "Put it on grass, with plenty of flowers within five tiles. And when you have the first honey, bring it to me.",
+     "I want to see if it tastes like home... or at least better than it."
+    ]
+   }
+  },
+  {
+   "id": "q07",
+   "title": "Festival Preparations",
+   "required": true,
+   "start": {
+    "day": 29
+   },
+   "deadline_day": 40,
+   "goals": [
+    {
+     "id": "veg",
+     "type": "deliver",
+     "items": [
+      "cauliflower",
+      "carrot",
+      "pumpkin"
+     ],
+     "count": 10,
+     "min_kinds": 2,
+     "label": "vegetables",
+     "label_one": "vegetable",
+     "text": "Bring Zoe 10 vegetables (2+ kinds)"
+    },
+    {
+     "id": "milk",
+     "type": "deliver",
+     "items": [
+      "milk"
+     ],
+     "count": 3,
+     "label": "milk",
+     "text": "Bring Zoe 3 milk"
+    },
+    {
+     "id": "honey",
+     "type": "deliver",
+     "items": [
+      "honey",
+      "mad_honey"
+     ],
+     "count": 4,
+     "label": "honey",
+     "text": "Bring Zoe 4 honey"
+    }
+   ],
+   "delivery": {
+    "npc": "mira",
+    "wait_lines": [
+     {
+      "day_min": 29,
+      "lines": [
+       "The festival is on Summer 15, {player}! I need 10 vegetables (at least two kinds), 3 milk and 4 honey, all from your farm.",
+       "Bring them as you get them, no need for one big trip. Still missing: {missing}."
+      ]
+     },
+     {
+      "day_min": 36,
+      "lines": [
+       "Still missing: {missing}. We have until the end of Summer 12, {player}. I'm counting on you!"
+      ]
+     },
+     {
+      "day_min": 39,
+      "lines": [
+       "Still missing: {missing}. It's nearly too late, {player}. Please, tomorrow is the last day!"
+      ]
+     },
+     {
+      "day_min": 40,
+      "lines": [
+       "Today is the last day, {player}! Still missing: {missing}. Please hurry!"
+      ]
+     }
+    ],
+    "thanks_lines": [
+     "Thank you, {player}! That helps so much.",
+     "Still missing: {missing}."
+    ],
+    "done_lines": [
+     "That's everything! Oh, {player}, the whole village will be so happy.",
+     "The honey goes on the feast table. It'll be the sweetest festival we've had in years!"
+    ]
+   },
+   "reminders": [
+    {
+     "day": 33,
+     "text": "Zoe: \"The festival is coming. Don't forget the supplies!\""
+    },
+    {
+     "day": 36,
+     "text": "Zoe: \"Only a few days left to bring the festival supplies.\""
+    },
+    {
+     "day": 39,
+     "text": "Zoe: \"Two days left for the festival list!\""
+    },
+    {
+     "day": 40,
+     "text": "Last day to bring Zoe the festival supplies!",
+     "mood": "bad"
+    }
+   ],
+   "on_complete": {
+    "gold": 200,
+    "sets": [
+     "festival_supplied",
+     "honey_served"
+    ],
+    "message": "Festival supplied! The village is delighted. (+200 gold)"
+   },
+   "on_fail": {
+    "sets": [
+     "bad_end_1"
+    ],
+    "message": "You never really joined in. Trying to make friends here felt like a waste of time, so you packed your things and left."
+   },
+   "visit": {
+    "npc": "mira",
+    "notice": "Zoe is waiting outside your house.",
+    "sets": [],
+    "lines": [
+     "{player}! Big news, and I need you. The summer festival is in two weeks, on Summer 15!",
+     "Everyone in the village contributes. It's tradition, and it's how a newcomer becomes one of us.",
+     "From you, I need 10 vegetables, at least two different kinds. Three milk. And four honey. All from your own farm.",
+     "The honey will be served at the feast, so make it good!",
+     "Bring things whenever you have them, as many trips as you like. Just come to me.",
+     "The list has to be complete by the end of Summer 12. I'll remind you. I'll remind you a lot. Sorry in advance!"
     ]
    }
   }

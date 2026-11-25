@@ -11,6 +11,7 @@ class Building:
     def __init__(self, data, tile_size):
         """Read one building entry of buildings.json and load its picture."""
         self.name = data.get("name", "building")
+        self.requires = data.get("requires")      # story flag that must be set for the building to exist (None = always there)
         self.tile_size = tile_size
 
         self.x = data["tile"][0] * tile_size

@@ -1,320 +1,1040 @@
 {
-  "mira": [
+ "mira": [
+  {
+   "variants": [
+    [
+     "Back again, {player}? The lilies are doing well this year."
+    ],
+    [
+     "Have you watered your crops today? ...Of course you have. I'm sure. I'm only asking!"
+    ],
+    [
+     "Dolores is sulking. I complimented the roses first. She sure is one jealous little thing!"
+    ],
+    [
+     "Hungry? Granny always bakes too much. Remind me and I'll bring you something."
+    ],
+    [
+     "While I do like Ariane, she is a bit... hard to talk to. Sometimes it feels like I'm talking to a plant! ...Oh, wait. No, sorry!",
+     "No offense, Dolores, you're a wonderful listener."
+    ],
+    [
+     "I told Maya she could help with the main dish for the festival, and now I'm slightly terrified. Pray for our stomachs, {player}."
+    ],
+    [
+     "Have you seen Tom today? That boy needs to learn how to say 'no' before he ends up building his own coffin."
+    ],
+    [
+     "Jonas tried to sell me 'exotic valley fertilizer' yesterday. It was literally just dirt from behind his own shop.",
+     "The man has nerve, I'll give him that."
+    ],
+    [
+     "Cyrus rarely leaves his house so its pretty difficult to get a hold of him, however he's such a interesting guy it makes it totally worth it"
+    ],
+    [
+     "Oh, good, you're here. Say something, anything! It's too quiet today. ...There, much better."
+    ]
+   ]
+  },
+  {
+   "requires": [
+    "met_mira"
+   ],
+   "forbids": [
+    "q01_done"
+   ],
+   "lines": [
+    "Shovel first, then a seed, then the watering can, {player}. One tile is enough to start!"
+   ]
+  },
+  {
+   "requires": [
+    "q02_started"
+   ],
+   "forbids": [
+    "q02_done"
+   ],
+   "lines": [
+    "Before your first harvest you should say hello to everyone, {player}. It's a small village, you'll meet them all in no time!",
+    "Maya and her sister, Ariane, Tom, Jonas at the shop... and the old folks, and Cyrus too, if you can find him. Go on!"
+   ]
+  },
+  {
+   "requires": [
+    "met_mira",
+    "q02_started"
+   ],
+   "forbids": [
+    "q01_done",
+    "q02_done"
+   ],
+   "lines": [
+    "Don't forget to take care of your crops: plant then water, and if you have time you can say hello to everyone in town, who knows they may",
+    "have interesting stories to tell!"
+   ]
+  },
+  {
+   "day_min": 1,
+   "forbids": [
+    "mira_c1"
+   ],
+   "daily": true,
+   "sets": [
+    "mira_c1",
+    "met_mira"
+   ],
+   "lines": [
+    "Oh, there you are! {player}, right? I've been watching the road since sunrise. I'm Zoe, I run the flower stall by the square.",
+    "Welcome to the valley! Everyone's been wondering who'd take the old farm. Granny said someone with strong hands.",
+    "And look at that, strong hands! Right, a proper tour!",
+    "The shop is that way, Jonas runs it, he arrived a few months ago, so I'm pretty sure you'll get along.",
+    "We really prioritize local produce so Jonas will be buying anything you sell, to sell something all you need to do is drop it in the shipping box by your house.",
+    "Oh and as you can tell, the house behind you has your bed.",
+    "You can sleep there and replenish your energy, Don't go to bed too late or else you'll be too tired the next day.",
+    "These are cauliflower seeds. Five of them. Don't make that face, everyone starts with cauliflower. It's honest food.",
+    "Shovel to dig a patch, then a seed, then the watering can. Just one tile for now. I'll stand here and watch. I won't say anything...",
+    "OK I'm going to say something. But do go on!"
+   ],
+   "gives": [
     {
-      "day_min": 1,
-      "sets": [
-        "met_mira"
-      ],
-      "gives": [
-        {
-          "item": "cauliflower_seeds",
-          "count": 5
-        }
-      ],
-      "lines": [
-        "Oh, hello, {player}! You must be the new farmer. I'm Mira, I run the flower stall.",
-        "Let me show you around! The shop is over there, the shipping box is where you sell what you grow, and your bed is in the farmhouse.",
-        "Here, take these seeds. Use the shovel to till a patch of soil, plant a seed, and water it with the can. Go on, try it!"
-      ]
-    },
-    {
-      "requires": [
-        "met_mira"
-      ],
-      "forbids": [
-        "q01_done"
-      ],
-      "lines": [
-        "Shovel first, then a seed, then the watering can, {player}. One tile is enough to start!"
-      ]
-    },
-    {
-      "requires": [
-        "q01_done"
-      ],
-      "lines": [
-        "Back again, {player}? The lilies are doing well this year."
-      ]
-    },
-    {
-      "requires": [
-        "q02_started"
-      ],
-      "forbids": [
-        "q02_done"
-      ],
-      "lines": [
-        "Before your first harvest you should say hello to everyone, {player}. It's a small village, you'll meet them all in no time!",
-        "Maya, Ariane, Tom, Jonas at the shop... and the old folks, and Cyrus too, if you can find him. Go on!"
-      ]
+     "item": "cauliflower_seeds",
+     "count": 5
     }
-  ],
-  "tom": [
+   ]
+  },
+  {
+   "day_min": 2,
+   "requires": [
+    "mira_c1"
+   ],
+   "forbids": [
+    "mira_c2"
+   ],
+   "daily": true,
+   "sets": [
+    "mira_c2"
+   ],
+   "lines": [
+    "Oh, {player}! Look, look, the flowers by the fence are mine. Well, the village's. But I planted them, so, mine. They all have names.",
+    "That one's Dolores. She's dramatic, she wilts if you don't compliment her. Don't laugh, it works! Do you talk to your plants?",
+    "You should. They grow better. Granny says so, and Granny's never wrong. Don't tell her I said that.",
+    "Anyway, once you've settled in I want you to meet everybody. A village is only as good as the people who bother with each other.",
+    "Some mornings it's so quiet here. So I need someone to talk to, I know I know talk A lot, Stop me whenever you like.",
+    "...No, don't actually stop me."
+   ]
+  },
+  {
+   "day_min": 5,
+   "requires": [
+    "mira_c2"
+   ],
+   "forbids": [
+    "mira_c3"
+   ],
+   "daily": true,
+   "sets": [
+    "mira_c3"
+   ],
+   "lines": [
+    "Come by the stall sometime and I'll teach you the flower names. Every one has a story.",
+    "The marigold nearly got named after a grumpy duke! Do you have a favorite yet? You don't have to.",
+    "Most people say roses. such a generic answer! But not necessarily bad, I just think you should get to know them better before deciding!",
+    "I want this village to be the happiest place in the valley. It already is, I know. But you can always do a bit more.",
+    "There's always a bit more. I plan everything.",
+    "Market days, the harvest supper, something big for the summer... it's months away and I already have a list. Granny teases me. ...",
+    "Oh Sorry! ...What was I saying? Right. Lists. I love lists."
+   ]
+  },
+  {
+   "requires": [
+    "festival_supplied"
+   ],
+   "forbids": [
+    "bad_end_1"
+   ],
+   "lines": [
+    "You did it, {player}! Everything's ready. The village will be so pleased. Rest up.",
+    "The festival is on Summer 15, and I want you there, bright and early!"
+   ]
+  }
+ ],
+ "tom": [
+  {
+   "variants": [
+    [
+     "Hi again. Um. If you ever need something built, I could... I mean, I'd like to try."
+    ],
+    [
+     "Oh! Hello. I was just measuring something. I forgot what. It's fine, I wrote it down. Somewhere."
+    ],
+    [
+     "Is my tie straight? Be honest. No, don't be honest. Actually, be honest."
+    ],
+    [
+     "Grandpa's in a mood today. That's not a complaint! That's just, um, weather."
+    ]
+   ]
+  },
+  {
+   "day_min": 1,
+   "forbids": [
+    "tom_c1"
+   ],
+   "daily": true,
+   "sets": [
+    "tom_c1",
+    "met_tom"
+   ],
+   "lines": [
+    "Oh! H-hello. You must be the new farmer. I'm Tom. I do carpentry. Well, I'm learning. From my grandpa. He's very good.",
+    "He's also very... well. Yes. Sorry, I'm talking too much. Or too little? I never know which.",
+    "I rehearsed something to say but it was, um, shorter than this. Anyway! If you ever need a fence mended, or a shelf, or a, a barn...",
+    "I mean, I'd like to try. I wouldn't charge much. Grandpa says I should charge more. Oh, and the tie! Everyone asks about the tie.",
+    "It's, ah, professional. A carpenter should look like someone you can trust. ...Does it look like that? Welcome to the village. Really.",
+    "I hope you like it here. I think you will. Probably. I'll stop now."
+   ]
+  },
+  {
+   "day_min": 2,
+   "requires": [
+    "tom_c1"
+   ],
+   "forbids": [
+    "tom_c2"
+   ],
+   "daily": true,
+   "sets": [
+    "tom_c2"
+   ],
+   "lines": [
+    "Oh, hi! I was just finishing a shelf for Martha. And a gate for... well, a few people. And a stand for Maya's forge.",
+    "I said I'd do them all this week. I think that's too many. It's definitely too many. But they looked so hopeful, I couldn't say no.",
+    "Grandpa says a good carpenter knows when to say no. He's right. I practise in the mirror. Then someone asks and I just... say yes.",
+    "Is it bad that I like being useful? I do like it. When someone says thank you, even if I'm too tired to stand. Sorry, you didn't ask.",
+    "You were just walking past and I... it's fine. It's fine! Don't tell Cyrus I took his line."
+   ]
+  },
+  {
+   "day_min": 5,
+   "requires": [
+    "tom_c2"
+   ],
+   "forbids": [
+    "tom_c3"
+   ],
+   "daily": true,
+   "sets": [
+    "tom_c3"
+   ],
+   "lines": [
+    "Grandpa taught me everything. How to read the grain, how to plane a board until it sings, how to hold a hammer without hitting myself.",
+    "He still checks all my work. Every joint, every nail. Then he says 'hmph', and I never know if that's good or bad.",
+    "I want to build something big one day. Properly big. A bridge, or a mill, with my name on it. Then maybe he'd... ...Never mind.",
+    "He'd say 'hmph'. And that would be fine. That's, um, that's fine. Thank you for listening, {player}.",
+    "Most people say 'great, great' and walk off. You actually stood here. That's rare."
+   ]
+  },
+  {
+   "requires": [
+    "q07_started"
+   ],
+   "forbids": [
+    "q07_done"
+   ],
+   "lines": [
+    "The festival! Grandpa says it was bigger when he was young. Everything was bigger when he was young. I'm helping carry the tables.",
+    "Please don't let me drop anything."
+   ]
+  }
+ ],
+ "ariane": [
+  {
+   "variants": [
+    [
+     "Hm. Back again."
+    ],
+    [
+     "The air smells of rain. Plant something thirsty."
+    ],
+    [
+     "I'm drying lavender. Don't breathe near it. It's fragile."
+    ],
+    [
+     "Tom talked your ear off, didn't he. No? Then he's improving."
+    ]
+   ]
+  },
+  {
+   "day_min": 1,
+   "forbids": [
+    "ariane_c1"
+   ],
+   "daily": true,
+   "sets": [
+    "ariane_c1",
+    "met_ariane"
+   ],
+   "lines": [
+    "A new face. Welcome. I'm Ariane. I make perfume. Flowers, resin, a little oil. Tom is my nephew, in case he talked your ear off.",
+    "He does that. Hm. He doesn't, actually. He apologises. That's worse. I know about plants. A little. Less than I'd like.",
+    "If something in your field looks sick, ask. If you'd rather not talk, that's fine too. I don't mind quiet.",
+    "The flowers in this valley are stranger than they look. Be gentle with them."
+   ]
+  },
+  {
+   "day_min": 2,
+   "requires": [
+    "ariane_c1"
+   ],
+   "forbids": [
+    "ariane_c2"
+   ],
+   "daily": true,
+   "sets": [
+    "ariane_c2"
+   ],
+   "lines": [
+    "You stand very still. Good. Most people fidget. This is my notebook. Local plants. Names, where they grow, which season.",
+    "Half of it is blank. Nobody wrote anything down before me. Not the old herbalist, not her teacher. They knew things.",
+    "They kept it in their heads. Then they died. So I test. I dry, I smell, I try. It is slow. ...Don't look sorry. It isn't tragic.",
+    "It's only slow."
+   ]
+  },
+  {
+   "day_min": 5,
+   "requires": [
+    "ariane_c2"
+   ],
+   "forbids": [
+    "ariane_c3"
+   ],
+   "daily": true,
+   "sets": [
+    "ariane_c3"
+   ],
+   "lines": [
+    "I've lived here my whole life. I know every path and every neighbour. Everyone is kind. But I have no one to ask.",
+    "If I'm wrong, I'm wrong alone. It's a strange sort of quiet. Zoe says I should come to more gatherings. She's right. She usually is.",
+    "It's tiring. Hm. Talking to you is easy. You don't rush to fill the silence. I appreciate that."
+   ]
+  },
+  {
+   "requires": [
+    "q07_started"
+   ],
+   "forbids": [
+    "q07_done"
+   ],
+   "lines": [
+    "I'll be there. I always am. I just don't eat the sweets. Bring Zoe what she asks for. She worries when the list is not done."
+   ]
+  }
+ ],
+ "maya": [
+  {
+   "variants": [
+    [
+     "Come for dinner some time! I'm working on a new recipe. An experimental one.",
+     "And no, the smoke alarm going off doesn't mean it's ruined, it just means it's got character!"
+    ],
+    [
+     "I'm forging a new set of candlesticks shaped like skeletal hands! Isn't that cool? I'll show you as soon as I finish them!"
+    ],
+    [
+     "Did I leave the forge on? I did, didn't I. Don't go anywhere, I'll be right, hold that thought!"
+    ],
+    [
+     "Clover's drawn you! She's put a lot of green on you. I think it's a compliment."
+    ],
+    [
+     "Sorry, what were you saying? My brain was still back at the anvil. Start over, I'm listening! Mostly!"
+    ],
+    [
+     "Clover's been drawing everyone in town. She gave Tom a tie that's bigger than his whole body. She's not wrong, honestly."
+    ],
+    [
+     "Ariane asked if I needed any medicinal herbs for my burns. I told her burns are just character marks.",
+     "She gave me 'that look' and walked away. You know the look."
+    ],
+    [
+     "Clover is one clever little thing. She's so creative with her little doodles, almost as creative as her big sister.",
+     "Must be something she inherited from me!"
+    ],
+    [
+     "Everyone thinks Jonas is super mysterious because he's from far away.",
+     "Honestly, I think he forgot where he left his luggage and is too embarrassed to admit it."
+    ],
+    [
+     "Zoe actually agreed to let me help with the festival food this year! She looked a little pale when she said yes, but a yes is a yes!"
+    ]
+   ]
+  },
+  {
+   "day_min": 1,
+   "forbids": [
+    "maya_c1"
+   ],
+   "daily": true,
+   "sets": [
+    "maya_c1",
+    "met_maya"
+   ],
+   "lines": [
+    "Hey! New farmer! {player}, right? I'm Maya, the blacksmith! The forge is that way, you can't miss it, it's the one with the smoke.",
+    "Wait. Did I leave it on? ...Okay, false alarm! Probably. Anyway! Hammers, hinges, horseshoes, whatever you break, bring it to me.",
+    "I can fix anything. Except my sister's drawings. Those are perfect. That's Clover.",
+    "Small, loud and very curious, She'll ask you about everything.",
+    "Keep her some company and I'm sure youll receive a pretty drawing from her. And you should come for dinner!",
+    "I'm working on a new recipe. It's experimental. People say that's a bad word for cooking. It isn't. Welcome! Seriously!",
+    "We needed more people who don't flinch at soot!"
+   ]
+  },
+  {
+   "day_min": 2,
+   "requires": [
+    "maya_c1"
+   ],
+   "forbids": [
+    "maya_c2"
+   ],
+   "daily": true,
+   "sets": [
+    "maya_c2"
+   ],
+   "lines": [
+    "Oh hey, {player}! You smell like soil. I like it. Honest smell. Better than coal. Wait, no, I like coal. Both! Want a secret?",
+    "The forge isn't just for horseshoes and plow blades. When the regular orders are done, I make the real stuff.",
+    "Iron ravens, thorny candle holders, hinges shaped like bat wings: you name it!",
+    "Nobody in town ever orders the cool stuff, so I just hang it from the rafters. Looks like a proper haunted castle in there now! Anyway!",
+    "Clover needs new shoes, the soles are...you know, it's fine. I'll fix them. I fix everything."
+   ]
+  },
+  {
+   "day_min": 5,
+   "requires": [
+    "maya_c2"
+   ],
+   "forbids": [
+    "maya_c3"
+   ],
+   "daily": true,
+   "sets": [
+    "maya_c3"
+   ],
+   "lines": [
+    "Dinner! Tonight! Mine! Everybody says no, but you look brave. ...You're not coming? Fine. Next time. I'll go easy. It's only a soup.",
+    "Hey, it's not that I can't cook! I just refuse to follow boring old recipes. Nothing ventured, nothing gained, right?",
+    "People around here need to be a little more experimental! When I was small the house always smelled like Sunday stew.",
+    "Clover barely remembers it. I'm trying to... never mind! Soup! Wait, what was I saying? Oh right, soup.",
+    "You're really nice to listen to me, you know that? Don't tell anyone I said so."
+   ]
+  },
+  {
+   "requires": [
+    "q07_started"
+   ],
+   "forbids": [
+    "q07_done"
+   ],
+   "lines": [
+    "Festival prep is in full swing! I'm helping with the main dish this year, and I promise I'm sticking to the plan. Mostly.",
+    "Just don't tell Clover I'm practising on the neighbours!"
+   ]
+  }
+ ],
+ "foreigner": [
+  {
+   "variants": [
+    [
+     "Tea? I always have a cup. Honey Lemon Tea, the way they make it back home. Not that I miss the place.",
+     "Honestly, the tea was the only decent thing they ever produced. Take your time, {player}."
+    ],
+    [
+     "Ah, my best customer! Admittedly, the only customer to look at my eyes instead of my feather. Are they really that captivating to you?"
+    ],
+    [
+     "Need something? Want something? Or are you just here to admire the shopkeeper? I stock all three, though the last one is free."
+    ],
+    [
+     "Some people are so worried about what others think. I get it, trust me. But sometimes you just have to enjoy life as it comes."
+    ],
+    [
+     "Tom is such a sweet young man. And don't get me wrong, while I do like honey, he's sweeter than I can handle.",
+     "Maybe I should stop messing with him or else before he dies of embarrassment."
+    ],
+    [
+     "I told Maya she looked 'radiant in the firelight' yesterday. She told me it was sweat and coal dust, and just stared at me.",
+     "Strange girl."
+    ],
+    [
+     "Cyrus came in for paper. He's got a certain aura around him makes you want to talk to him for hours, despite him not saying much.",
+     "What a charming dude."
+    ],
+    [
+     "Ariane is a fascinating woman. Quiet, striking, and completely unbothered by the rest of the world.",
+     "Sometimes I feel like we're total opposites yet being around her just gives you peace"
+    ],
+    [
+     "Zoe asked me to provide a grocery delivery service for the elders, but Walter definitely doesn't seem happy with that idea!",
+     "Sorry, Zoe, I don't want to get chewed out by the old man. Even if it's for you"
+    ]
+   ]
+  },
+  {
+   "requires": [
+    "hive_offered"
+   ],
+   "lines": [
+    "Found a spot for the hive yet, {player}? Somewhere with plenty of flowers nearby. You will thank me later.",
+    "Real honey is nothing like these artificial ones."
+   ]
+  },
+  {
+   "requires": [
+    "hive_built"
+   ],
+   "lines": [
+    "Good spot! Now give the bees a few days. They know their business better than we do."
+   ]
+  },
+  {
+   "requires": [
+    "hive_no_flowers"
+   ],
+   "lines": [
+    "Hm. I do not see many flowers around your hive. Bees need blossoms to make honey. Maybe you should plant it near some flowers instead.",
+    "Take it back with your pickaxe and move it next to the flowers. They will be much happier."
+   ]
+  },
+  {
+   "requires": [
+    "honey_remarked"
+   ],
+   "lines": [
+    "Honey every few days. I should have brought bees to this valley sooner."
+   ]
+  },
+  {
+   "day_min": 1,
+   "forbids": [
+    "foreigner_c1"
+   ],
+   "daily": true,
+   "sets": [
+    "foreigner_c1",
+    "met_foreigner",
+    "met_jonas"
+   ],
+   "lines": [
+    "Ah, the famous new farmer! Welcome to my humble shop, {player}. Everything on the shelf is imported, and priced accordingly.",
+    "I'm Jonas merchant, shopkeeper, tea enthusiast, and a man who refuses to live life without a little color.",
+    "I arrived only a few months before you, so we are both newcomers.",
+    "Tell you what, you stop by often, and I'll save my best smile for you. Take your time, browse, tell me what you need.",
+    "And if anyone in town tells you to take things too seriously, just ignore them. I certainly do.",
+    "It makes the evenings much more entertaining."
+   ]
+  },
+  {
+   "day_min": 2,
+   "requires": [
+    "foreigner_c1"
+   ],
+   "forbids": [
+    "foreigner_c2"
+   ],
+   "daily": true,
+   "sets": [
+    "foreigner_c2"
+   ],
+   "lines": [
+    "Hello again! Why I came here? You look like someone who appreciates a good story, {player}. Ahem, ahem.",
+    "People always ask me why a guy like me ends up running a quiet shop in the middle of nowhere. Truth is... it's a heavy tale.",
+    "I used to be a renowned tightrope walker in a traveling royal circus, best in the eastern provinces.",
+    "Then one stormy night, a jealous rival greased the wire with cheap lard.",
+    "I fell forty feet straight into a cart of prize-winning cabbages.",
+    "Shattered my pride, ruined my favorite boots, and forced me into early retirement. ...You didn't believe a word of that?",
+    "Damn, I thought I got you! My acting is usually so good no one can tell.",
+    "Half the fun of being a merchant is seeing what people will buy."
+   ]
+  },
+  {
+   "day_min": 5,
+   "requires": [
+    "foreigner_c2"
+   ],
+   "forbids": [
+    "foreigner_c3"
+   ],
+   "daily": true,
+   "sets": [
+    "foreigner_c3"
+   ],
+   "lines": [
+    "Ah, {player}, you caught me in a reflective mood. I was just thinking about my days as a disgraced opera singer.",
+    "My voice used to shatter crystal goblets from fifty paces until a tragic incident involving a stray duck and a high C ruined my vocal cords forever.",
+    "A heartbreaking loss for the arts, really. ...Wait. You're giving me that look. Right, right you already heard the tightrope story.",
+    "Look, if people are going to pry into where I came from, I might as well make the answers entertaining, shouldn't I?",
+    "Truth is, my real past is far less theatrical and considerably more boring. Besides, a little mystery is good for business.",
+    "Now, are you going to buy something, or just stand there dismantling my tragic mystique?"
+   ]
+  },
+  {
+   "requires": [
+    "q06_started"
+   ],
+   "forbids": [
+    "hive_offered"
+   ],
+   "sets": [
+    "hive_offered"
+   ],
+   "gives": [
     {
-      "day_min": 1,
-      "sets": [
-        "met_tom"
-      ],
-      "lines": [
-        "Oh! H-hello. I'm Tom. I do carpentry, well, I'm learning it. From my grandpa.",
-        "Sorry, I'm not good at this. Welcome to the village!"
-      ]
-    },
-    {
-      "requires": [
-        "met_tom"
-      ],
-      "lines": [
-        "Hi again. Um. If you ever need something built, I could... I mean, I'd like to try."
-      ]
+     "item": "beehive",
+     "count": 1
     }
-  ],
-  "foreigner": [
+   ],
+   "lines": [
+    "{player}! There you are. You look awful. I mean that fondly. Farming suits you. I came all this way to talk about something important.",
+    "Tea. Honey Lemon Tea is my favourite, I told you. But the imported artificial honey they sell here has no flavour at all.",
+    "Sweet and flat, like a polite compliance form. But I have seen the native flowers growing all over this valley.",
+    "Real honey could be made here! You have a farm. I have memories to chase. Take this hive, I made it from spare boards.",
+    "Put it on grass, with plenty of flowers within five tiles. And when you have the first honey, bring it to me.",
+    "I want to see if it tastes like home... or at least better than it."
+   ]
+  },
+  {
+   "requires": [
+    "first_honey"
+   ],
+   "forbids": [
+    "honey_remarked"
+   ],
+   "sets": [
+    "honey_remarked"
+   ],
+   "lines": [
+    "Is that the honey? Let me see... Hm. Well it's darker than what we make back home. And the taste is sharper too But it is good!",
+    "Good in its own way. Keep some for yourself."
+   ]
+  },
+  {
+   "requires": [
+    "q02_done"
+   ],
+   "forbids": [
+    "jonas_gift"
+   ],
+   "sets": [
+    "jonas_gift"
+   ],
+   "gives": [
     {
-      "day_min": 1,
-      "sets": [
-        "met_foreigner",
-        "met_jonas"
-      ],
-      "lines": [
-        "Welcome to my shop, {player}! I arrived only a few days before you, so we are both new here.",
-        "Take your time. Everything on the shelf is imported, and priced accordingly."
-      ]
-    },
-    {
-      "requires": [
-        "met_jonas"
-      ],
-      "lines": [
-        "Tea? I always have a cup. Honey Lemon Tea, the way they make it back home.",
-        "Take your time, {player}."
-      ]
-    },
-    {
-      "requires": [
-        "q06_started"
-      ],
-      "forbids": [
-        "hive_offered"
-      ],
-      "sets": [
-        "hive_offered"
-      ],
-      "gives": [
-        {
-          "item": "beehive",
-          "count": 1
-        }
-      ],
-      "lines": [
-        "Ah, {player}, there you are! I wanted to talk to you about tea.",
-        "Honey Lemon Tea is my favourite, but the honey they import here has no flavour at all. Artificial, I think.",
-        "But I have seen the flowers growing all over this valley. Real honey could be made here! Take this hive, I made it from spare boards.",
-        "Put it on grass, with plenty of flowers within five tiles. The bees will do the rest. It takes about three days."
-      ]
-    },
-    {
-      "requires": [
-        "hive_offered"
-      ],
-      "lines": [
-        "Found a spot for the hive yet, {player}? Somewhere with plenty of flowers nearby.",
-        "You will thank me later. Real honey is nothing like the town sweets."
-      ]
-    },
-    {
-      "requires": [
-        "hive_built"
-      ],
-      "lines": [
-        "Good spot! Now give the bees a few days.",
-        "They know their business better than we do."
-      ]
-    },
-    {
-      "requires": [
-        "hive_no_flowers"
-      ],
-      "lines": [
-        "Hm. I do not see many flowers around your hive.",
-        "Bees need blossoms to make honey. Maybe you should plant it near some flowers instead.",
-        "Take it back with your pickaxe and move it next to the lilies and azaleas. They will be much happier."
-      ]
-    },
-    {
-      "requires": [
-        "first_honey"
-      ],
-      "sets": [
-        "honey_remarked"
-      ],
-      "lines": [
-        "Is that the honey? Let me see... Hm. Much darker than what we make back home.",
-        "And the taste is sharper, heavier. Unusual.",
-        "But it is good! Good in its own way. Keep some for yourself."
-      ]
-    },
-    {
-      "requires": [
-        "honey_remarked"
-      ],
-      "lines": [
-        "Honey every few days. I should have brought bees to this valley sooner."
-      ]
-    },
-    {
-      "requires": [
-        "q02_done"
-      ],
-      "forbids": [
-        "jonas_gift"
-      ],
-      "sets": [
-        "jonas_gift"
-      ],
-      "gives": [
-        {
-          "item": "carrot_seeds",
-          "count": 3
-        }
-      ],
-      "lines": [
-        "So you have greeted the whole village, {player}! Everyone here talks about you already.",
-        "Here, a little welcome gift from the shop. Carrot seeds. They grow fast, you will like them."
-      ]
+     "item": "carrot_seeds",
+     "count": 3
     }
-  ],
-  "ariane": [
-    {
-      "day_min": 1,
-      "sets": [
-        "met_ariane"
-      ],
-      "lines": [
-        "Oh, a new face. Welcome to the village, {player}.",
-        "I don't talk much. If you want to know about plants, ask."
-      ]
-    },
-    {
-      "requires": [
-        "met_ariane"
-      ],
-      "lines": [
-        "Hm. Back again."
-      ]
-    }
-  ],
-  "maya": [
-    {
-      "day_min": 1,
-      "sets": [
-        "met_maya"
-      ],
-      "lines": [
-        "Hey! New farmer! I'm Maya, I'm the blacksmith. The forge is that way. Wait, did I leave it on?",
-        "Anyway! Welcome!"
-      ]
-    },
-    {
-      "requires": [
-        "met_maya"
-      ],
-      "lines": [
-        "Come for dinner some time! I'm working on a new recipe. An experimental one."
-      ]
-    }
-  ],
-  "littleGirl": [
-    {
-      "day_min": 1,
-      "sets": [
-        "met_clover"
-      ],
-      "lines": [
-        "Hi! Who are you? Why are you here? What's that you're carrying?",
-        "I'm Clover! I draw everything. I'll draw you next!"
-      ]
-    },
-    {
-      "requires": [
-        "met_clover"
-      ],
-      "lines": [
-        "Why do plants need water? What's under the ground? Can I see?"
-      ]
-    }
-  ],
-  "cyrus": [
-    {
-      "day_min": 1,
-      "sets": [
-        "met_cyrus"
-      ],
-      "lines": [
-        "Oh... hello. You must be the new farmer. I'm Cyrus. I write novels, mostly. Or I try to.",
-        "It's fine. Everything's fine. Please don't mind me."
-      ]
-    },
-    {
-      "requires": [
-        "met_cyrus"
-      ],
-      "lines": [
-        "Oh, hello again. It's fine, I was just thinking. It's fine."
-      ]
-    },
-    {
-      "requires": [
-        "q03_started"
-      ],
-      "forbids": [
-        "q03_done"
-      ],
-      "lines": [
-        "You're the new one, we spoke the other day. I can help you with something.",
-        "Harvest a crop and put it in the shipping box by your farm. It pays you for whatever you put in. Sell enough and you'll have some gold to grow on.",
-        "I'm not really good at making money myself, being a novelist and all. But I can still help a neighbour."
-      ]
-    }
-  ],
-  "walter": [
-    {
-      "day_min": 1,
-      "sets": [
-        "met_walter"
-      ],
-      "lines": [
-        "Hmph. A new farmer.",
-        "Don't go up the ridge. Ever."
-      ]
-    },
-    {
-      "requires": [
-        "met_walter"
-      ],
-      "lines": [
-        "Hmph."
-      ]
-    }
-  ],
-  "martha": [
-    {
-      "day_min": 1,
-      "sets": [
-        "met_martha"
-      ],
-      "lines": [
-        "Oh, hello, dear! You must be the new farmer. I'm Martha, Mira's granny.",
-        "Come see us sometimes. You look like you could use a hot meal."
-      ]
-    },
-    {
-      "requires": [
-        "met_martha"
-      ],
-      "lines": [
-        "Have you eaten, dear?"
-      ]
-    }
-  ]
+   ],
+   "lines": [
+    "So you have greeted the whole village, {player}! Everyone here talks about you already. Here, a little welcome gift from the shop.",
+    "Carrot seeds. They grow fast, you will like them."
+   ]
+  },
+  {
+   "requires": [
+    "q06_done",
+    "q07_started"
+   ],
+   "forbids": [
+    "q07_done"
+   ],
+   "lines": [
+    "A festival! Back home, a celebration meant rows of stiff chairs and polite applause.",
+    "Here, they've got music, laughter, and mountains of cake. Honestly? It's a massive upgrade.",
+    "Your honey is going straight onto the feast table, I hear. Quite the honor! Try not to eat the whole jar before the big day, {player}."
+   ]
+  }
+ ],
+ "cyrus": [
+  {
+   "variants": [
+    [
+     "The old house is quiet today. Sometimes too quiet.",
+     "The ink dries faster than the thoughts can keep up... but perhaps that is for the best."
+    ],
+    [
+     "A quiet evening is a rare luxury. I find it leaves room for proper conversation, even if we simply share the silence.",
+     "I am glad our paths crossed today, {player}."
+    ],
+    [
+     "Do you ever feel like the air in this valley remembers things we've long forgotten? No? A foolish thought. Pay me no mind."
+    ],
+    [
+     "There is a distinct art to watching the world move without feeling the need to run with it. Most people never learn it.",
+     "Take a moment to breathe, {player}. The day will wait for you."
+    ],
+    [
+     "Watching Clover, you realize how separate her world is from ours.",
+     "This new generation sure is different from ours, perhaps it's a good thing."
+    ],
+    [
+     "Maya... I hope she is doing well. Ever since the divorce, every last responsibility fell squarely onto her shoulders.",
+     "Perhaps that is why she is always a bit all over the place.",
+     "Helen and Phil were polar opposites from the start I never truly understood why they married.",
+     "They must have thought their differences would complete one another. But in the end, all they found were arguments."
+    ],
+    [
+     "Every time I meet Martha, she doesn't stop asking about my health when she should be worrying about her own. She truly never changes.",
+     "And Walter that old fossil still insists he's as young and capable as ever.",
+     "I wish he'd just hand over the business to Tom and take care of himself for once."
+    ],
+    [
+     "Jonas? Who is that?"
+    ],
+    [
+     "Hmm... the Briktens invited me for dinner. They aren't exactly a social family, so I do wonder who sent this. Definitely wasn't Walter.",
+     "Tom? He can barely meet my gaze when we speak, I can never tell if he's frightened or simply shy. Maybe both. Ariane? I doubt it.",
+     "She is straightforward; if she had something to say, she'd tell me directly.",
+     "When we were kids, she acted more like a mother to the rest of us than anything else.",
+     "Even now, it sometimes feels like she can see right through me. ...Wait. This handwriting? Oh, Zoe. I see what she did.",
+     "What a ball of positive energy she can't go a second without spreading it.",
+     "Well, I'm sure the Briktens won't mind me showing up uninvited."
+    ]
+   ]
+  },
+  {
+   "requires": [
+    "q03_started"
+   ],
+   "forbids": [
+    "q03_done"
+   ],
+   "lines": [
+    "You're the newcomer we crossed paths the other day. If you're still finding your footing, I can offer a small piece of advice.",
+    "Harvest a crop and leave it in the shipping box beside your farm; it will pay out whatever you place inside.",
+    "Sell enough, and you'll have the coin to start properly.",
+    "I'm no authority on making money myself, a novelist rarely is, but one does what one can for a neighbour."
+   ]
+  },
+  {
+   "day_min": 1,
+   "forbids": [
+    "cyrus_c1"
+   ],
+   "daily": true,
+   "sets": [
+    "cyrus_c1",
+    "met_cyrus"
+   ],
+   "lines": [
+    "Ah... hello. You must be the new arrival. I'm Cyrus.",
+    "I write novels, mostly or at least, I let the ink flow until something resembles one.",
+    "Forgive me if I seem a bit distant; I was up rather late trying to untangle a stubborn chapter. I look after the old house by the mill.",
+    "It is far too large for one person, though all the papers keep it full enough.",
+    "If you ever need directions, a hand with something heavy, or simply a quiet place to sit, you're welcome to find me.",
+    "I hope the valley treats you kindly, {player}."
+   ]
+  },
+  {
+   "day_min": 2,
+   "requires": [
+    "cyrus_c1"
+   ],
+   "forbids": [
+    "cyrus_c2"
+   ],
+   "daily": true,
+   "sets": [
+    "cyrus_c2"
+   ],
+   "lines": [
+    "Good to see you again. Pay no mind if I looked lost, the waves of contradiction in my draft keep crashing over me.",
+    "My publisher tells me it isn't particularly cheerful, though I suppose it is through misery that one learns what true happiness actually is.",
+    "I do most of my writing at night... or so I believe. Sometimes it is rather hard to tell night from day anymore.",
+    "The town is quite peaceful today. How nice. I haven't left my room in a while, so this is rather refreshing... Care to take a walk?"
+   ]
+  },
+  {
+   "day_min": 5,
+   "requires": [
+    "cyrus_c2"
+   ],
+   "forbids": [
+    "cyrus_c3"
+   ],
+   "daily": true,
+   "sets": [
+    "cyrus_c3"
+   ],
+   "lines": [
+    "The red flower on my chest? You like it? Thank you.",
+    "There was a time when people used to decorate the entire town with these, lining the fences, pinned to coats, woven into festival wreaths.",
+    "Slowly, year by year, the custom simply faded away. That is the nature of life, I suppose. Everything moves toward an end eventually.",
+    "Still... there is a quiet sort of dread in watching things vanish piece by piece, knowing that one day no one will even recall why they",
+    "mattered in the first place.",
+    "It makes you wonder how fleeting 'meaning' really is. Tell me, {player}... what do you think is scarier?",
+    "Living your life by carving heavy meaning into everything you encounter, or living a life where you see no meaning at all?"
+   ]
+  },
+  {
+   "requires": [
+    "q03_done",
+    "q07_started"
+   ],
+   "forbids": [
+    "q07_done"
+   ],
+   "lines": [
+    "Ah, the festival. It is good to see the square so full of life, though I find I enjoy the celebration best from the quieter edges.",
+    "If you catch me lingering near the perimeter with a warm drink, feel free to come say hello."
+   ]
+  }
+ ],
+ "littleGirl": [
+  {
+   "variants": [
+    [
+     "Why do plants need water? What's under the ground? Can I see?"
+    ],
+    [
+     "Hi! I drew a duck. It looks like a potato. Maya says that's okay. Ducks are kind of potatoes."
+    ],
+    [
+     "Is it today yet? Is it tomorrow? How do you know which one it is?"
+    ],
+    [
+     "Look, a snail! Hello, snail! He's not talking. Maybe he's shy. Like Tom."
+    ]
+   ]
+  },
+  {
+   "day_min": 1,
+   "forbids": [
+    "littleGirl_c1"
+   ],
+   "daily": true,
+   "sets": [
+    "littleGirl_c1",
+    "met_clover"
+   ],
+   "lines": [
+    "Hi! Who are you? Why are you here? What's that you're carrying? Is it a shovel? What's a shovel for? I'm Clover!",
+    "I'm not little, I'm medium. I live with my big sister Maya. She makes fire for a job. It's the coolest. I draw everything! Look!",
+    "This is the pond. This is a duck. That's a different duck. They're friends. Can I draw you? You've got a really interesting face.",
+    "No, a good one! The kind you want to draw twice. Do you know any stories? Not boring ones.",
+    "The ones where somebody goes somewhere they're not allowed!"
+   ]
+  },
+  {
+   "day_min": 2,
+   "requires": [
+    "littleGirl_c1"
+   ],
+   "forbids": [
+    "littleGirl_c2"
+   ],
+   "daily": true,
+   "sets": [
+    "littleGirl_c2"
+   ],
+   "lines": [
+    "Hi! Hi hi hi! Why is the sky that colour in the morning? Is it because it's tired? Maya says it's smoke. I drew your farm!",
+    "Here's the house, here's the fence, and here's you. You're the stick one holding a stick. Do plants get lonely?",
+    "What if you plant just one? Does it miss the others? I think I'd miss the others. Maya burned the soup again. I said it was good.",
+    "I lied a little. A little lie is okay when it's nice, right?"
+   ]
+  },
+  {
+   "day_min": 5,
+   "requires": [
+    "littleGirl_c2"
+   ],
+   "forbids": [
+    "littleGirl_c3"
+   ],
+   "daily": true,
+   "sets": [
+    "littleGirl_c3"
+   ],
+   "lines": [
+    "There are red flowers up the ridge! I saw them from the fence! They're so pretty, like tiny fires! But Walter says I can't go.",
+    "He always says that. Why? What's up there? Is it a dragon? Maya says it's just a hill. But when she says it she doesn't look at me.",
+    "That's what grown-ups do when they're hiding something. I know. Don't tell her I told you! I'm not going. I'm just looking.",
+    "Looking isn't going."
+   ]
+  },
+  {
+   "requires": [
+    "q07_started"
+   ],
+   "forbids": [
+    "q07_done"
+   ],
+   "lines": [
+    "The festival! There will be games! And cake! Will there be cake? Maya says there will be cake but it won't be hers, I hope!",
+    "I want to wear a flower crown. A red one. Zoe says maybe."
+   ]
+  }
+ ],
+ "walter": [
+  {
+   "variants": [
+    [
+     "Hmph."
+    ],
+    [
+     "Hmph. You again."
+    ],
+    [
+     "...Hmph."
+    ],
+    [
+     "Weather's turning. Hmph. Good for the crops. Maybe."
+    ]
+   ]
+  },
+  {
+   "day_min": 1,
+   "forbids": [
+    "walter_c1"
+   ],
+   "daily": true,
+   "sets": [
+    "walter_c1",
+    "met_walter"
+   ],
+   "lines": [
+    "Hmph. A new farmer. Walter. That's my name. Don't wear it out. The old farm has good soil. Poor luck, though. People leave. You'll see.",
+    "Don't go up the ridge. Ever. I don't explain. Just don't."
+   ]
+  },
+  {
+   "day_min": 2,
+   "requires": [
+    "walter_c1"
+   ],
+   "forbids": [
+    "walter_c2"
+   ],
+   "daily": true,
+   "sets": [
+    "walter_c2"
+   ],
+   "lines": [
+    "Hmph. You again. My grandson says you seem decent. The boy likes everybody. It's a weakness. He works hard. Too hard.",
+    "Says yes to everything. Hmph. Tell him I said nothing. Go away."
+   ]
+  },
+  {
+   "day_min": 5,
+   "requires": [
+    "walter_c2"
+   ],
+   "forbids": [
+    "walter_c3"
+   ],
+   "daily": true,
+   "sets": [
+    "walter_c3"
+   ],
+   "lines": [
+    "See the fence round the old pen? I built that. Forty years ago. Still standing. Things last if you build them right. People too.",
+    "Some of them. ...Hmph. Why are you still here? Go. Plant something."
+   ]
+  },
+  {
+   "requires": [
+    "q07_started"
+   ],
+   "forbids": [
+    "q07_done"
+   ],
+   "lines": [
+    "Hmph. Festival. Fuss and noise. In my day we did it properly. ...Fine. I'll sit at the front. Somebody has to."
+   ]
+  }
+ ],
+ "martha": [
+  {
+   "variants": [
+    [
+     "Have you eaten, dear?"
+    ],
+    [
+     "Oh, hello, dear. Take your time. There's always a bench free."
+    ],
+    [
+     "Zoe's been fussing over you again, hasn't she? Let her. It's how she says she's fond."
+    ],
+    [
+     "Put your hat on, dear. The sun's sneakier than it looks."
+    ]
+   ]
+  },
+  {
+   "day_min": 1,
+   "forbids": [
+    "martha_c1"
+   ],
+   "daily": true,
+   "sets": [
+    "martha_c1",
+    "met_martha"
+   ],
+   "lines": [
+    "Oh, hello, dear! You must be the new farmer. I'm Martha, Zoe's granny. Come closer, my eyes aren't what they were. There!",
+    "Oh, you're taller than I thought. And thinner. You'll need feeding up. Do you eat enough? Nobody does, these days.",
+    "Zoe's been talking about you for days. 'The new farmer, the new farmer.' I told her, let the poor soul unpack first. She means well.",
+    "She plans everything. Even my afternoons. I'm an old woman and I have a schedule. Come and see us sometimes. There's always soup.",
+    "Always. Far too much of it, usually."
+   ]
+  },
+  {
+   "day_min": 2,
+   "requires": [
+    "martha_c1"
+   ],
+   "forbids": [
+    "martha_c2"
+   ],
+   "daily": true,
+   "sets": [
+    "martha_c2"
+   ],
+   "lines": [
+    "Dear! Sit a moment. No? Busy, busy. You young ones, always busy. I knit and watch the square.",
+    "You'd be amazed what you can see from a bench. Who's sweet on whom. Who's been crying. Zoe thinks I don't notice when she's tired.",
+    "I notice, dear. I always do. She talks and talks, our Zoe. It's her way of keeping the house warm. I let her. It does us both good."
+   ]
+  },
+  {
+   "day_min": 5,
+   "requires": [
+    "martha_c2"
+   ],
+   "forbids": [
+    "martha_c3"
+   ],
+   "daily": true,
+   "sets": [
+    "martha_c3"
+   ],
+   "lines": [
+    "Walter and I go way back. He's been a grump since he was young. A very handsome grump, if you can believe it.",
+    "He worries about the ridge. About the old stories. I tell him stories are only stories. But he's not wrong to worry.",
+    "Not about everything. Hm. Never mind. An old woman's chatter. Have you eaten? Take a moment. Don't argue, dear. It's only a bun."
+   ]
+  },
+  {
+   "requires": [
+    "q07_started"
+   ],
+   "forbids": [
+    "q07_done"
+   ],
+   "lines": [
+    "Oh, dear, the whole village is helping this year! Zoe is running about like a little hen. Bring what she asks, dear.",
+    "A festival is only as good as its guests."
+   ]
+  }
+ ]
 }

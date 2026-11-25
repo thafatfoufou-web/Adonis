@@ -11,6 +11,7 @@ DIALOGUES_FILE = "data/dialogues.json"
 QUESTS_FILE = "data/quests.json"
 PICKUPS_FILE = "data/pickups.json"
 ITEMS_FILE = "data/items.json"
+GIFTS_FILE = "data/gifts.json"
 
 PLAYER_SPRITES = {                
     "female": "assets/characters/fmc.png",
@@ -61,6 +62,7 @@ START_OF_DAY = 6 * 60             # minutes since midnight: the day starts at 6:
 END_OF_DAY = 24 * 60              # the day ends at midnight
 DAY_LENGTH_SECONDS = 27           # real seconds from START_OF_DAY to END_OF_DAY
 MINUTES_PER_SECOND = (END_OF_DAY - START_OF_DAY) / DAY_LENGTH_SECONDS
+MORNING_WINDOW = 90               # minutes after waking during which quests with a visit may start
 SEASON_LENGTH = 28                # days in one season (every quest date in the Quest Bible is counted from this)
 SEASON_NAMES = ("Spring", "Summer", "Autumn", "Winter")
 NIGHT_START = 18 * 60             # darkness begins at 18:00
@@ -84,6 +86,7 @@ MOOD_MIST_HEIGHT = 220            # height of the mist band in pixels
 MAX_ENERGY = 100
 SLEEP_ENERGY_FRACTION = 1.0       # energy after sleeping in bed (1.0 = full)
 PASS_OUT_FRACTION = 0.8           # energy after staying up until midnight
+EARLIEST_SLEEP = 19 * 60          # the bed only works from 19:00 (unless the energy is below LOW_ENERGY)
 LOW_ENERGY = 0.25                 # below this fraction the energy bar turns red
 ENERGY_COSTS = {
     "till": 4,                    # shovel on grass
@@ -101,8 +104,67 @@ ENERGY_COSTS = {
 # ============================================================
 START_GOLD = 100
 STARTING_ITEMS = [("shovel", 1), ("pickaxe", 1), ("watering_can", 1)]   # the first seeds come from Mira in Quest 1
-SHOP_STOCK = ["cauliflower_seeds", "carrot_seeds", "pumpkin_seeds"]
+# What the shop sells. An entry shows up once its story flag is set (these flags are set by quest rewards in
+# data/quests.json), so the shelf grows as the story goes on. "item" sells an item from items.json for its
+# "buy_price"; "kind": "cow" sells a cow, which walks into the pen. "tab" is the shop tab the entry is listed in.
+SHOP_STOCK = [
+    {"item": "cauliflower_seeds", "requires": "shop_carrots", "tab": "Farm"},      # after Greet Everyone (the first two quests)
+    {"item": "carrot_seeds", "requires": "shop_carrots", "tab": "Farm"},           # after Greet Everyone
+    {"item": "pumpkin_seeds", "requires": "shop_tier_2", "tab": "Farm"},           # after Making a Living
+    {"kind": "cow", "name": "Cow", "price": 400, "requires": "cows_unlocked", "tab": "Farm", "icon": "assets/animals/cow.png"},   # after The Empty Barn
+    {"item": "beehive", "requires": "beehives_unlocked", "tab": "Farm"},           # after Something Different
+]
+# The tabs of the shop window, in this order. A tab only shows up once it has something unlocked.
+# Every entry of SHOP_STOCK needs a "tab" that is one of these names.
+SHOP_TABS = ("Farm", "Flowers", "Food", "Materials", "Jewels", "Other")
+# Gifts sold by Jonas once the player has greeted everyone (flag "shop_carrots").
+# tab name -> {item id: price in gold}. Edit a price here, move a line to another tab,
+# or delete a line to stop selling that gift. The order here is the order on the shelf.
+GIFT_SHOP = {
+    "Flowers": {
+        "daisy": 20, "daffodil": 25, "lily": 30,
+    },
+    "Food": {
+        "candy": 15, "apple": 20, "cookie": 25, "donut": 35, "cupcake": 45,
+        "bread": 30, "cheese": 40, "tofu": 30, "sandwich": 50,
+        "soup": 40, "potato_soup": 40, "meat": 70, "ribs": 90,
+        "coffee": 30, "tea_cup": 30, "juice_grape": 35, "juice_orange": 35,
+    },
+    "Materials": {
+        "plank": 40, "rope": 35, "gear": 60, "wool": 50, "fabric": 50,
+    },
+    "Jewels": {
+        "brooch": 150, "amulet": 120, "moon_charm": 120,
+        "pearl": 350, "ruby": 400, "ring_gold": 400,
+        "emerald": 450, "sapphire": 500, "diamond": 900,
+    },
+    "Other": {
+        "bandages": 25, "herbal_medicine": 40, "joint_cream": 45,
+        "envelope": 10, "paper": 15, "scroll": 30, "book": 80,
+        "candle": 25, "lantern": 60, "bow": 40, "hourglass": 70,
+        "music_player": 150, "bathrobe": 80, "perfume_sample": 35, "perfume": 90,
+    },
+}
+for tab_name in GIFT_SHOP:
+    for gift_id in GIFT_SHOP[tab_name]:
+        SHOP_STOCK.append({"item": gift_id, "requires": "shop_carrots", "tab": tab_name})
+SHOP_EMPTY_TEXT = "Nothing on the shelf yet. Come back once you have settled in."
 SLOT_COUNT = 10                   # hotbar slots (keys 1 to 9, then 0)
+
+# ============================================================
+# FRIENDSHIP AND GIFTS
+# ============================================================
+AFFECTION = {
+    "max_hearts": 3,              # the three steps of each villager's affection ladder in the Character Sheet
+    "heart_points": 150,          # points for one heart (3 hearts = 450 points)
+    "talk_points": 5,             # the first chat of the day with a villager
+    "gift_points": {"love": 50, "like": 25, "neutral": 10, "dislike": -15},   # one gift per villager per day
+    "giftable_types": ("crop", "material", "gift"),   # item types that can be given (not tools, seeds or hives)
+}
+GIFT_REACH = 2                    # tiles: a villager this close (in any direction) can get a gift with G, no need to face them exactly
+NPC_PAUSE_AFTER_CHAT = 3          # seconds a villager stands still after a chat or a gift, so they do not walk off right away
+GIFT_KEY = pygame.K_g             # gives the held item to the villager in front of you (right click does it too)
+HEART_IMAGE = "assets/ui/Heart.png"
 
 # ============================================================
 # CROPS
@@ -119,7 +181,7 @@ SOIL_REVERT_DAYS = 3              # days an empty tilled tile can stay unused be
 # ============================================================
 # COWS
 # ============================================================
-COW_START_TILES = [(6, 15), (9, 18), (11, 14)]   # where the cows start (inside the pen)
+COW_START_TILES = [(6, 15), (9, 18), (11, 14), (6, 19), (12, 18)]   # where the cows start (inside the pen); also the most cows you can own
 COW_PEN = (4, 13, 13, 21)         # the area they wander in: first column, first row, last column, last row (tiles)
 COW_SPRITE = "assets/animals/cow.png"   # optional picture of the cow
 COW_SPRITE_FACES = "left"         # which way the cow looks in the picture file: "left" or "right"   # optional picture, drawn looking RIGHT (the game flips it)
@@ -156,7 +218,8 @@ PLAYER_START = (64, 256)          # starting position in pixels
 PLAYER_SPEED = 200                # pixels per second
 PLAYER_HITBOX = (14, 10)          # width and height of the feet hitbox
 PLAYER_SPRITE_SIZE = (64, 64)
-PLAYER_FALLBACK_COLOR = (230, 200, 80)
+PLAYER_SIDE_FACES = "left" 
+PLAYER_FALLBACK_COLOR = (230, 200, 80)  
 
 # ============================================================
 # NPCS
@@ -194,6 +257,7 @@ SLOT_KEYS = [pygame.KSCAN_1, pygame.KSCAN_2, pygame.KSCAN_3, pygame.KSCAN_4,
 # Cream and brown pixel interface
 TEXT = (74, 44, 30)               # dark brown text on cream panels
 TEXT_DIM = (140, 100, 72)         # softer brown: hints, labels, empty text
+TEXT_DEEP = (40, 24, 16)          # darker brown for the green dialogue box (more contrast than TEXT)
 TEXT_LIGHT = (255, 240, 205)      # cream text drawn on the world or on a picture
 ACCENT = (159, 67, 42)            # red-brown: selection, prices, gold amount
 ACCENT_DARK = (131, 66, 39)
@@ -238,15 +302,30 @@ COIN_BOX_SIZE = (52, 44)
 GOLD_BOX_SIZE = (110, 44)
 HUD_GAP = 8
 
-SHOP_PANEL_SIZE = (480, 270)
+SHOP_PANEL_SIZE = (480, 420)
+SHOP_TAB_Y = 54                   # height of the tab buttons below the top of the window
+SHOP_TAB_HEIGHT = 28
+SHOP_ROWS_Y = 90                  # height of the first item row below the top of the window
 SHOP_ROW_HEIGHT = 40
 SHOP_ROW_SPACING = 46
+SHOP_VISIBLE_ROWS = 6            # rows shown at once; the list scrolls when a tab has more
 
 DIALOGUE_BOX_HEIGHT = 130
 DIALOGUE_BOX_MARGIN = 20
 DIALOGUE_BOX_Y = 412
 DIALOGUE_TEXT_PADDING = 20
 DIALOGUE_LINE_SPACING = 28
+DIALOGUE_STYLES = {
+    "Zoe": {"piece": "dialogue_zoe", "text": TEXT, "name": TEXT},
+    "Maya": {"piece": "dialogue_maya", "text": TEXT, "name": TEXT},
+    "Cyrus": {"piece": "dialogue_cyrus", "text": TEXT_LIGHT, "name": TEXT_LIGHT},
+    "Tom": {"piece": "dialogue_tom", "text": TEXT_LIGHT, "name": TEXT_LIGHT},
+    "Jonas": {"piece": "dialogue_jonas", "text": TEXT, "name": TEXT},
+    "Ariane": {"piece": "dialogue_ariane", "text": TEXT_DEEP, "name": TEXT_DEEP},
+    "Clover": {"piece": "dialogue_clover", "text": TEXT, "name": TEXT},
+    "Walter": {"piece": "dialogue_elder", "text": TEXT, "name": TEXT},
+    "Martha": {"piece": "dialogue_elder", "text": TEXT, "name": TEXT},
+}
 
 
 # ============================================================
@@ -275,8 +354,12 @@ START_BUTTON_SIZE = (260, 52)
 # ============================================================
 # SAVING
 # ============================================================
-SAVE_FILE = "saves/save1.json"    # the one save slot (the folder is created when needed)
+SAVE_SLOTS = 4                    # how many games can be kept side by side
+SAVE_FILE_PATTERN = "saves/save{}.json"   # slot 1 is saves/save1.json, as before (the folder is created when needed)
 SAVE_VERSION = 1                  # raise it if the save format ever changes
 PAUSE_PANEL_SIZE = (340, 320)
-MENU_BUTTON_RECT = (16, 16, 56, 56)  
-
+MENU_BUTTON_RECT = (16, 16, 56, 56)
+QUEST_BUTTON_RECT = (MENU_BUTTON_RECT[0], MENU_BUTTON_RECT[1] + MENU_BUTTON_RECT[3] + HUD_GAP, 56, 56)   # the quest book, under the menu button
+QUEST_BOOK_ICON = "assets/ui/book.png"
+QUEST_FLASH_SECONDS = 3.0         # how long the one-line tracker stays bright after a quest changes
+QUEST_LOG_KEY = pygame.K_TAB      # opens and closes the quest log

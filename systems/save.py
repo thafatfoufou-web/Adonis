@@ -1,8 +1,8 @@
-"""Saving and loading the game: one JSON file with everything that changes during play.
+"""Saving and loading the game: one JSON file per slot (config.SAVE_SLOTS slots) with everything that changes during play.
 
 What is saved: the hero's name and gender, the day and time, the player's position and
 energy, the hotbar and gold, the tilled soil with its crops, the beehives, whether each cow
-has milk, the story flags and the quest progress. The map, the villagers' positions (they walk home every
+has milk, the story flags, the quest progress and the friendship hearts. The map, the villagers' positions (they walk home every
 morning) and the interface are not saved.
 """
 
@@ -13,24 +13,30 @@ import config
 from systems.items import ITEMS
 
 
-def save_exists():
-    """Return True if a save file is there."""
-    return os.path.exists(config.SAVE_FILE)
+def get_save_path(slot):
+    """Return the file of a slot (1 to config.SAVE_SLOTS)."""
+    return config.SAVE_FILE_PATTERN.format(slot)
 
 
-def read_save():
-    """Return the saved data as a dictionary, or None if there is no usable save file."""
-    if not os.path.exists(config.SAVE_FILE):
+def save_exists(slot):
+    """Return True if the slot has a save file."""
+    return os.path.exists(get_save_path(slot))
+
+
+def read_save(slot):
+    """Return the saved data of a slot as a dictionary, or None if there is no usable save file."""
+    path = get_save_path(slot)
+    if not os.path.exists(path):
         return None
     try:
-        with open(config.SAVE_FILE, "r", encoding="utf-8") as file:
+        with open(path, "r", encoding="utf-8") as file:
             data = json.load(file)
     except (OSError, ValueError) as error:
-        print("[save] could not read " + config.SAVE_FILE + ": " + str(error))
+        print("[save] could not read " + path + ": " + str(error))
         return None
 
     if not isinstance(data, dict):
-        print("[save] the save file is not valid")
+        print("[save] the save file is not valid: " + path)
         return None
     version = data.get("version")
     if not isinstance(version, int) or version > config.SAVE_VERSION:
@@ -43,29 +49,60 @@ def read_save():
     return data
 
 
-def write_save(data):
-    """Write the data to the save file. Return True if it worked.
+def write_save(data, slot):
+    """Write the data to the slot's save file. Return True if it worked.
 
     The data goes to a temporary file first and replaces the real save only when it is
     complete, so a crash in the middle cannot ruin an existing save.
     """
-    temporary = config.SAVE_FILE + ".tmp"
+    path = get_save_path(slot)
+    temporary = path + ".tmp"
     try:
-        folder = os.path.dirname(config.SAVE_FILE)
+        folder = os.path.dirname(path)
         if folder != "":
             os.makedirs(folder, exist_ok=True)
         with open(temporary, "w", encoding="utf-8") as file:
             json.dump(data, file, indent=1)
             file.flush()
             os.fsync(file.fileno())
-        os.replace(temporary, config.SAVE_FILE)
+        os.replace(temporary, path)
         return True
     except OSError as error:
-        print("[save] could not write " + config.SAVE_FILE + ": " + str(error))
+        print("[save] could not write " + path + ": " + str(error))
         return False
 
 
-def build_save(profile, game_time, player, energy, inventory, farm, apiary, cows, story, quests=None):
+def delete_save(slot):
+    """Erase the slot's save file. Return True if the slot is empty afterwards."""
+    try:
+        if save_exists(slot):
+            os.remove(get_save_path(slot))
+        return True
+    except OSError as error:
+        print("[save] could not delete " + get_save_path(slot) + ": " + str(error))
+        return False
+
+
+def get_slot_info(slot):
+    """Return what the slot list shows: None for an empty slot, {"damaged": True} for a broken file,
+    otherwise {"name", "gender", "date" (like "Spring 3") and "gold"}."""
+    if not save_exists(slot):
+        return None
+    data = read_save(slot)
+    if data is None:
+        return {"damaged": True}
+    day = max(1, int(data["time"].get("day", 1)))
+    season = config.SEASON_NAMES[((day - 1) // config.SEASON_LENGTH) % len(config.SEASON_NAMES)]
+    return {
+        "damaged": False,
+        "name": str(data["profile"].get("name", "?")),
+        "gender": data["profile"].get("gender"),
+        "date": season + " " + str((day - 1) % config.SEASON_LENGTH + 1),
+        "gold": int(data.get("inventory", {}).get("gold", config.START_GOLD)),
+    }
+
+
+def build_save(profile, game_time, player, energy, inventory, farm, apiary, cows, story, quests=None, affection=None):
     """Collect everything worth keeping into a dictionary that can be written as JSON."""
     soil = []
     for (tx, ty), tile in farm.soil.items():
@@ -103,6 +140,7 @@ def build_save(profile, game_time, player, energy, inventory, farm, apiary, cows
         "cows": [bool(cow.milk_ready) for cow in cows],
         "story": sorted(story.flags),
         "quests": quests.to_dict() if quests is not None else {},
+        "affection": affection.to_dict() if affection is not None else {},
     }
 
 

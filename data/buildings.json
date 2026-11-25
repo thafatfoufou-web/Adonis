@@ -1,22 +1,54 @@
 {
   "buildings": [
-        {
+    {
       "name": "Farmhouse",
       "image": "assets/farm.png",
-      "tile": [2, 0],
-      "hitbox": [16, 144, 160, 88],
+      "tile": [
+        2,
+        0
+      ],
+      "hitbox": [
+        16,
+        144,
+        160,
+        88
+      ],
       "doors": [
-        {"tile": [2, 6], "action": "sleep"},
-        {"tile": [3, 6], "action": "sleep"},
-        {"tile": [2, 7], "action": "sleep"},
-        {"tile": [3, 7], "action": "sleep"}
+        {
+          "tile": [
+            2,
+            6
+          ],
+          "action": "sleep"
+        },
+        {
+          "tile": [
+            3,
+            6
+          ],
+          "action": "sleep"
+        },
+        {
+          "tile": [
+            2,
+            7
+          ],
+          "action": "sleep"
+        },
+        {
+          "tile": [
+            3,
+            7
+          ],
+          "action": "sleep"
+        }
       ]
     },
     {
       "name": "Shop",
       "image": "assets/shop.png",
       "tile": [
-        10,
+        52,
         0
       ],
       "hitbox": [
@@ -55,6 +87,82 @@
           "action": "shop"
         }
       ]
+    },
+    {
+      "name": "Barn",
+      "image": "assets/barn.png",
+      "tile": [
+        18,
+        0
+      ],
+      "hitbox": [
+        16,
+        144,
+        160,
+        88
+      ],
+      "requires": "cows_unlocked",
+      "doors": []
+    },
+    {
+      "name": "House of Zoe and Martha",
+      "image": "assets/farm.png",
+      "tile": [
+        17,
+        17
+      ],
+      "hitbox": [
+        16,
+        144,
+        160,
+        88
+      ],
+      "doors": []
+    },
+    {
+      "name": "House of Tom, Walter and Ariane",
+      "image": "assets/farm.png",
+      "tile": [
+        5,
+        32
+      ],
+      "hitbox": [
+        16,
+        144,
+        160,
+        88
+      ],
+      "doors": []
+    },
+    {
+      "name": "House of Maya and Clover",
+      "image": "assets/farm.png",
+      "tile": [
+        25,
+        32
+      ],
+      "hitbox": [
+        16,
+        144,
+        160,
+        88
+      ],
+      "doors": []
+    },
+    {
+      "name": "Cyrus's house",
+      "image": "assets/farm.png",
+      "tile": [
+        44,
+        33
+      ],
+      "hitbox": [
+        16,
+        144,
+        160,
+        88
+      ],
+      "doors": []
     }
   ]
 }

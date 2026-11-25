@@ -24,7 +24,16 @@ PIECES = {
     "slot":        ("inventorySlot.png",          (4, 4, 4, 5), 1),
     "slot_down":   ("inventorySlotPressed.png",   (4, 4, 4, 4), 1),
     "bar":         ("96x12ProgressBar.png",       (2, 2, 2, 2), 1),
+    "dialogue_zoe":   ("90X27containerZoe.png",      (5, 5, 5, 6), 1),   # colored dialogue boxes, see config.DIALOGUE_STYLES
+    "dialogue_maya":  ("90X27containerMaya.png",     (5, 5, 5, 6), 1),
+    "dialogue_cyrus": ("90X27containerZoeCyrus.png", (5, 5, 5, 6), 1),
+    "dialogue_tom":    ("90X27containerTom.png",         (5, 5, 5, 6), 1),
+    "dialogue_jonas":  ("90X27containerJonas.png",       (5, 5, 5, 6), 1),
+    "dialogue_ariane": ("90X27containerJonasAriane.png", (5, 5, 5, 6), 1),   # the green box (the file name is a leftover)
+    "dialogue_clover": ("90X27containerClover.png",      (5, 5, 5, 6), 1),
+    "dialogue_elder":  ("90X27containerElder.png",       (5, 5, 5, 6), 1),   # grey box shared by Walter and Martha
 }
+
 
 # the flesh pictures are drawn 16 times too big in their files, so they are shrunk back by 16
 GRAVE_PIECES = {
@@ -40,6 +49,15 @@ FALLBACK_COLORS = {
     "slot":        ((232, 207, 166), (170, 121, 89)),
     "slot_down":   ((220, 185, 138), (170, 121, 89)),
     "bar":         ((204, 134, 105), (159, 67, 42)),
+    "dialogue_zoe":   ((157, 199, 222), (170, 121, 89)),
+    "dialogue_maya":  ((252, 144, 85), (170, 121, 89)),
+    "dialogue_cyrus": ((114, 114, 132), (170, 121, 89)),
+    "dialogue_tom":    ((159, 105, 105), (170, 121, 89)),
+    "dialogue_jonas":  ((255, 220, 114), (170, 121, 89)),
+    "dialogue_ariane": ((109, 142, 113), (170, 121, 89)),
+    "dialogue_clover": ((225, 148, 102), (170, 121, 89)),
+    "dialogue_elder":  ((195, 194, 193), (170, 121, 89)),
+
 }
 
 _skin = "calm"

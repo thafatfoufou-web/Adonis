@@ -5,7 +5,7 @@ import os
 import pygame
 import config
 from ui import theme
-from core.assets import load_image
+from core.assets import load_image, get_back_path
 from world.pathfinding import find_path
 
 
@@ -29,6 +29,9 @@ class NPC:
         self.name = data["name"]
         self.color = tuple(data["color"])
         self.schedule = data["schedule"]
+        # the tile in front of the villager's house door; a schedule spot written "home" means this tile
+        home = data.get("home")
+        self.home_tile = (home[0], home[1]) if home else self.resolve_tile(self.schedule[0]["tile"])
 
         default_path = config.CHARACTERS_DIR + self.id + ".png"
         self.sprite_path = data.get("sprite", default_path)
@@ -36,12 +39,20 @@ class NPC:
         if not self.has_sprite:
             print("[npc] no picture for " + self.id + ", expected " + self.sprite_path)
 
-        first = self.schedule[0]["tile"]
-        self.start_tile = (first[0], first[1])
+        self.start_tile = self.resolve_tile(self.schedule[0]["tile"])
         self.tile = self.start_tile
         self.pos = self.get_tile_center(self.start_tile)
         self.goal = self.start_tile
         self.path = []
+        self.visiting = False    # True while systems/visits.py walks this villager to the player
+        self.facing_up = False   # True while walking up the screen: the back picture is drawn
+        self.pause_timer = 0     # seconds left standing still (after a chat or a gift)
+
+    def resolve_tile(self, tile):
+        """Turn a schedule spot into a (column, row) tuple: "home" means the tile in front of the villager's house."""
+        if tile == "home":
+            return self.home_tile
+        return (tile[0], tile[1])
 
     def get_tile_center(self, tile):
         """Return the pixel position of the center of a tile."""
@@ -56,7 +67,7 @@ class NPC:
         for entry in self.schedule:
             if hour >= entry["hour"]:
                 tile = entry["tile"]
-        return (tile[0], tile[1])
+        return self.resolve_tile(tile)
 
     def go_home(self):
         """Put the NPC back on its first spot of the day."""
@@ -64,13 +75,41 @@ class NPC:
         self.pos = self.get_tile_center(self.start_tile)
         self.goal = self.start_tile
         self.path = []
+        self.facing_up = False
+
+    def put_on_tile(self, tile):
+        """Place the NPC on a tile right away and stop its walk."""
+        self.tile = tile
+        self.pos = self.get_tile_center(tile)
+        self.path = []
+
+    def end_visit(self):
+        """Go back to the schedule: the next update walks to wherever the clock says."""
+        self.visiting = False
+        self.goal = None
+        self.path = []
+
+    def pause(self, seconds):
+        """Stand still for a few seconds (the clock only runs while the game is not paused by a dialogue)."""
+        self.pause_timer = seconds
+
+    def get_hit_rect(self):
+        """Return the rectangle (world pixels) of the villager's body, for clicking on them anywhere, not only on their feet."""
+        rect = pygame.Rect(0, 0, config.NPC_SPRITE_SIZE[0] * 5 // 8, config.NPC_SPRITE_SIZE[1] * 15 // 16)
+        rect.midbottom = (int(self.pos.x), self.get_feet_y())
+        return rect
 
     def update(self, dt, minutes, world):
         """Check the schedule, compute a new path if the goal changed, then walk."""
-        scheduled = self.get_scheduled_tile(minutes)
-        if scheduled != self.goal:
-            self.goal = scheduled
-            self.path = find_path(world, self.tile, scheduled)
+        if self.pause_timer > 0:
+            self.pause_timer -= dt
+            self.facing_up = False
+            return
+        if not self.visiting:
+            scheduled = self.get_scheduled_tile(minutes)
+            if scheduled != self.goal:
+                self.goal = scheduled
+                self.path = find_path(world, self.tile, scheduled)
 
         self.walk(dt)
         self.tile = self.compute_tile()
@@ -78,12 +117,19 @@ class NPC:
     def walk(self, dt):
         """Move toward the next tile of the path and drop it once reached."""
         if len(self.path) == 0:
+            self.facing_up = False       # standing still: look at the player
             return
 
         target = self.get_tile_center(self.path[0])
         to_target = target - self.pos
         distance = to_target.length()
         step = config.NPC_SPEED * dt
+
+        # going up the screen shows the back; sideways or down shows the front
+        if abs(to_target.y) > abs(to_target.x):
+            self.facing_up = to_target.y < 0
+        elif abs(to_target.x) > 0:
+            self.facing_up = False
 
         if distance <= step:
             self.pos = target
@@ -110,7 +156,8 @@ class NPC:
 
     def draw_picture(self, screen, camera):
         """Draw the NPC's picture with its feet on the ground and return its rectangle."""
-        picture = load_image(self.sprite_path, config.NPC_SPRITE_SIZE, self.color)
+        path = get_back_path(self.sprite_path) if self.facing_up else self.sprite_path
+        picture = load_image(path, config.NPC_SPRITE_SIZE, self.color)
         picture_rect = picture.get_rect()
         picture_rect.midbottom = (int(self.pos.x) - camera.x, self.get_feet_y() - camera.y)
         screen.blit(picture, picture_rect)

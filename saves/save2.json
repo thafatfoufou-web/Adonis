@@ -1,0 +1,238 @@
+{
+ "version": 1,
+ "profile": {
+  "name": "ayki",
+  "gender": "male"
+ },
+ "time": {
+  "day": 44,
+  "minutes": 360
+ },
+ "player": {
+  "x": 64.0,
+  "y": 256.0,
+  "facing": [
+   0.0,
+   1.0
+  ],
+  "energy": 80
+ },
+ "inventory": {
+  "slots": [
+   {
+    "id": "shovel",
+    "count": 1
+   },
+   {
+    "id": "pickaxe",
+    "count": 1
+   },
+   {
+    "id": "watering_can",
+    "count": 1
+   },
+   {
+    "id": "milk",
+    "count": 1
+   },
+   null,
+   null,
+   null,
+   null,
+   null,
+   null
+  ],
+  "selected": 4,
+  "gold": 835
+ },
+ "farm": [],
+ "hives": [
+  {
+   "x": 16,
+   "y": 7,
+   "days": 2
+  }
+ ],
+ "cows": [
+  true
+ ],
+ "story": [
+  "ariane_c1",
+  "ariane_c2",
+  "ariane_c3",
+  "barn_paid",
+  "beehives_unlocked",
+  "cows_unlocked",
+  "cyrus_c1",
+  "cyrus_c2",
+  "cyrus_c3",
+  "festival_supplied",
+  "first_honey",
+  "flowers_given",
+  "foreigner_c1",
+  "foreigner_c2",
+  "foreigner_c3",
+  "hive_built",
+  "hive_offered",
+  "honey_remarked",
+  "honey_served",
+  "jonas_gift",
+  "knows_red_flowers",
+  "littleGirl_c1",
+  "littleGirl_c2",
+  "littleGirl_c3",
+  "martha_c1",
+  "martha_c2",
+  "martha_c3",
+  "maya_c1",
+  "maya_c2",
+  "maya_c3",
+  "met_ariane",
+  "met_clover",
+  "met_cyrus",
+  "met_foreigner",
+  "met_jonas",
+  "met_martha",
+  "met_maya",
+  "met_mira",
+  "met_tom",
+  "met_walter",
+  "mira_c1",
+  "mira_c2",
+  "mira_c3",
+  "mira_hearts_1",
+  "mira_hearts_2",
+  "picked_flower1",
+  "picked_flower2",
+  "picked_flower3",
+  "picked_flower4",
+  "picked_flower5",
+  "picked_wood1",
+  "picked_wood2",
+  "picked_wood3",
+  "picked_wood4",
+  "picked_wood5",
+  "q01_done",
+  "q01_started",
+  "q02_done",
+  "q02_started",
+  "q03_done",
+  "q03_started",
+  "q04_done",
+  "q04_started",
+  "q05_done",
+  "q05_started",
+  "q06_done",
+  "q06_started",
+  "q07_done",
+  "q07_started",
+  "shop_carrots",
+  "shop_tier_2",
+  "tom_c1",
+  "tom_c2",
+  "tom_c3",
+  "walter_c1",
+  "walter_c2",
+  "walter_c3"
+ ],
+ "quests": {
+  "state": {
+   "q01": {
+    "status": "done",
+    "progress": {
+     "till": 1,
+     "plant": 1,
+     "water": 1
+    },
+    "marks": {},
+    "delivered": {},
+    "reminded": [],
+    "visit_pending": false
+   },
+   "q02": {
+    "status": "done",
+    "progress": {},
+    "marks": {},
+    "delivered": {},
+    "reminded": [],
+    "visit_pending": false
+   },
+   "q03": {
+    "status": "done",
+    "progress": {
+     "earn": 100
+    },
+    "marks": {},
+    "delivered": {},
+    "reminded": [],
+    "visit_pending": false
+   },
+   "q04": {
+    "status": "done",
+    "progress": {
+     "wood": 5
+    },
+    "marks": {
+     "build": 14
+    },
+    "delivered": {},
+    "reminded": [],
+    "visit_pending": false
+   },
+   "q05": {
+    "status": "done",
+    "progress": {
+     "pick": 5
+    },
+    "marks": {},
+    "delivered": {},
+    "reminded": [],
+    "visit_pending": false
+   },
+   "q06": {
+    "status": "done",
+    "progress": {},
+    "marks": {},
+    "delivered": {},
+    "reminded": [],
+    "visit_pending": false
+   },
+   "q07": {
+    "status": "done",
+    "progress": {},
+    "marks": {},
+    "visit_pending": false,
+    "delivered": {
+     "veg": {
+      "cauliflower": 3,
+      "carrot": 7
+     },
+     "milk": {
+      "milk": 3
+     },
+     "honey": {
+      "mad_honey": 4
+     }
+    },
+    "reminded": [
+     33
+    ]
+   }
+  }
+ },
+ "affection": {
+  "points": {
+   "martha": 65,
+   "maya": 40,
+   "foreigner": 45,
+   "cyrus": 80,
+   "ariane": 40,
+   "walter": 40,
+   "tom": 20,
+   "mira": 370,
+   "littleGirl": 25
+  },
+  "gifted_today": [],
+  "talked_today": []
+ }
+}

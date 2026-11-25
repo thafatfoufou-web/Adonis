@@ -41,7 +41,8 @@
       180,
       60
     ],
-    "stackable": true
+    "stackable": true,
+    "buy_price": 100
   },
   "cauliflower_seeds": {
     "name": "Cauliflower seeds",
@@ -150,7 +151,8 @@
     ],
     "stackable": true,
     "sell_price": 60,
-    "toxic": true
+    "toxic": true,
+    "gift_as": "honey"
   },
   "wood": {
     "name": "Wood",
@@ -171,6 +173,644 @@
       235,
       200,
       90
+    ],
+    "stackable": true
+  },
+  "daisy": {
+    "name": "Daisy",
+    "type": "gift",
+    "icon": "assets/items/1.daisy.png",
+    "color": [
+      129,
+      180,
+      142
+    ],
+    "stackable": true
+  },
+  "crimson_rhododendron": {
+    "name": "Crimson Rhododendron",
+    "type": "gift",
+    "icon": "assets/items/3.poppy.png",
+    "color": [
+      114,
+      68,
+      56
+    ],
+    "stackable": true
+  },
+  "daffodil": {
+    "name": "Daffodil",
+    "type": "gift",
+    "icon": "assets/items/4.daffodil.png",
+    "color": [
+      174,
+      173,
+      50
+    ],
+    "stackable": true
+  },
+  "lily": {
+    "name": "Lily",
+    "type": "gift",
+    "icon": "assets/items/6.lily.png",
+    "color": [
+      132,
+      190,
+      135
+    ],
+    "stackable": true
+  },
+  "bread": {
+    "name": "Bread",
+    "type": "gift",
+    "icon": "assets/items/Bread.png",
+    "color": [
+      210,
+      172,
+      123
+    ],
+    "stackable": true
+  },
+  "cheese": {
+    "name": "Cheese",
+    "type": "gift",
+    "icon": "assets/items/Cheese.png",
+    "color": [
+      220,
+      192,
+      139
+    ],
+    "stackable": true
+  },
+  "meat": {
+    "name": "Meat",
+    "type": "gift",
+    "icon": "assets/items/Meat.png",
+    "color": [
+      191,
+      149,
+      118
+    ],
+    "stackable": true
+  },
+  "apple": {
+    "name": "Green apple",
+    "type": "gift",
+    "icon": "assets/items/Green Apple.png",
+    "color": [
+      168,
+      167,
+      90
+    ],
+    "stackable": true
+  },
+  "candy": {
+    "name": "Candy",
+    "type": "gift",
+    "icon": "assets/items/candy.png",
+    "color": [
+      159,
+      73,
+      22
+    ],
+    "stackable": true
+  },
+  "cookie": {
+    "name": "Cookie",
+    "type": "gift",
+    "icon": "assets/items/cookie.png",
+    "color": [
+      182,
+      130,
+      59
+    ],
+    "stackable": true
+  },
+  "cupcake": {
+    "name": "Cupcake",
+    "type": "gift",
+    "icon": "assets/items/cupcake.png",
+    "color": [
+      186,
+      111,
+      90
+    ],
+    "stackable": true
+  },
+  "donut": {
+    "name": "Donut",
+    "type": "gift",
+    "icon": "assets/items/donut.png",
+    "color": [
+      191,
+      104,
+      79
+    ],
+    "stackable": true
+  },
+  "sandwich": {
+    "name": "Sandwich",
+    "type": "gift",
+    "icon": "assets/items/sandwich.png",
+    "color": [
+      185,
+      139,
+      81
+    ],
+    "stackable": true
+  },
+  "tofu": {
+    "name": "Tofu",
+    "type": "gift",
+    "icon": "assets/items/tofu.png",
+    "color": [
+      126,
+      89,
+      65
+    ],
+    "stackable": true
+  },
+  "ribs": {
+    "name": "Ribs",
+    "type": "gift",
+    "icon": "assets/items/ribs.png",
+    "color": [
+      110,
+      51,
+      32
+    ],
+    "stackable": true
+  },
+  "soup": {
+    "name": "Soup",
+    "type": "gift",
+    "icon": "assets/items/soup.png",
+    "color": [
+      114,
+      84,
+      56
+    ],
+    "stackable": true
+  },
+  "potato_soup": {
+    "name": "Potato soup",
+    "type": "gift",
+    "icon": "assets/items/potatoSoup.png",
+    "color": [
+      167,
+      104,
+      63
+    ],
+    "stackable": true
+  },
+  "coffee": {
+    "name": "Coffee",
+    "type": "gift",
+    "icon": "assets/items/coffee.png",
+    "color": [
+      181,
+      147,
+      115
+    ],
+    "stackable": true
+  },
+  "tea_cup": {
+    "name": "Tea cup",
+    "type": "gift",
+    "icon": "assets/items/tea_cup.png",
+    "color": [
+      193,
+      150,
+      122
+    ],
+    "stackable": true
+  },
+  "juice_grape": {
+    "name": "Grape juice",
+    "type": "gift",
+    "icon": "assets/items/juice_grape.png",
+    "color": [
+      104,
+      76,
+      106
+    ],
+    "stackable": true
+  },
+  "juice_orange": {
+    "name": "Orange juice",
+    "type": "gift",
+    "icon": "assets/items/juice_orange.png",
+    "color": [
+      207,
+      147,
+      88
+    ],
+    "stackable": true
+  },
+  "plank": {
+    "name": "Wooden plank",
+    "type": "gift",
+    "icon": "assets/items/Wooden Plank.png",
+    "color": [
+      183,
+      158,
+      117
+    ],
+    "stackable": true
+  },
+  "rope": {
+    "name": "Rope",
+    "type": "gift",
+    "icon": "assets/items/Rope.png",
+    "color": [
+      171,
+      146,
+      111
+    ],
+    "stackable": true
+  },
+  "wool": {
+    "name": "Wool",
+    "type": "gift",
+    "icon": "assets/items/Wool.png",
+    "color": [
+      195,
+      181,
+      161
+    ],
+    "stackable": true
+  },
+  "fabric": {
+    "name": "Fabric",
+    "type": "gift",
+    "icon": "assets/items/Fabric.png",
+    "color": [
+      206,
+      197,
+      180
+    ],
+    "stackable": true
+  },
+  "worn_axe": {
+    "name": "Worn axe",
+    "type": "gift",
+    "icon": "assets/items/wornAxe.png",
+    "color": [
+      69,
+      59,
+      52
+    ],
+    "stackable": true
+  },
+  "gear": {
+    "name": "Gear",
+    "type": "gift",
+    "icon": "assets/items/Gear.png",
+    "color": [
+      186,
+      173,
+      157
+    ],
+    "stackable": true
+  },
+  "staff": {
+    "name": "Wooden staff",
+    "type": "gift",
+    "icon": "assets/items/Wooden Staff.png",
+    "color": [
+      181,
+      161,
+      144
+    ],
+    "stackable": true
+  },
+  "emerald": {
+    "name": "Cut emerald",
+    "type": "gift",
+    "icon": "assets/items/Cut Emerald.png",
+    "color": [
+      144,
+      171,
+      116
+    ],
+    "stackable": true
+  },
+  "sapphire": {
+    "name": "Cut sapphire",
+    "type": "gift",
+    "icon": "assets/items/Cut Sapphire.png",
+    "color": [
+      135,
+      147,
+      209
+    ],
+    "stackable": true
+  },
+  "diamond": {
+    "name": "Diamond",
+    "type": "gift",
+    "icon": "assets/items/Diamond.png",
+    "color": [
+      155,
+      170,
+      177
+    ],
+    "stackable": true
+  },
+  "pearl": {
+    "name": "Pearl",
+    "type": "gift",
+    "icon": "assets/items/Pearl.png",
+    "color": [
+      195,
+      176,
+      161
+    ],
+    "stackable": true
+  },
+  "ruby": {
+    "name": "Ruby",
+    "type": "gift",
+    "icon": "assets/items/ruby.png",
+    "color": [
+      168,
+      29,
+      56
+    ],
+    "stackable": true
+  },
+  "brooch": {
+    "name": "Brooch",
+    "type": "gift",
+    "icon": "assets/items/brooch.png",
+    "color": [
+      116,
+      72,
+      66
+    ],
+    "stackable": true
+  },
+  "amulet": {
+    "name": "Red amulet",
+    "type": "gift",
+    "icon": "assets/items/charm-01.png",
+    "color": [
+      95,
+      59,
+      60
+    ],
+    "stackable": true
+  },
+  "moon_charm": {
+    "name": "Moon pendant",
+    "type": "gift",
+    "icon": "assets/items/charm-02.png",
+    "color": [
+      81,
+      82,
+      81
+    ],
+    "stackable": true
+  },
+  "ring_gold": {
+    "name": "Gold ring",
+    "type": "gift",
+    "icon": "assets/items/ring_gold.png",
+    "color": [
+      157,
+      119,
+      33
+    ],
+    "stackable": true
+  },
+  "bow": {
+    "name": "Hair bow",
+    "type": "gift",
+    "icon": "assets/items/bow.png",
+    "color": [
+      143,
+      87,
+      101
+    ],
+    "stackable": true
+  },
+  "shell": {
+    "name": "Shell",
+    "type": "gift",
+    "icon": "assets/items/shell.png",
+    "color": [
+      177,
+      154,
+      167
+    ],
+    "stackable": true
+  },
+  "feather": {
+    "name": "Feather",
+    "type": "gift",
+    "icon": "assets/items/Feather.png",
+    "color": [
+      198,
+      189,
+      169
+    ],
+    "stackable": true
+  },
+  "clover": {
+    "name": "Clover sprig",
+    "type": "gift",
+    "icon": "assets/items/clover.png",
+    "color": [
+      102,
+      120,
+      92
+    ],
+    "stackable": true
+  },
+  "herb": {
+    "name": "Herb",
+    "type": "gift",
+    "icon": "assets/items/herb.png",
+    "color": [
+      88,
+      104,
+      97
+    ],
+    "stackable": true
+  },
+  "herbal_medicine": {
+    "name": "Herbal medicine",
+    "type": "gift",
+    "icon": "assets/items/med_herbal_medicine.png",
+    "color": [
+      195,
+      213,
+      217
+    ],
+    "stackable": true
+  },
+  "bandages": {
+    "name": "Adhesive bandages",
+    "type": "gift",
+    "icon": "assets/items/med_adhesive_bandages.png",
+    "color": [
+      150,
+      153,
+      167
+    ],
+    "stackable": true
+  },
+  "joint_cream": {
+    "name": "Joint cream",
+    "type": "gift",
+    "icon": "assets/items/jointCream.png",
+    "color": [
+      218,
+      197,
+      173
+    ],
+    "stackable": true
+  },
+  "perfume": {
+    "name": "Perfume",
+    "type": "gift",
+    "icon": "assets/items/Perfume.png",
+    "color": [
+      176,
+      173,
+      107
+    ],
+    "stackable": true
+  },
+  "perfume_sample": {
+    "name": "Perfume sample",
+    "type": "gift",
+    "icon": "assets/items/perfumeSample.png",
+    "color": [
+      180,
+      176,
+      105
+    ],
+    "stackable": true
+  },
+  "book": {
+    "name": "Book",
+    "type": "gift",
+    "icon": "assets/items/book.png",
+    "color": [
+      163,
+      84,
+      69
+    ],
+    "stackable": true
+  },
+  "paper": {
+    "name": "Paper",
+    "type": "gift",
+    "icon": "assets/items/Paper.png",
+    "color": [
+      194,
+      181,
+      157
+    ],
+    "stackable": true
+  },
+  "scroll": {
+    "name": "Scroll",
+    "type": "gift",
+    "icon": "assets/items/Scroll.png",
+    "color": [
+      194,
+      176,
+      146
+    ],
+    "stackable": true
+  },
+  "envelope": {
+    "name": "Envelope",
+    "type": "gift",
+    "icon": "assets/items/Envolop.png",
+    "color": [
+      209,
+      190,
+      167
+    ],
+    "stackable": true
+  },
+  "candle": {
+    "name": "Candle",
+    "type": "gift",
+    "icon": "assets/items/Candle.png",
+    "color": [
+      226,
+      204,
+      159
+    ],
+    "stackable": true
+  },
+  "lantern": {
+    "name": "Lantern",
+    "type": "gift",
+    "icon": "assets/items/Lantern.png",
+    "color": [
+      182,
+      165,
+      145
+    ],
+    "stackable": true
+  },
+  "hourglass": {
+    "name": "Hourglass",
+    "type": "gift",
+    "icon": "assets/items/hourglass.png",
+    "color": [
+      158,
+      147,
+      134
+    ],
+    "stackable": true
+  },
+  "music_player": {
+    "name": "Music box",
+    "type": "gift",
+    "icon": "assets/items/musicPlayer.png",
+    "color": [
+      120,
+      75,
+      77
+    ],
+    "stackable": true
+  },
+  "bathrobe": {
+    "name": "Bathrobe",
+    "type": "gift",
+    "icon": "assets/items/bathRobe.png",
+    "color": [
+      189,
+      173,
+      172
+    ],
+    "stackable": true
+  },
+  "cursebook": {
+    "name": "Cursed book",
+    "type": "gift",
+    "icon": "assets/items/Cursebook.png",
+    "color": [
+      66,
+      54,
+      50
+    ],
+    "stackable": true
+  },
+  "skull": {
+    "name": "Skull",
+    "type": "gift",
+    "icon": "assets/items/Skull.png",
+    "color": [
+      178,
+      166,
+      148
     ],
     "stackable": true
   }

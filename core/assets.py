@@ -36,6 +36,31 @@ def load_image(path, size, fallback_color):
     return image
 
 
+def get_back_path(path):
+    """Return the back-facing picture of a character picture (fmc.png -> fmcUp.png), or path itself if that file does not exist.
+
+    Characters without an "Up" picture keep showing their front picture when they walk up.
+    """
+    if path is None:
+        return path
+    key = ("back", path)
+    if key not in _cache:
+        base, extension = os.path.splitext(path)
+        back = base + "Up" + extension
+        _cache[key] = back if os.path.exists(back) else path
+    return _cache[key]
+
+def get_side_path(path):
+    """Return the side picture of a character picture (fmc.png -> fmcSide.png), or path itself if that file does not exist."""
+    if path is None:
+        return path
+    key = ("side", path)
+    if key not in _cache:
+        base, extension = os.path.splitext(path)
+        side = base + "Side" + extension
+        _cache[key] = side if os.path.exists(side) else path
+    return _cache[key]
+
 def load_font(path, size):
     """Load a .ttf font at size. A missing or broken file gives pygame's default font and prints a warning once."""
     key = ("font", path, size)

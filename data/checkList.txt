@@ -1,26 +1,23 @@
-A. Quick test (2 images)
+add barn png and shipping bin png flowers png
+fix some quest dialogues
+add heart events ( be careful with the flags)
+different maps
+portraits 
+walking animation
 
-assets/tiles/grass.png +
-Hero sprite sheet, only the standing pose to start +
+fix jonas dialogue stuck on the honey one (prolly a flag issue)
+fix festival event there is no constraint and u can bring 10 of the sameveggie when u shouldnt 
+add npc weekly schedule (each day differs)
+fix no one says their festival lines
+fix extra " " on dialogues somtimes
+Add interior ?
 
-B. Ground tiles (8, active now) in assets/tiles/
 
-grass.png +
-path.png  +
-wall.png +
-water.png +
-tree.png +
-fence.png +
-shop_counter.png +
+
+
 shipping_box.png -
 
-D. Item icons (8, active now) in assets/items/, 32 x 32 each
 
-hoe.png, watering_can.png found shovel.png instead +
-turnip_seeds.png, turnip.png +
-carrot_seeds.png, carrot.png +
-
-pumpkin_seeds.png, pumpkin.png /cauliflower +
 
 E. Farm in assets/farm/
 These are not read by the game yet. I’ll hook them in the next steps.
@@ -32,8 +29,6 @@ carrot_1.png to carrot_4.png
 pumpkin_1.png to pumpkin_4.png
 clue_spot.png (replaces the gold diamond)
 
-F. Extra tiles for a richer map in assets/tiles/
-These are not in tiles.json yet. Draw the ones you want, and I’ll add them.
 
 Ground: dirt.png, sand.png, flowers.png, tall_grass.png
 Buildings: house_wall.png, roof.png, door.png, window.png, house_floor.png
@@ -41,72 +36,16 @@ Objects: rock.png, bush.png, well.png (useful for the mystery), sign.png, bed.pn
 
 G. Interface (optional, they are drawn in code now) in assets/ui/
 
-slot.png (32 or 48 square), slot_selected.png
-panel.png (a frame that can stretch)
-coin.png
 dialogue_portrait_<name>.png (a face, about 64 x 64, one per villager, shown in the dialogue box)
 
-Counts
 
-Needed to make the game look real: 8 tiles + 8 icons + 2 soil + 12 crops + 6 characters (2 heroes, Mira, Tom, 2 new villagers) = 36 images.
-With extras (F) and the interface (G): around 60 to 70.
-
-
-TO FIX
-make it so that u cant put anything in 0 slot 
-shouldnt be tilable under house
-
-
-bugs :
-problem in crops growth? tiles are dark sometimes when i havent watered them yet
-Phase 0: Story flags (small)
 
 Goal: the game can remember that something happened.
-
-[ ] Create systems/story.py with a Story class holding a set of flags, plus set(flag), has(flag) and clear(flag).
-[ ] Create one Story() in main.py, next to Energy().
-[ ] Extend data/dialogues.json entries with optional conditions, for example "requires": ["hive_built"] and "time": "night".
-[ ] Update get_lines in ui/dialogue.py to take the story and the time of day. Keep your current day-based rule as the fallback, and let an entry win only if all its conditions pass.
-[ ] Test: set a flag by hand, talk to Mira, and check that her line changes.
-Phase 1: Decisions to make on paper first
-
-Answer these before coding the hive:
-
-[ ] What day does the foreigner arrive, and what is the festival day?
-[ ] How many days between starting the hive and the first honey? (3 is a good start.)
-[ ] Is the foreigner a new NPC with a name and sprite? You’ll need his art.
-[ ] Do you have hive art, or should a colored box stand in for now?
-Phase 2: The foreigner and the tutorial
-[ ] Add him to data/npcs.json with a schedule that keeps him near the farm.
-[ ] Add his dialogues, with a flag-gated line chain: introduction, then offering to help with a hive.
-[ ] Give the player the hive item when he finishes talking (set a flag like hive_offered).
-Phase 3: The beehive
-[ ] Add a beehive item (and a honey item) to data/items.json.
-[ ] Create systems/apiary.py: a dictionary of hives by tile, each counting days until honey is ready, like crops in Farm.
-[ ] Placing a hive uses the same click as farming (a new branch for the beehive item), costs energy, and only works on grass.
-[ ] Hives block movement (add them to the solid check, like tilled soil is not, so give world a way to know about them).
-[ ] Draw hives, with a different look when honey is ready.
-[ ] Clicking a ready hive gives honey. Call apiary.new_day() from start_new_day in main.py.
-[ ] Keep the poison hidden: honey is a normal-looking item, and the toxic detail lives only in your data.
-[ ] The first time the player collects honey, set first_honey and trigger the foreigner’s remark about its odd color and taste, which is your early hint.
-Phase 4: Honey in the economy
-[ ] Let the player sell honey in the shipping box and buy it as a shop item.
-[ ] Optional: an “eat” action that restores a bit of energy, so honey is tempting.
-Phase 5: Quests
-[ ] Create systems/quests.py with quests from a JSON file: id, title, goal, and how it completes (items shipped, a flag set).
-[ ] Show the active quest in the HUD.
-[ ] First quest: festival preparations (vegetables, fruit, milk, honey).
-[ ] Second quest: the missing child, two days before the festival.
-Later
 
 The festival event, the hallucinations, the journal and clues, the investigation chain, multiple maps, and save and load. Each of these depends on flags and quests, so they come after the phases above.
 
 Small things anytime
-[ ] A pause menu with quit (Esc currently doesn’t exit).
-[ ] Better placeholder lines for Mira and Tom.
 [ ] Lengthen the day for real playtesting.
 
 
-to change add cooking and food sprite
-add gifts and hearts
-you cant end the day before 19h
+to change add cooking and food sprite?

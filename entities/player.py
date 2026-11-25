@@ -2,7 +2,8 @@
 
 import pygame
 import config
-from core.assets import load_image
+from core.assets import load_image, get_back_path
+from core.assets import load_image, get_back_path, get_side_path
 
 
 class Player:
@@ -15,6 +16,11 @@ class Player:
         self.pos = pygame.Vector2(x, y)
         self.speed = config.PLAYER_SPEED
         self.width, self.height = config.PLAYER_HITBOX
+        self.facing = pygame.Vector2(0, 1)
+
+    def respawn_home(self):
+        """Put the player back at the home spawn point, looking down (every morning)."""
+        self.pos = pygame.Vector2(*config.PLAYER_START)
         self.facing = pygame.Vector2(0, 1)
 
     def get_rect(self):
@@ -79,9 +85,23 @@ class Player:
             self.pos.y -= move.y
 
     def draw(self, screen, camera):
-        """Draw the sprite with its bottom on the feet hitbox."""
+        """Draw the sprite with its bottom on the feet hitbox: side picture (flipped when needed) going left or right, back picture going up, front picture otherwise."""
         width, height = config.PLAYER_SPRITE_SIZE
-        sprite = load_image(self.sprite_path, config.PLAYER_SPRITE_SIZE, config.PLAYER_FALLBACK_COLOR)
+        path = self.sprite_path
+        flip = False
+
+        if self.facing.x != 0:
+            path = get_side_path(self.sprite_path)
+            sprite_looks_left = config.PLAYER_SIDE_FACES == "left"
+            facing_left = self.facing.x < 0
+            flip = facing_left != sprite_looks_left
+        elif self.facing.y < 0:
+            path = get_back_path(self.sprite_path)
+
+        sprite = load_image(path, config.PLAYER_SPRITE_SIZE, config.PLAYER_FALLBACK_COLOR)
+        if flip:
+            sprite = pygame.transform.flip(sprite, True, False)
+
         hitbox = self.get_rect()
         x = hitbox.centerx - width // 2 - camera.x
         y = hitbox.bottom - height - camera.y

@@ -5,7 +5,7 @@ import pygame
 import config
 from core.assets import load_image, load_font
 from ui import theme
-from systems.save import read_save
+from systems.save import read_save, get_slot_info, delete_save
 
 
 def make_background(size):
@@ -330,6 +330,122 @@ class Creation:
         theme.draw_button(screen, font, self.get_start_rect(), "Start", self.focus == self.BUTTON_FOCUS)
 
 
+class SlotMenu:
+    """The save slots: pick a game to continue, an empty slot for a new game, or erase a slot."""
+
+    ROW_SIZE = (560, 76)
+    ROW_GAP = 10
+    FIRST_ROW_Y = 92
+
+    def __init__(self):
+        """Read what is in each slot and put the cursor on the first one."""
+        self.slots = [get_slot_info(slot) for slot in range(1, config.SAVE_SLOTS + 1)]
+        self.selected = 0                    # 0 .. SAVE_SLOTS - 1 are slots, SAVE_SLOTS is the Back button
+
+    def get_row_rect(self, index):
+        """Return the rectangle of a slot row."""
+        width, height = self.ROW_SIZE
+        rect = pygame.Rect(0, 0, width, height)
+        rect.midtop = (config.SCREEN_SIZE[0] // 2, self.FIRST_ROW_Y + index * (height + self.ROW_GAP))
+        return rect
+
+    def get_delete_rect(self, index):
+        """Return the rectangle of the Delete button of a slot row."""
+        row = self.get_row_rect(index)
+        rect = pygame.Rect(0, 0, 96, 34)
+        rect.midright = (row.right - 16, row.centery)
+        return rect
+
+    def get_back_rect(self):
+        """Return the rectangle of the Back button."""
+        rect = pygame.Rect(0, 0, 200, 44)
+        rect.center = (config.SCREEN_SIZE[0] // 2, 472)
+        return rect
+
+    def use_slot(self, index):
+        """What a slot does when chosen: load it, start a new game in it, or (damaged) offer to erase it."""
+        info = self.slots[index]
+        slot = index + 1
+        if info is None:
+            return ("new", slot)
+        if info["damaged"]:
+            return ("delete", slot)
+        return ("load", slot)
+
+    def handle_event(self, event):
+        """Return ("load", n), ("new", n), ("delete", n), "back" or None."""
+        count = config.SAVE_SLOTS + 1
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_ESCAPE:
+                return "back"
+            if event.key in config.UP_KEYS:
+                self.selected = (self.selected - 1) % count
+            elif event.key in config.DOWN_KEYS:
+                self.selected = (self.selected + 1) % count
+            elif event.key in (pygame.K_DELETE, pygame.K_BACKSPACE):
+                if self.selected < config.SAVE_SLOTS and self.slots[self.selected] is not None:
+                    return ("delete", self.selected + 1)
+            elif event.key in config.INTERACT_KEYS:
+                if self.selected == config.SAVE_SLOTS:
+                    return "back"
+                return self.use_slot(self.selected)
+
+        elif event.type == pygame.MOUSEMOTION:
+            for index in range(config.SAVE_SLOTS):
+                if self.get_row_rect(index).collidepoint(event.pos):
+                    self.selected = index
+            if self.get_back_rect().collidepoint(event.pos):
+                self.selected = config.SAVE_SLOTS
+
+        elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+            for index in range(config.SAVE_SLOTS):
+                if self.slots[index] is not None and self.get_delete_rect(index).collidepoint(event.pos):
+                    return ("delete", index + 1)
+                if self.get_row_rect(index).collidepoint(event.pos):
+                    self.selected = index
+                    return self.use_slot(index)
+            if self.get_back_rect().collidepoint(event.pos):
+                return "back"
+        return None
+
+    def draw_row(self, screen, font, small_font, index):
+        """Draw one slot: its number, then the name with the date and gold under it (or just "Empty")."""
+        rect = self.get_row_rect(index)
+        info = self.slots[index]
+        selected = index == self.selected
+        if selected:
+            theme.draw_inset(screen, rect)
+            pygame.draw.rect(screen, config.ACCENT, rect, 3, border_radius=4)
+        else:
+            theme.draw_frame(screen, rect)
+
+        number_color = config.ACCENT if selected else config.TEXT_DIM
+        theme.draw_text(screen, font, str(index + 1), number_color, (rect.x + 40, rect.centery - 1), "center")
+        text_x = rect.x + 80
+
+        if info is not None and not info["damaged"]:
+            block = font.get_height() + small_font.get_height()
+            top = rect.centery - block // 2
+            theme.draw_text(screen, font, info["name"], config.TEXT, (text_x, top))
+            theme.draw_text(screen, small_font, info["date"] + "  -  " + str(info["gold"]) + " gold",
+                            config.TEXT_DIM, (text_x, top + font.get_height()))
+            theme.draw_button(screen, small_font, self.get_delete_rect(index), "Delete", False)
+        elif info is not None:
+            theme.draw_text(screen, font, "Damaged save", config.BAD, (text_x, rect.centery - 1), "midleft")
+        else:
+            theme.draw_text(screen, font, "Empty", config.TEXT_DIM, (text_x, rect.centery - 1), "midleft")
+
+    def draw(self, screen, fonts):
+        """Draw the window, the four slots and the Back button."""
+        title_font, font, small_font = fonts
+        center_x = config.SCREEN_SIZE[0] // 2
+        theme.draw_panel(screen, pygame.Rect(*config.CREATION_PANEL))
+        theme.draw_text(screen, font, "Choose a save", config.ACCENT, (center_x, 62), anchor="center")
+        for index in range(config.SAVE_SLOTS):
+            self.draw_row(screen, font, small_font, index)
+        theme.draw_button(screen, font, self.get_back_rect(), "Back", self.selected == config.SAVE_SLOTS)
+
+
 def run_screen(screen, clock, screen_object, background, fonts):
     """Run one menu screen until it gives a result: "start", "quit", "done" or "back"."""
     while True:
@@ -348,51 +464,59 @@ def run_screen(screen, clock, screen_object, background, fonts):
 
 
 def run_start_menus(screen, clock, font, small_font):
-    """Show the title screen, then the character creation.
+    """Show the title screen, the save slots and the character creation.
 
-    Return the player's profile (name, gender and hero's picture), or None if the player quits.
+    Return the player's profile (name, gender, hero's picture and the save slot number), or None if the player quits.
     The profile has a "save" entry: the saved game to load, or None for a new game.
-    Escape in the creation goes back to the title screen.
+    Escape in the slots goes back to the title, Escape in the creation goes back to the slots.
     """
     title_font = load_font(config.FONT_BOLD_FILE, config.TITLE_FONT_SIZE)
     fonts = (title_font, font, small_font)
     background = make_background(screen.get_size())
+    default_sprite = config.PLAYER_SPRITES[list(config.PLAYER_SPRITES)[0]]
 
     while True:
-        save = read_save()
-        if save is None:
-            title = TitleMenu()
-        else:
-            title = TitleMenu(["Continue", "New game", "Quit"], ["continue", "start", "quit"])
-        choice = run_screen(screen, clock, title, background, fonts)
-
-        if choice == "continue":
-            profile = dict(save["profile"])
-            default_sprite = config.PLAYER_SPRITES[list(config.PLAYER_SPRITES)[0]]
-            profile["sprite"] = config.PLAYER_SPRITES.get(profile.get("gender"), default_sprite)
-            profile["save"] = save
-            return profile
-        if choice != "start":
+        title = TitleMenu(["Play", "Quit"], ["play", "quit"])
+        if run_screen(screen, clock, title, background, fonts) != "play":
             return None
 
-        if save is not None:
-            question = TitleMenu(["Yes, new game", "Back"], ["yes", "back"], "Replace your saved game?")
-            answer = run_screen(screen, clock, question, background, fonts)
-            if answer == "quit":
+        while True:                                      # the slot list, until a game is chosen or Back
+            result = run_screen(screen, clock, SlotMenu(), background, fonts)
+            if result == "quit":
                 return None
-            if answer != "yes":
+            if result == "back":
+                break
+            action, slot = result
+
+            if action == "load":
+                save = read_save(slot)
+                if save is None:                         # it broke since the list was drawn
+                    continue
+                profile = dict(save["profile"])
+                profile["sprite"] = config.PLAYER_SPRITES.get(profile.get("gender"), default_sprite)
+                profile["save"] = save
+                profile["slot"] = slot
+                return profile
+
+            if action == "delete":
+                question = TitleMenu(["Yes, delete it", "Back"], ["yes", "back"], "Erase slot " + str(slot) + " for good?")
+                answer = run_screen(screen, clock, question, background, fonts)
+                if answer == "quit":
+                    return None
+                if answer == "yes":
+                    delete_save(slot)
                 continue
 
-        creation = Creation()
-        pygame.key.start_text_input()
-        pygame.key.set_repeat(350, 40)
-        result = run_screen(screen, clock, creation, background, fonts)
-        pygame.key.stop_text_input()
-        pygame.key.set_repeat()
-
-        if result == "done":
-            profile = creation.get_profile()
-            profile["save"] = None
-            return profile
-        if result == "quit":
-            return None
+            creation = Creation()                        # action == "new"
+            pygame.key.start_text_input()
+            pygame.key.set_repeat(350, 40)
+            created = run_screen(screen, clock, creation, background, fonts)
+            pygame.key.stop_text_input()
+            pygame.key.set_repeat()
+            if created == "quit":
+                return None
+            if created == "done":
+                profile = creation.get_profile()
+                profile["save"] = None
+                profile["slot"] = slot
+                return profile

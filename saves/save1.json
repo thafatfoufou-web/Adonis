@@ -5,15 +5,15 @@
   "gender": "female"
  },
  "time": {
-  "day": 9,
+  "day": 16,
   "minutes": 360
  },
  "player": {
-  "x": 301.0928932188132,
-  "y": 1239.2199277023258,
+  "x": 64.0,
+  "y": 256.0,
   "facing": [
    0.0,
-   -1.0
+   1.0
   ],
   "energy": 80
  },
@@ -31,24 +31,64 @@
     "id": "watering_can",
     "count": 1
    },
+   null,
    {
-    "id": "cauliflower_seeds",
+    "id": "cauliflower",
     "count": 1
    },
-   null,
-   null,
+   {
+    "id": "wood",
+    "count": 5
+   },
    null,
    null,
    null,
    null
   ],
-  "selected": 4,
-  "gold": 300
+  "selected": 2,
+  "gold": 350
  },
- "farm": [],
+ "farm": [
+  {
+   "x": 5,
+   "y": 15,
+   "watered": false,
+   "idle": 1,
+   "crop": null
+  },
+  {
+   "x": 6,
+   "y": 15,
+   "watered": false,
+   "idle": 1,
+   "crop": null
+  },
+  {
+   "x": 6,
+   "y": 16,
+   "watered": false,
+   "idle": 0,
+   "crop": {
+    "seed": "cauliflower_seeds",
+    "days": 1
+   }
+  }
+ ],
  "hives": [],
  "cows": [],
  "story": [
+  "ariane_c1",
+  "ariane_c2",
+  "cyrus_c1",
+  "foreigner_c1",
+  "foreigner_c2",
+  "jonas_gift",
+  "littleGirl_c1",
+  "littleGirl_c2",
+  "martha_c1",
+  "martha_c2",
+  "maya_c1",
+  "maya_c2",
   "met_ariane",
   "met_clover",
   "met_cyrus",
@@ -59,6 +99,14 @@
   "met_mira",
   "met_tom",
   "met_walter",
+  "mira_c1",
+  "mira_c2",
+  "mira_c3",
+  "picked_wood1",
+  "picked_wood2",
+  "picked_wood3",
+  "picked_wood4",
+  "picked_wood5",
   "q01_done",
   "q01_started",
   "q02_done",
@@ -66,37 +114,80 @@
   "q03_done",
   "q03_started",
   "q04_started",
+  "q05_started",
   "shop_carrots",
-  "shop_tier_2"
+  "shop_tier_2",
+  "tom_c1",
+  "tom_c2",
+  "tom_c3",
+  "walter_c1",
+  "walter_c2"
  ],
  "quests": {
   "state": {
    "q01": {
     "status": "done",
     "progress": {
-     "till": 4,
-     "plant": 4,
+     "till": 3,
+     "plant": 1,
      "water": 1
     },
-    "marks": {}
+    "marks": {},
+    "delivered": {},
+    "reminded": [],
+    "visit_pending": false
    },
    "q02": {
     "status": "done",
     "progress": {},
-    "marks": {}
+    "marks": {},
+    "delivered": {},
+    "reminded": [],
+    "visit_pending": false
    },
    "q03": {
     "status": "done",
     "progress": {
      "earn": 100
     },
-    "marks": {}
+    "marks": {},
+    "delivered": {},
+    "reminded": [],
+    "visit_pending": false
    },
    "q04": {
     "status": "active",
+    "progress": {
+     "wood": 5
+    },
+    "marks": {},
+    "delivered": {},
+    "reminded": [],
+    "visit_pending": false
+   },
+   "q05": {
+    "status": "active",
     "progress": {},
-    "marks": {}
+    "marks": {},
+    "visit_pending": false,
+    "delivered": {},
+    "reminded": []
    }
   }
+ },
+ "affection": {
+  "points": {
+   "mira": 25,
+   "tom": 15,
+   "ariane": 10,
+   "walter": 10,
+   "littleGirl": 10,
+   "maya": 10,
+   "cyrus": 10,
+   "martha": 10,
+   "foreigner": 65
+  },
+  "gifted_today": [],
+  "talked_today": []
  }
 }

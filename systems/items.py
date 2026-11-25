@@ -14,7 +14,16 @@ def load_items(path):
     return items
 
 
+def add_gift_prices(items):
+    """Give every gift sold in the shop its buy price, taken from config.GIFT_SHOP."""
+    for tab_name in config.GIFT_SHOP:
+        prices = config.GIFT_SHOP[tab_name]
+        for item_id in prices:
+            items[item_id]["buy_price"] = prices[item_id]
+
+
 ITEMS = load_items(config.ITEMS_FILE)
+add_gift_prices(ITEMS)
 
 
 def get_buy_price(item_id):

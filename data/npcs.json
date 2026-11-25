@@ -1,34 +1,47 @@
 {
+  "_comment": "\"home\" is the tile in front of the villager's house door. A schedule spot written \"home\" means that tile. Each hour is when the villager STARTS walking to the spot.",
   "npcs": [
     {
       "id": "mira",
-      "name": "Mira",
+      "name": "Zoe",
       "color": [
         220,
         120,
         180
       ],
+      "home": [
+        19,
+        25
+      ],
       "schedule": [
         {
           "hour": 6,
+          "tile": "home"
+        },
+        {
+          "hour": 8,
           "tile": [
-            20,
+            24,
+            20
+          ]
+        },
+        {
+          "hour": 11,
+          "tile": [
+            22,
             9
           ]
         },
         {
-          "hour": 12,
+          "hour": 15,
           "tile": [
-            23,
-            12
+            24,
+            14
           ]
         },
         {
           "hour": 18,
-          "tile": [
-            29,
-            26
-          ]
+          "tile": "home"
         }
       ]
     },
@@ -40,27 +53,46 @@
         170,
         90
       ],
+      "home": [
+        54,
+        8
+      ],
       "schedule": [
         {
           "hour": 6,
+          "tile": "home"
+        },
+        {
+          "hour": 8,
           "tile": [
-            12,
-            11
+            30,
+            6
           ]
         },
         {
           "hour": 12,
           "tile": [
-            21,
-            13
+            28,
+            12
           ]
         },
         {
-          "hour": 18,
+          "hour": 15.5,
           "tile": [
-            27,
-            14
+            50,
+            9
           ]
+        },
+        {
+          "hour": 18.5,
+          "tile": [
+            56,
+            9
+          ]
+        },
+        {
+          "hour": 20,
+          "tile": "home"
         }
       ]
     },
@@ -72,27 +104,39 @@
         160,
         230
       ],
+      "home": [
+        7,
+        40
+      ],
       "schedule": [
         {
           "hour": 6,
-          "tile": [
-            9,
-            10
-          ]
+          "tile": "home"
         },
         {
-          "hour": 14,
-          "tile": [
-            43,
-            20
-          ]
-        },
-        {
-          "hour": 20,
+          "hour": 8,
           "tile": [
             14,
-            9
+            36
           ]
+        },
+        {
+          "hour": 12,
+          "tile": [
+            12,
+            27
+          ]
+        },
+        {
+          "hour": 16,
+          "tile": [
+            14,
+            36
+          ]
+        },
+        {
+          "hour": 19,
+          "tile": "home"
         }
       ]
     },
@@ -104,27 +148,39 @@
         150,
         150
       ],
+      "home": [
+        27,
+        40
+      ],
       "schedule": [
         {
           "hour": 6,
+          "tile": "home"
+        },
+        {
+          "hour": 8,
           "tile": [
-            20,
-            12
+            35,
+            35
           ]
         },
         {
           "hour": 12,
           "tile": [
-            24,
-            14
+            38,
+            27
           ]
         },
         {
-          "hour": 18,
+          "hour": 16,
           "tile": [
-            20,
-            12
+            32,
+            31
           ]
+        },
+        {
+          "hour": 19,
+          "tile": "home"
         }
       ]
     },
@@ -136,27 +192,32 @@
         150,
         150
       ],
+      "home": [
+        28,
+        40
+      ],
       "schedule": [
         {
           "hour": 6,
-          "tile": [
-            18,
-            12
-          ]
+          "tile": "home"
         },
         {
-          "hour": 12,
+          "hour": 9,
           "tile": [
             22,
-            14
+            38
           ]
         },
         {
-          "hour": 18,
+          "hour": 13,
           "tile": [
             18,
-            12
+            31
           ]
+        },
+        {
+          "hour": 17,
+          "tile": "home"
         }
       ]
     },
@@ -168,34 +229,39 @@
         160,
         90
       ],
+      "home": [
+        9,
+        40
+      ],
       "schedule": [
         {
           "hour": 6,
+          "tile": "home"
+        },
+        {
+          "hour": 8,
           "tile": [
-            10,
-            9
+            20,
+            38
           ]
         },
         {
-          "hour": 10,
+          "hour": 12,
           "tile": [
-            14,
-            12
+            18,
+            31
           ]
         },
         {
           "hour": 15,
           "tile": [
-            20,
-            10
+            12,
+            27
           ]
         },
         {
           "hour": 19,
-          "tile": [
-            6,
-            13
-          ]
+          "tile": "home"
         }
       ]
     },
@@ -208,27 +274,39 @@
         215
       ],
       "sprite": "assets/characters/caretaker.png",
+      "home": [
+        46,
+        41
+      ],
       "schedule": [
         {
           "hour": 6,
+          "tile": "home"
+        },
+        {
+          "hour": 8,
           "tile": [
-            16,
-            13
+            52,
+            36
           ]
         },
         {
-          "hour": 13,
+          "hour": 11.5,
           "tile": [
-            26,
-            12
+            44,
+            29
           ]
         },
         {
-          "hour": 19,
+          "hour": 15.5,
           "tile": [
-            23,
-            9
+            40,
+            31
           ]
+        },
+        {
+          "hour": 18.5,
+          "tile": "home"
         }
       ]
     },
@@ -241,27 +319,32 @@
         210
       ],
       "sprite": "assets/characters/oldMan.png",
+      "home": [
+        8,
+        40
+      ],
       "schedule": [
         {
           "hour": 6,
+          "tile": "home"
+        },
+        {
+          "hour": 9,
           "tile": [
-            12,
-            10
+            14,
+            36
           ]
         },
         {
-          "hour": 16,
+          "hour": 14,
           "tile": [
             18,
-            10
+            31
           ]
         },
         {
-          "hour": 20,
-          "tile": [
-            12,
-            10
-          ]
+          "hour": 18,
+          "tile": "home"
         }
       ]
     },
@@ -274,27 +357,32 @@
         200
       ],
       "sprite": "assets/characters/oldWoman.png",
+      "home": [
+        20,
+        25
+      ],
       "schedule": [
         {
           "hour": 6,
+          "tile": "home"
+        },
+        {
+          "hour": 9,
           "tile": [
-            23,
-            9
+            15,
+            24
           ]
         },
         {
-          "hour": 15,
+          "hour": 13,
           "tile": [
-            19,
-            14
+            24,
+            20
           ]
         },
         {
-          "hour": 19,
-          "tile": [
-            23,
-            9
-          ]
+          "hour": 17,
+          "tile": "home"
         }
       ]
     }

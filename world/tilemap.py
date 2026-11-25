@@ -27,18 +27,25 @@ class TileMap:
         self.blockers = set()   # tiles made solid by things placed later, like beehives
         self.moving_obstacles = []   # rectangles of things that move (cows), set by main.py every frame
 
-        self.buildings = []
+        self.story = None            # set by main.py: buildings with a "requires" flag only exist once it is set
+        self.all_buildings = []
         if buildings_path is not None:
             with open(buildings_path) as f:
                 building_data = json.load(f)
             for entry in building_data["buildings"]:
-                self.buildings.append(Building(entry, config.TILE_SIZE))
+                self.all_buildings.append(Building(entry, config.TILE_SIZE))
 
         self.objects = []
         for y, row in enumerate(self.rows):
             for x, tile_id in enumerate(row):
                 if self.get_definition(tile_id).get("object", False):
                     self.objects.append((x, y, tile_id))
+
+    @property
+    def buildings(self):
+        """Return the buildings that exist right now (the barn only appears once the barn quest is done)."""
+        return [building for building in self.all_buildings
+                if building.requires is None or (self.story is not None and self.story.has(building.requires))]
 
     @property
     def pixel_size(self):
@@ -201,6 +208,22 @@ class TileMap:
 
         self.hitboxes[tile_id] = hitbox
         return hitbox
+
+    def get_depth_items(self, screen, camera):
+        """Return [(base_y, draw_function)] for every object and building on screen, to be sorted with the characters."""
+        size = config.TILE_SIZE
+        first_col, first_row, last_col, last_row = camera.visible_tiles(size)
+        items = []
+        for x, y, tile_id in self.objects:
+            if x < first_col - 1 or x > last_col or y < first_row - 1 or y > last_row + 1:
+                continue
+            base_y = y * size + self.get_hitbox(tile_id).bottom
+            surface = self.get_surface(tile_id)
+            position = (x * size - camera.x, y * size - camera.y)
+            items.append((base_y, lambda s=surface, p=position: screen.blit(s, p)))
+        for building in self.buildings:
+            items.append((building.get_base_y(), lambda b=building: b.draw(screen, camera)))
+        return items
 
     def collides(self, rect):
         """Return True if a rectangle touches the solid part of a solid tile or a building."""

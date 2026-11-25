@@ -6,6 +6,7 @@ import config
 from core.assets import load_image
 from systems.items import ITEMS
 from ui import theme
+from ui.hearts import draw_hearts
 
 
 class HUD:
@@ -18,6 +19,9 @@ class HUD:
         self.notice = ""
         self.notice_color = config.GOOD
         self.notice_timer = 0
+        self.quest_signature = None      # what the quest tracker said last frame, to notice changes
+        self.quest_flash = 0             # seconds left of the bright one-line tracker
+        self.quests_unread = False       # True: the book button shows a red dot
 
     def show_notice(self, text, seconds=2, color=config.GOOD):
         """Show a short message (for example 'Sold for 50 gold') for a few seconds."""
@@ -29,6 +33,8 @@ class HUD:
         """Count down the timer of the short message."""
         if self.notice_timer > 0:
             self.notice_timer -= dt
+        if self.quest_flash > 0:
+            self.quest_flash -= dt
 
     def draw_notice(self, screen):
         """Draw the short message on a small cream plate just under the energy bar while its timer runs."""
@@ -123,28 +129,36 @@ class HUD:
             slot_rect = pygame.Rect(slot_x, panel.y + border, slot_size, slot_size)
             self.draw_slot(screen, slot_rect, index, inventory)
 
-    def draw_quests(self, screen, quests):
-        """Draw the active quests and their goals in a small panel under the menu button."""
-        tracker = quests.get_tracker()
-        if len(tracker) == 0:
-            return
-        line_height = self.small_font.get_height() + 2
-        rows = sum(1 + len(lines) for _, lines in tracker)
-        width = 340
-        height = rows * line_height + 24 + (len(tracker) - 1) * 8
-        top = config.SCREEN_MARGIN + config.MENU_BUTTON_RECT[3] + config.HUD_GAP
-        panel = pygame.Rect(config.SCREEN_MARGIN, top, width, height)
-        inner = theme.draw_panel(screen, panel, 8)
+    def draw_quests(self, screen, quests, hovered=False):
+        """Draw the quest book button (with a red dot when something is new) and the next goal on one small line."""
+        signature = (str(quests.get_log()))
+        if signature != self.quest_signature:
+            if self.quest_signature is not None:        # the first look is silent, so loading a save shows no dot
+                self.quest_flash = config.QUEST_FLASH_SECONDS
+                self.quests_unread = True
+            self.quest_signature = signature
 
-        y = inner.y + 4
-        for title, lines in tracker:
-            theme.draw_text(screen, self.small_font, title, config.ACCENT, (inner.x + 6, y))
-            y += line_height
-            for text in lines:
-                color = config.TEXT_DIM if text.endswith("(done)") else config.TEXT
-                theme.draw_text(screen, self.small_font, "- " + text, color, (inner.x + 6, y))
-                y += line_height
-            y += 8
+        button = pygame.Rect(*config.QUEST_BUTTON_RECT)
+        theme.draw_piece(screen, button, "button_down" if hovered else "button")
+        icon = load_image(config.QUEST_BOOK_ICON, (32, 32), config.ACCENT)
+        screen.blit(icon, icon.get_rect(center=(button.centerx, button.centery - 1)))
+        if self.quests_unread:
+            pygame.draw.circle(screen, config.TEXT_LIGHT, (button.right - 6, button.top + 8), 9)
+            pygame.draw.circle(screen, config.BAD, (button.right - 6, button.top + 8), 6)
+
+        goal = quests.get_next_goal()
+        if goal is None:
+            return
+        bright = self.quest_flash > 0
+        width = self.small_font.size(goal)[0] + 24
+        plate = pygame.Rect(button.right + 8, 0, width, self.small_font.get_height() + 12)
+        plate.centery = button.centery
+        surface = pygame.Surface(plate.size, pygame.SRCALPHA)
+        surface.fill((253, 236, 203, 255 if bright else 190))
+        pygame.draw.rect(surface, config.ACCENT, surface.get_rect(), 2)
+        screen.blit(surface, plate)
+        color = config.TEXT if bright else config.TEXT_DIM
+        theme.draw_text(screen, self.small_font, goal, color, (plate.x + 12, plate.centery - 1), "midleft")
 
     def draw(self, screen, game_time, inventory, energy, quests=None):
         """Draw the whole interface; called once per frame after the world."""
@@ -154,4 +168,199 @@ class HUD:
         self.draw_gold(screen, inventory, clock_rect)
         self.draw_hotbar(screen, inventory)
         if quests is not None:
-            self.draw_quests(screen, quests)
+            self.draw_quests(screen, quests, pygame.Rect(*config.QUEST_BUTTON_RECT).collidepoint(pygame.mouse.get_pos()))
+
+
+class DaySummary:
+    """The screen shown after each night: what you did today, then a click to start the next morning."""
+
+    WIDTH = 620
+    ROW_HEIGHT = 30
+
+    def __init__(self):
+        """Start closed."""
+        self.is_open = False
+        self.title = ""
+        self.rows = []         # (label, value) pairs
+        self.note = ""         # a short sentence under the rows
+        self.footer = ""       # save result, shown at the bottom
+        self.footer_color = config.GOOD
+
+    def open(self, title, rows, note="", footer="", footer_color=config.GOOD):
+        """Show the summary."""
+        self.is_open = True
+        self.title, self.rows, self.note = title, rows, note
+        self.footer, self.footer_color = footer, footer_color
+
+    def close(self):
+        """Hide the summary and let the new day start."""
+        self.is_open = False
+
+    def handle_key(self, key):
+        """Any interact key (or Esc) closes it."""
+        if key in config.INTERACT_KEYS or key == pygame.K_ESCAPE:
+            self.close()
+
+    def handle_click(self):
+        """A left click closes it."""
+        self.close()
+
+    def draw(self, screen, font, small_font):
+        """Dim the game and draw the summary panel in the middle."""
+        if not self.is_open:
+            return
+        dim = pygame.Surface(screen.get_size())
+        dim.set_alpha(150)
+        screen.blit(dim, (0, 0))
+
+        height = 150 + self.ROW_HEIGHT * len(self.rows) + (34 if self.note else 0) + (26 if self.footer else 0)
+        panel = pygame.Rect(0, 0, self.WIDTH, min(height, screen.get_height() - 40))
+        panel.center = (screen.get_width() // 2, screen.get_height() // 2)
+        inner = theme.draw_panel(screen, panel)
+
+        theme.draw_text(screen, font, self.title, config.ACCENT, (inner.centerx, inner.y + 30), "center")
+        y = inner.y + 70
+        for label, value in self.rows:
+            theme.draw_text(screen, font, label, config.TEXT, (inner.x + 28, y))
+            theme.draw_text(screen, font, str(value), config.ACCENT, (inner.right - 28, y), "topright")
+            y += self.ROW_HEIGHT
+        if self.note:
+            theme.draw_text(screen, small_font, self.note, config.TEXT_DIM, (inner.centerx, y + 8), "center")
+        if self.footer:
+            theme.draw_text(screen, small_font, self.footer, self.footer_color, (inner.centerx, inner.bottom - 54), "center")
+
+        bob = (pygame.time.get_ticks() // 400) % 2 * 3
+        theme.draw_text(screen, small_font, "Press E or click to start the next day", config.TEXT_DIM,
+                        (inner.centerx, inner.bottom - 24 + bob), "center")
+
+
+def wrap_text(font, text, width):
+    """Split text into lines that fit in width pixels."""
+    lines, line = [], ""
+    for word in text.split(" "):
+        trial = (line + " " + word).strip()
+        if line and font.size(trial)[0] > width:
+            lines.append(line)
+            line = word
+        else:
+            line = trial
+    lines.append(line)
+    return lines
+
+
+class QuestLog:
+    """The quest book, with two pages: the active quests (finished goals greyed out) and the Villagers
+    (hearts of each villager you have met). Pauses the game while open."""
+
+    WIDTH = 540
+    PAGES = ("Quests", "Villagers")
+    ROW = 36
+
+    def __init__(self):
+        """Start closed, on the first page."""
+        self.is_open = False
+        self.page = 0
+        self.tab_rects = []
+
+    def open(self):
+        """Show the book on the Quests page."""
+        self.is_open = True
+        self.page = 0
+
+    def close(self):
+        """Hide the book."""
+        self.is_open = False
+
+    def handle_key(self, key):
+        """The quest key or Esc closes it; left and right turn the page."""
+        if key == config.QUEST_LOG_KEY or key == pygame.K_ESCAPE:
+            self.close()
+        elif key in config.LEFT_KEYS:
+            self.page = (self.page - 1) % len(self.PAGES)
+        elif key in config.RIGHT_KEYS:
+            self.page = (self.page + 1) % len(self.PAGES)
+
+    def handle_click(self, pos):
+        """A click on a page tab turns to that page; a click anywhere else closes the book."""
+        for index, rect in enumerate(self.tab_rects):
+            if rect.collidepoint(pos):
+                self.page = index
+                return
+        self.close()
+
+    def draw(self, screen, font, small_font, quests, npcs, affection, story):
+        """Dim the game and draw the current page in the middle."""
+        if not self.is_open:
+            return
+        dim = pygame.Surface(screen.get_size())
+        dim.set_alpha(150)
+        screen.blit(dim, (0, 0))
+
+        if self.page == 0:
+            blocks = self.get_quest_blocks(small_font, quests)
+            goal_height = small_font.get_height() + 2
+            height = 110 + sum(font.get_height() + 10 if kind == "title" else goal_height for kind, _, _ in blocks)
+        else:
+            met = [npc for npc in npcs if story.has(npc.id + "_c1")]
+            height = 140 + max(len(met), 1) * self.ROW
+        panel = pygame.Rect(0, 0, self.WIDTH, min(height, screen.get_height() - 40))
+        panel.center = (screen.get_width() // 2, screen.get_height() // 2)
+        inner = theme.draw_panel(screen, panel)
+
+        self.tab_rects = []
+        for index, label in enumerate(self.PAGES):
+            rect = pygame.Rect(inner.x + 28 + index * 116, inner.y + 10, 108, 32)
+            theme.draw_button(screen, small_font, rect, label, index == self.page)
+            self.tab_rects.append(rect)
+        theme.draw_text(screen, small_font, "Tab or Esc to close", config.TEXT_DIM, (inner.right - 28, inner.y + 18), "topright")
+
+        if self.page == 0:
+            self.draw_quests(screen, font, small_font, quests, inner, blocks)
+        else:
+            self.draw_villagers(screen, font, small_font, inner, met, affection)
+
+    def get_quest_blocks(self, small_font, quests):
+        """Return the rows of the Quests page as (kind, text, done), already wrapped."""
+        text_width = self.WIDTH - 2 * config.PANEL_BORDER - 56
+        blocks = []
+        for title, goals in quests.get_log():
+            blocks.append(("title", title, False))
+            for text, done in goals:
+                for index, line in enumerate(wrap_text(small_font, "- " + text + (" (done)" if done else ""), text_width)):
+                    blocks.append(("goal", ("  " if index else "") + line, done))
+        if not blocks:
+            blocks.append(("goal", "No active quests right now. Talk to the villagers.", False))
+        return blocks
+
+    def draw_quests(self, screen, font, small_font, quests, inner, blocks):
+        """Draw the active quests and their goals."""
+        goal_height = small_font.get_height() + 2
+        y = inner.y + 56
+        for kind, text, done in blocks:
+            if y > inner.bottom - 44:
+                theme.draw_text(screen, small_font, "...", config.TEXT_DIM, (inner.x + 28, y))
+                break
+            if kind == "title":
+                y += 6
+                theme.draw_text(screen, font, text, config.ACCENT, (inner.x + 28, y))
+                y += font.get_height() + 4
+            else:
+                theme.draw_text(screen, small_font, text, config.TEXT_DIM if done else config.TEXT, (inner.x + 28, y))
+                y += goal_height
+        theme.draw_text(screen, small_font, "Quests done: " + str(quests.count_done()), config.TEXT_DIM,
+                        (inner.x + 28, inner.bottom - 28))
+
+    def draw_villagers(self, screen, font, small_font, inner, met, affection):
+        """Draw every villager met so far with their hearts."""
+        y = inner.y + 56
+        if not met:
+            theme.draw_text(screen, small_font, "You have not met anyone yet.", config.TEXT_DIM, (inner.x + 28, y))
+        for npc in met:
+            theme.draw_text(screen, font, npc.name, config.TEXT, (inner.x + 28, y))
+            if npc.id in affection.gifted_today:
+                theme.draw_text(screen, small_font, "gift given today", config.TEXT_DIM, (inner.x + 190, y + 8))
+            row_width = config.AFFECTION["max_hearts"] * 26
+            draw_hearts(screen, (inner.right - 28 - row_width, y + 2), affection.get_hearts(npc.id), size=24, gap=2)
+            y += self.ROW
+        theme.draw_text(screen, small_font, "Hold an item and press G (or right click) near a villager to give a gift. One a day each.",
+                        config.TEXT_DIM, (inner.x + 28, inner.bottom - 28))
